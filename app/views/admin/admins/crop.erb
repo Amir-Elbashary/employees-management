@@ -1,0 +1,5 @@
+<%= form_for current_admin || current_hr, url: admin_profile_path, method: :path, html: { help: :block } do |f| %>
+  <%= f.cropbox :avatar %>
+  <%= f.previewbox :avatar %>
+  <%= f.submit 'Crop' %>
+<% end %>

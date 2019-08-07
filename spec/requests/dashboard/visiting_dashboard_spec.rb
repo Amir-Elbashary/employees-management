@@ -18,9 +18,9 @@ RSpec.describe 'Visiting dashboard', type: :request do
       expect(response.code).to eq('200')
     end
 
-    xit 'should load admin dashboard while logging as supervisor' do
-      @supervisor = create(:supervisor)
-			login_as(@supervisor, scope: :supervisor)
+    it 'should load admin dashboard while logging as H.R' do
+      @hr = create(:hr)
+			login_as(@hr, scope: :hr)
       get '/admin'
 
       expect(response.code).to eq('200')

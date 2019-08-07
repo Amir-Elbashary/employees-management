@@ -2,22 +2,22 @@ require 'rails_helper'
 
 RSpec.feature 'Loggin in as supervisor' do
   before do
-    # @supervisor = create(:supervisor)
-    # visit '/supervisors/sign_in'
+    @hr = create(:hr)
+    visit '/hrs/sign_in'
 
-    # expect(page).to have_button('Log in')
+    expect(page).to have_button('Log in')
   end
 
-  xscenario 'with valid credential' do
-    fill_in 'Email', with: @supervisor.email
-    fill_in 'Password', with: @supervisor.password
+  scenario 'with valid credential' do
+    fill_in 'Email', with: @hr.email
+    fill_in 'Password', with: @hr.password
     click_button 'Log in'
 
-    expect(page).to have_content(@supervisor.full_name)
+    expect(page).to have_content(@hr.full_name)
   end
 
-  xscenario 'with invalid credential' do
-    fill_in 'Email', with: 'supervisor@test.com'
+  scenario 'with invalid credential' do
+    fill_in 'Email', with: 'hr@test.com'
     fill_in 'Password', with: 'AdminAdmin'
     click_button 'Log in'
 

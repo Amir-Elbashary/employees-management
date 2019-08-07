@@ -1,0 +1,68 @@
+<%= render 'shared/error_messages', object: current_admin || current_hr %>
+
+<div class="row">
+	<div class="col-6">
+		<div class="card">
+      <div class="card-header bg-info">
+        <h4 class="m-b-0 text-white">Edit profile</h4>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for current_admin || current_hr, url: admin_profile_path, method: :path, html: { help: :block } do |f| %>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :first_name, 'First Name' %>
+                <%= f.text_field :first_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :last_name, 'Last Name' %>
+                <%= f.text_field :last_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+                <%= f.label :mobile_numbers, 'Mobile Numbers' %>
+                <%= f.text_field :mobile_numbers, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-8">
+							<div class="form-group">
+                <%= f.label :avatar, 'Avatar' %>
+                <%= f.file_field :avatar, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :password, 'Password' %>
+                <%= f.password_field :password, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :password_confirmation, 'Password Confirmation' %>
+                <%= f.password_field :password_confirmation, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

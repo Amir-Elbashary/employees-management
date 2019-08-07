@@ -1,7 +1,8 @@
-class Admin < ApplicationRecord
+class Hr < ApplicationRecord
   include UserHelpers
   mount_uploader :avatar, AvatarUploader
   crop_uploaded :avatar
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :validatable

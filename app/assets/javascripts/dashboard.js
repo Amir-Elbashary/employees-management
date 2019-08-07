@@ -27,4 +27,4 @@
 //= require dashboard/custom.min.js
 //
 //= require admins.js.coffee
-// require supervisors.js.coffee
+//= require hrs.js.coffee

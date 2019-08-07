@@ -118,8 +118,8 @@
                             <li role="separator" class="divider"></li>
                             <% if current_admin %>
                               <li><a href="<%= destroy_admin_session_path %>" data-method="delete" class="logout-btn"><i class="fa fa-power-off"></i> Logout</a></li>
-                            <% elsif current_supervisor %>
-                              <li><a href="<%= destroy_supervisor_session_path %>" data-method="delete"><i class="fa fa-power-off"></i> Logout</a></li>
+                            <% elsif current_hr %>
+                              <li><a href="<%= destroy_hr_session_path %>" data-method="delete"><i class="fa fa-power-off"></i> Logout</a></li>
                             <% end %>
                         </ul>
                     </div>

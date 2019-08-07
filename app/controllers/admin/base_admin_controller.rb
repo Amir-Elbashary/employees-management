@@ -30,8 +30,8 @@ class Admin::BaseAdminController < ApplicationController
   def authenticate
     if current_admin
       authenticate_admin!
-    # elsif current_supervisor
-    #   authenticate_supervisor!
+    elsif current_hr
+      authenticate_hr!
     else
       redirect_to new_admin_session_path
     end
