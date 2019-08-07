@@ -1,6 +1,11 @@
 class Admin < ApplicationRecord
+  include UserHelpers
+  mount_uploader :avatar, AvatarUploader
+  crop_uploaded :avatar
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  validates :first_name, :last_name, presence: true
 end

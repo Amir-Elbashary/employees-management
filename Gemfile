@@ -10,7 +10,7 @@ gem 'puma', '~> 3.11'
 gem 'dotenv-rails'
 gem 'tzinfo-data'
 gem 'bootsnap', '>= 1.1.0', require: false
-# gem 'nested_form'
+gem 'nested_form'
 
 # ================ Job Related Gems =================
 # gem 'redis', '~> 4.0'
@@ -40,10 +40,10 @@ gem 'rest-client'
 # gem 'will_paginate', '~> 3.1', '>= 3.1.7'
 
 # =============== Images Related Gems ===============
-# gem 'carrierwave'
-# gem 'carrierwave-base64'
-# gem 'carrierwave-crop'
-# gem 'mini_magick', '~> 4.9', '>= 4.9.3'
+gem 'carrierwave'
+gem 'carrierwave-base64'
+gem 'carrierwave-crop'
+gem 'mini_magick', '~> 4.9', '>= 4.9.3'
 
 # =============== Development & Test ================
 group :development, :test do
