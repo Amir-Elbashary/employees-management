@@ -1,19 +1,19 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  helper_method :current_active_user #, :current_ability
+  helper_method :current_active_user, :current_ability
   skip_before_action :verify_authenticity_token, only: :reorder
 
 	def current_active_user      
     current_admin || current_supervisor || current_user
   end
   
-  # def current_ability          
-  #   if request.fullpath =~ /\/admin/
-  #     @current_ability ||= Ability.new(current_admin || current_supervisor)
-  #   else
-  #     @current_ability ||= Ability.new(current_active_user)
-  #   end
-  # end 
+  def current_ability          
+    if request.fullpath =~ /\/admin/
+      @current_ability ||= Ability.new(current_admin || current_supervisor)
+    else
+      @current_ability ||= Ability.new(current_active_user)
+    end
+  end 
       
   def after_sign_out_path_for(resource)
     case resource

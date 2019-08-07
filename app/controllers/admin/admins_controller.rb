@@ -1,6 +1,6 @@
 class Admin::AdminsController < Admin::BaseAdminController
-  # load_and_authorize_resource except: %i[dashboard edit update toggle_state]
-  # skip_authorization_check only: %i[dashboard edit update toggle_state]
+  load_and_authorize_resource except: %i[dashboard edit update toggle_state]
+  skip_authorization_check only: %i[dashboard edit update toggle_state]
 
   def dashboard
     render 'admin/dashboard'
