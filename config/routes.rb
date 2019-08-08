@@ -13,5 +13,7 @@ Rails.application.routes.draw do
 
     get :profile, to: 'admins#edit'
     post :profile, to: 'admins#update'
+
+    resources :hrs
   end
 end

@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :hr do
-    email { 'hr@test.com' }
+    email { Faker::Internet.unique.email }
     password  { 'hrhrhrhr' }
-    first_name { 'Human' }
-    last_name { 'Resources' }
+    first_name { Faker::Name.unique.name }
+    last_name { Faker::Name.unique.name }
     avatar { Faker::Avatar.image }
   end
 end
