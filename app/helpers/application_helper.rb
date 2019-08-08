@@ -28,4 +28,8 @@ module ApplicationHelper
         puts flash_type
     end
   end
+
+  def formatted_date(date)
+    date.strftime('%d/%m/%Y') unless date.nil?
+  end
 end

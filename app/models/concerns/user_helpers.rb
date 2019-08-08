@@ -12,8 +12,4 @@ module UserHelpers
       full_name.gsub(/\s+/, "-").gsub( /[^a-zA-Z0-9أ-ي-]*/ , "" ) 
     end
   end
-
-  def formatted_birthdate
-    attributes['birthdate'].strftime('%d/%m/%Y') unless birthdate.nil?
-  end
 end
