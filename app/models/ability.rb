@@ -1,8 +1,8 @@
 class Ability
   include CanCan::Ability
-  AUTHORIZABLE_MODELS = [User]
-  USERS_MODELS = [User]
-  USERS_AUTHORIZED_MODELS = []
+  AUTHORIZABLE_MODELS = [Employee]
+  END_USERS_MODELS = [Employee]
+  END_USERS_AUTHORIZED_MODELS = []
 
   def initialize(user)
     case user
@@ -17,9 +17,9 @@ class Ability
           can permission.action.to_sym, model
         end
       end
-    when User
-      # Users have access to specific models only
-      authorize_models(USERS_MODELS, USERS_AUTHORIZED_MODELS)
+    when Employee
+      # Employees have access to specific models only
+      authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
     end
   end
 

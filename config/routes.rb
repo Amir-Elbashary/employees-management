@@ -8,8 +8,8 @@ Rails.application.routes.draw do
     sessions: 'hrs/sessions'
   }
 
-  devise_for :users, controllers: {
-    sessions: 'users/sessions'
+  devise_for :employees, controllers: {
+    sessions: 'employees/sessions'
   }
 
   namespace :admin do
@@ -26,9 +26,8 @@ Rails.application.routes.draw do
       end
     end
 
-
     resources :roles
     resources :hrs
-    resources :users
+    resources :employees
   end
 end

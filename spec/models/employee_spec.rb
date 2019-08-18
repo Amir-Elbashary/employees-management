@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe Employee, type: :model do
   describe 'Require validations' do
     it 'should has an email' do
       should validate_presence_of(:email)

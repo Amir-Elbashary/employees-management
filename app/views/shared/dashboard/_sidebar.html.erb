@@ -23,10 +23,10 @@
       </li>
     <% end %>
 
-  <% if can? :read, User %>
-      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Users </span></a>
+  <% if can? :read, Employee %>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Employees </span></a>
         <ul aria-expanded="false" class="collapse">
-          <li><%= link_to 'All Users', admin_users_path %></li>
+          <li><%= link_to 'All Employees', admin_employees_path %></li>
         </ul>
       </li>
     <% end %>

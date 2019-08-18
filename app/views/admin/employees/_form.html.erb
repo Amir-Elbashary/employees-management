@@ -1,28 +1,28 @@
 <% content_for :bc_title do %>
-  Users
+  Employees
 <% end %>
 
 <% content_for :bc_current do %>
-  Edit User
+  Edit Employee
 <% end %>
 
 <% content_for :bc_buttons do %>
-  <a href="<%= admin_users_path %>"><button type="button" class="btn btn-info"> All Users</button></a>
+  <a href="<%= admin_employees_path %>"><button type="button" class="btn btn-info"> All Employees</button></a>
 <% end %>
 
 <%= render 'shared/dashboard/breadcrumb' %>
 
-<%= render 'shared/error_messages', object: @user %>
+<%= render 'shared/error_messages', object: @employee %>
 
 <div class="row">
 	<div class="col-6">
 		<div class="card">
       <div class="card-header bg-info">
-        <h4 class="m-b-0 text-white">Edit User</h4>
+        <h4 class="m-b-0 text-white">Edit Employee</h4>
       </div>
 			<div class="card-body">
         <br/>
-        <%= form_for [:admin, @user], html: { help: :block } do |f| %>
+        <%= form_for [:admin, @employee], html: { help: :block } do |f| %>
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">

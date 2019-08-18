@@ -4,14 +4,14 @@ class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token, only: :reorder
 
 	def current_active_user      
-    current_admin || current_hr || current_user
+    current_admin || current_hr || current_employee
   end
   
-  def current_ability          
+  def current_ability
     if request.fullpath =~ /\/admin/
       @current_ability ||= Ability.new(current_admin || current_hr)
     else
-      @current_ability ||= Ability.new(current_user)
+      @current_ability ||= Ability.new(current_employee)
     end
   end 
       
@@ -21,8 +21,8 @@ class ApplicationController < ActionController::Base
       new_admin_session_path
     when :hr
       new_hr_session_path
-    # when :user
-    #   stylist_root_path
+    when :employee
+      root_path
     end
   end
 
@@ -30,8 +30,8 @@ class ApplicationController < ActionController::Base
     case user
     when current_admin, current_hr
       stored_location_for(user) || admin_path
-    # when current_user
-    #   stored_location_for(user) || stylist_root_path
+    when current_employee
+      stored_location_for(user) || root_path
     end
   end
 end
