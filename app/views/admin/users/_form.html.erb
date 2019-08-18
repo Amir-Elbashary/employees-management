@@ -1,0 +1,55 @@
+<% content_for :bc_title do %>
+  Users
+<% end %>
+
+<% content_for :bc_current do %>
+  Edit User
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_users_path %>"><button type="button" class="btn btn-info"> All Users</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @user %>
+
+<div class="row">
+	<div class="col-6">
+		<div class="card">
+      <div class="card-header bg-info">
+        <h4 class="m-b-0 text-white">Edit User</h4>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for [:admin, @user], html: { help: :block } do |f| %>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :first_name, 'First Name' %>
+                <%= f.text_field :first_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                  <%= f.label :last_name, 'Last Name' %>
+                  <%= f.text_field :last_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

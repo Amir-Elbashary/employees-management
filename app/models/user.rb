@@ -1,9 +1,10 @@
-class Hr < ApplicationRecord
+class User < ApplicationRecord
   include UserHelpers
   enum gender: %i[unspecified male female]
   enum work_type: %i[full_time part_time freelance]
   enum marital_status: %i[single engaged married]
   enum military_status: %i[completed exemption postponed currently_serving does_not_apply]
+
   mount_uploader :avatar, AvatarUploader
   crop_uploaded :avatar
 
@@ -12,7 +13,4 @@ class Hr < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   validates :first_name, :last_name, presence: true
-
-  has_many :hr_roles, dependent: :destroy
-  has_many :roles, through: :hr_roles
 end

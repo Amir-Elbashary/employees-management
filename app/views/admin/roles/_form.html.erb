@@ -1,0 +1,140 @@
+<% content_for :bc_title do %>
+  Roles
+<% end %>
+
+<% content_for :bc_current do %>
+  <%= @role.new_record? ? 'New' : 'Edit' %> Role
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_roles_path %>"><button type="button" class="btn btn-info"> All Roles</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @role %>
+
+<div class="row">
+	<div class="col-8">
+		<div class="card">
+      <div class="card-header bg-info">
+        <% if @role.new_record? %>
+          <h4 class="m-b-0 text-white">Add new role</h4>
+        <% else %>
+          <h4 class="m-b-0 text-white">Edit role</h4>
+        <% end %>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for [:admin, @role], html: { help: :block } do |f| %>
+          <input type="hidden" name="role[permission_ids][]">
+          <input type="hidden" name="role[hr_ids][]">
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :name, 'Name' %>
+                <%= f.text_field :name, required: true, class: 'form-control' %>
+                <small>Name should be describtive and unique</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Permissions:</label>
+                <br/><br/>
+                <% crud = ['create', 'read', 'update', 'destroy'] %>
+                <% Ability::AUTHORIZABLE_MODELS.each_slice(4) do |models| %>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <% models.each do |model| %>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h5><%= model.name %>:</h5>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <% if !@permissions.nil? && @permissions.any? %>
+                            <% crud.map do |function| %>
+                              <% permission = @permissions.find_by(action: function, target_model_name: model.name) %>
+                              <% next unless permission %>
+                              <div class="col-md-3">
+                                <input type="checkbox" name="role[permission_ids][]" value="<%= permission.id %>" id="permission_<%= permission.id %>" <%= 'checked' if @role.permissions.include?(permission) %>>
+                                <label for="permission_<%= permission.id %>"><%= permission.name %></label>
+                              </div>
+                            <% end %>
+                          <% else %>
+                            <div class="col-md-3">
+                              No permissions found
+                            </div>
+                          <% end %>
+                          <br/><br/>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+                <div class="row">
+                  <div class="col-md-12">
+                    <h5>Special Permissions:</h5>
+                  </div>
+                </div>
+                <% if !@permissions.nil? && @permissions.any? %>
+                  <% @permissions.where.not(action: crud).each_slice(4) do |permissions| %>
+                    <div class="row">
+                      <% permissions.each do |permission| %>
+                        <div class="col-md-3">
+                          <input type="checkbox" name="role[permission_ids][]" value="<%= permission.id %>" id="permission_<%= permission.id %>" <%= 'checked' if @role.permissions.include?(permission) %>>
+                          <label for="permission_<%= permission.id %>"><%= permission.name %></label>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      No permissions found
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>H.Rs:</label>
+                <br/>
+                <% if !@hrs.nil? && @hrs.any? %>
+                  <% @hrs.each_slice(4) do |hrs| %>
+                    <div class="row">
+                      <% hrs.each do |hr| %>
+                        <div class="col-md-3">
+                          <input type="checkbox" name="role[hr_ids][]" value="<%= hr.id %>" id="hr_<%= hr.id %>" <%= 'checked' if @role.hrs.include?(hr) %>>
+                          <label for="hr_<%= hr.id %>"><%= hr.full_name %></label>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      No H.Rs found
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
