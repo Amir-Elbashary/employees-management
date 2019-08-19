@@ -5,4 +5,8 @@ module AdminHelpers
     user.roles << role
     user.save
   end
+
+  def formatted_date(date)
+    date.strftime('%d/%m/%Y') unless date.nil?
+  end
 end

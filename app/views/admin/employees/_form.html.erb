@@ -1,0 +1,93 @@
+<% content_for :bc_title do %>
+  Employees
+<% end %>
+
+<% content_for :bc_current do %>
+  Edit Employee
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_employees_path %>"><button type="button" class="btn btn-info"> All Employees</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @employee %>
+
+<div class="row">
+	<div class="col-6">
+		<div class="card">
+      <div class="card-header bg-info">
+        <h4 class="m-b-0 text-white">Edit Employee</h4>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for [:admin, @employee], html: { help: :block } do |f| %>
+          <% if @employee.new_record? %>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= f.label :email, 'Email' %>
+                  <%= f.text_field :email, required: true, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= f.label :password, 'Password' %>
+                  <%= f.password_field :password, required: true, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= f.label :password_confirmation, 'Password Confirmation' %>
+                  <%= f.password_field :password_confirmation, required: true, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :first_name, 'First Name' %>
+                <%= f.text_field :first_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                  <%= f.label :last_name, 'Last Name' %>
+                  <%= f.text_field :last_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                  <%= f.label :avatar, 'Avatar' %>
+                  <%= f.file_field :avatar, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

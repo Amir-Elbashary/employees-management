@@ -1,0 +1,40 @@
+<% content_for :bc_title do %>
+  Roles
+<% end %>
+
+<% content_for :bc_current do %>
+  All Roles
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= new_admin_role_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> New Role</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<div class="card">
+	<div class="card-body">
+    <h4 class="card-title">Roles</h4>
+    <div class="table-responsive m-t-40">
+      <table id="myTable" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @roles.each do |role| %>
+            <tr>
+              <td><%= role.name %></td>
+              <td>
+                <a href="<%= edit_admin_role_path(role) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a href="<%= admin_role_path(role) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
