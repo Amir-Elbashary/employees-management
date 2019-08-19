@@ -1,0 +1,45 @@
+class Admin::SectionsController < Admin::BaseAdminController
+  load_and_authorize_resource
+
+  def new
+    @section.sub_sections.build
+  end
+
+  def index
+    @sections = @sections.roots.order(name: 'asc')
+  end
+
+  def show; end
+
+  def edit; end
+
+  def create
+    if @section.save
+      flash[:notice] = 'Section has been saved.'
+      redirect_to admin_sections_path
+    else
+      render 'new'
+    end
+  end
+
+  def update
+    if @section.update(section_params)
+      flash[:notice] = 'Section has been updated.'
+      redirect_to admin_sections_path
+    else
+      render 'edit'
+    end
+  end
+
+  def destroy
+    return unless @section.destroy
+    flash[:notice] = 'Section was removed.'
+    redirect_to admin_sections_path
+  end
+
+  private
+
+  def section_params
+    params.require(:section).permit(:name, :parent_id, sub_sections_attributes: %i[id name _destroy])
+  end
+end

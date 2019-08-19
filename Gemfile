@@ -10,6 +10,7 @@ gem 'puma', '~> 3.11'
 gem 'dotenv-rails'
 gem 'tzinfo-data'
 gem 'bootsnap', '>= 1.1.0', require: false
+gem 'acts_as_tree', '~> 2.9'
 gem 'nested_form'
 
 # ================ Job Related Gems =================

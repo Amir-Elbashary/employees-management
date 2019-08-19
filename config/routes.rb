@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 
     resources :roles
     resources :hrs
+    resources :sections
     resources :employees
   end
 end

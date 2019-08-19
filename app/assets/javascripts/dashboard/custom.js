@@ -2,18 +2,18 @@ $(function() {
   $(".select2").select2();
 });
 
-$(function() {
-  $('.sortable').railsSortable({
-    axis: false,
-    opacity: 0.5,
-    revert: 240,
-    scroll: true,
-    scrollSensitivity: 20,
-    scrollSpeed: 40,
-    tolerance: "pointer",
-    cursor: "move",
-  });
-});
+// $(function() {
+//   $('.sortable').railsSortable({
+//     axis: false,
+//     opacity: 0.5,
+//     revert: 240,
+//     scroll: true,
+//     scrollSensitivity: 20,
+//     scrollSpeed: 40,
+//     tolerance: "pointer",
+//     cursor: "move",
+//   });
+// });
 
 function toggle(id) {
   $('#enable_' + id).toggle();
