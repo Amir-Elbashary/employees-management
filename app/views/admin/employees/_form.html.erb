@@ -182,6 +182,63 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
+                <%= f.label :section_id, 'Section' %>
+                <select name="employee[section_id]" class="form-control" required>
+                  <%= @sections.each do |section| %>
+                    <option label="<%= section.name %>" style="font-weight: bold;" disabled>
+                      <% section.sub_sections.each do |sub_section| %>
+                        <% if sub_section.sub_sections.any? %>
+                          <option label="<%= tree_formatting(0,1) %><%= sub_section.name %>" disabled>
+                            <% sub_section.sub_sections.each do |sub_2| %>
+                              <% if sub_2.sub_sections.any? %>
+                                <option label="<%= tree_formatting(1,1) %><%= sub_2.name %>" disabled>
+                                  <% sub_2.sub_sections.each do |sub_3| %>
+                                    <% if sub_3.sub_sections.any? %>
+                                      <option label="<%= tree_formatting(2,1) %><%= sub_3.name %>" disabled>
+                                        <% sub_3.sub_sections.each do |sub_4| %>
+                                          <% if sub_4.sub_sections.any? %>
+                                            <option label="<%= tree_formatting(3,1) %><%= sub_4.name %>" disabled>
+                                              <% sub_4.sub_sections.each do |sub_5| %>
+                                                <% if sub_5.sub_sections.any? %>
+                                                  <option label="<%= tree_formatting(4,1) %><%= sub_5.name %>" disabled>
+                                                    <% sub_5.sub_sections.each do |sub_6| %>
+                                                      <option value="<%= sub_6.id %>" <%= 'selected' if @employee.section == sub_6 %>><%= tree_formatting(5,1) %><%= sub_6.name %></option>
+                                                    <% end %>
+                                                  </option>
+                                                <% else %>
+                                                  <option value="<%= sub_5.id %>" <%= 'selected' if @employee.section == sub_5 %>><%= tree_formatting(4,1)%><%= sub_5.name %></option>
+                                                <% end %>
+                                              <% end %>
+                                            </option>
+                                          <% else %>
+                                            <option value="<%= sub_4.id %>" <%= 'selected' if @employee.section == sub_4 %>><%= tree_formatting(3,1) %><%= sub_4.name %></option>
+                                          <% end %>
+                                        <% end %>
+                                      </option>
+                                    <% else %>
+                                      <option value="<%= sub_3.id %>" <%= 'selected' if @employee.section == sub_3 %>><%= tree_formatting(2,1) %><%= sub_3.name %></option>
+                                    <% end %>
+                                  <% end %>
+                                </option>
+                              <% else %>
+                                <option value="<%= sub_2.id %>" <%= 'selected' if @employee.section == sub_2 %>><%= tree_formatting(1,1) %><%= sub_2.name %></option>
+                              <% end %>
+                            <% end %>
+                          </option>
+                        <% else %>
+                          <option value="<%= sub_section.id %>" <%= 'selected' if @employee.section == sub_section %>><%= tree_formatting(0,1) %><%= sub_section.name %></option>
+                        <% end %>
+                      <% end %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
                 <%= f.label :work_type, 'Work Type' %>
                 <%= f.select :work_type, Employee.work_types.map {|k, v| [k.humanize.capitalize, k]}, { selected: @employee.work_type }, class: 'form-control select2' %>
               </div>

@@ -12,4 +12,6 @@ class Employee < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   validates :first_name, :last_name, presence: true
+
+  belongs_to :section, optional: true
 end

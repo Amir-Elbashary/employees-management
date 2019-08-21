@@ -1,5 +1,6 @@
 class Admin::EmployeesController < Admin::BaseAdminController
   load_and_authorize_resource
+  before_action :set_sections, except: %i[index destroy]
 
   def new; end
 
@@ -40,9 +41,13 @@ class Admin::EmployeesController < Admin::BaseAdminController
   def employee_params
     params.require(:employee).permit(:email, :password, :password_confirmation, :first_name, :last_name,
                                      :gender, :birthdate, :address, :social_id, :personal_email, :business_email,
-                                     :mobile_numbers, :landline_numbers, :qualification, :graduation_year,
+                                     :mobile_numbers, :landline_numbers, :qualification, :graduation_year, :section_id,
                                      :date_of_employment, :job_description, :work_type, :date_of_social_insurance_joining,
                                      :social_insurance_number, :military_status, :marital_status, :nationality, :vacation_balance,
                                      :avatar, :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
+  end
+
+  def set_sections
+    @sections = Section.roots.sort
   end
 end
