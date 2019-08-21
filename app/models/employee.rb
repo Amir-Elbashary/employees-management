@@ -4,6 +4,7 @@ class Employee < ApplicationRecord
   enum work_type: %i[full_time part_time freelance]
   enum marital_status: %i[single engaged married]
   enum military_status: %i[completed exemption postponed currently_serving does_not_apply]
+  enum level: %i[employee supervisor]
   mount_uploader :avatar, AvatarUploader
   crop_uploaded :avatar
 
