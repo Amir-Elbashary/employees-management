@@ -32,4 +32,19 @@ module ApplicationHelper
   def formatted_date(date)
     date.strftime('%d/%m/%Y') unless date.nil?
   end
+
+  def tree_formatting(spaces, dashes)
+    tree_spaces = '|' + ('&nbsp;' * 6)
+    tree_dashes = '|' + ('-' * 4)
+
+    format = if spaces == 0
+               tree_dashes * dashes
+             elsif dashes == 0
+               tree_spaces * spaces
+            else
+              (tree_spaces * spaces) + (tree_dashes * dashes)
+            end
+
+    format.html_safe
+  end
 end

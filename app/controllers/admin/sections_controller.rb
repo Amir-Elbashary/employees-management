@@ -1,9 +1,8 @@
 class Admin::SectionsController < Admin::BaseAdminController
   load_and_authorize_resource
+  before_action :build_sub_sections, only: %i[new edit]
 
-  def new
-    @section.sub_sections.build
-  end
+  def new; end
 
   def index
     @sections = @sections.roots.order(name: 'asc')
@@ -41,5 +40,9 @@ class Admin::SectionsController < Admin::BaseAdminController
 
   def section_params
     params.require(:section).permit(:name, :parent_id, sub_sections_attributes: %i[id name _destroy])
+  end
+
+  def build_sub_sections
+    @section.sub_sections.build
   end
 end

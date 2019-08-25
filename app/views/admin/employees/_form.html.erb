@@ -22,7 +22,10 @@
       </div>
 			<div class="card-body">
         <br/>
-        <%= form_for [:admin, @employee], html: { help: :block } do |f| %>
+        <%= nested_form_for [:admin, @employee], html: { help: :block } do |f| %>
+          <h3>Employee information:</h3>
+          <br/>
+
           <% if @employee.new_record? %>
             <div class="row">
               <div class="col-md-12">
@@ -64,8 +67,8 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                  <%= f.label :last_name, 'Last Name' %>
-                  <%= f.text_field :last_name, required: true, class: 'form-control' %>
+                <%= f.label :last_name, 'Last Name' %>
+                <%= f.text_field :last_name, required: true, class: 'form-control' %>
               </div>
             </div>
           </div>
@@ -73,8 +76,276 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                  <%= f.label :avatar, 'Avatar' %>
+                <%= f.label :gender, 'Gender' %>
+                <%= f.select :gender, Employee.genders.map {|k, v| [k.humanize.capitalize, k]}, { selected: @employee.gender }, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+          <%= @employee.gender %>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :birthdate, 'Birthdate' %>
+                <%= f.date_field :birthdate, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :address, 'Address' %>
+                <%= f.text_field :address, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :social_id, 'Social ID' %>
+                <%= f.text_field :social_id, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :personal_email, 'Personal Email' %>
+                <%= f.email_field :personal_email, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :business_email, 'Business Email' %>
+                <%= f.email_field :business_email, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :mobile_numbers, 'Mobile Numbers' %>
+                <%= f.text_field :mobile_numbers, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :landline_numbers, 'Landline Numbers' %>
+                <%= f.text_field :landline_numbers, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :qualification, 'Qualification' %>
+                <%= f.text_field :qualification, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :graduation_year, 'Graduation Year' %>
+                <%= f.number_field :graduation_year, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :date_of_employment, 'Date of Employment' %>
+                <%= f.date_field :date_of_employment, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :job_description, 'Job Description' %>
+                <%= f.text_field :job_description, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :section_id, 'Section' %>
+                <select name="employee[section_id]" class="form-control" required>
+                  <%= @sections.each do |section| %>
+                    <option label="<%= section.name %>" style="font-weight: bold;" disabled>
+                      <% section.sub_sections.each do |sub_section| %>
+                        <% if sub_section.sub_sections.any? %>
+                          <option label="<%= tree_formatting(0,1) %><%= sub_section.name %>" disabled>
+                            <% sub_section.sub_sections.each do |sub_2| %>
+                              <% if sub_2.sub_sections.any? %>
+                                <option label="<%= tree_formatting(1,1) %><%= sub_2.name %>" disabled>
+                                  <% sub_2.sub_sections.each do |sub_3| %>
+                                    <% if sub_3.sub_sections.any? %>
+                                      <option label="<%= tree_formatting(2,1) %><%= sub_3.name %>" disabled>
+                                        <% sub_3.sub_sections.each do |sub_4| %>
+                                          <% if sub_4.sub_sections.any? %>
+                                            <option label="<%= tree_formatting(3,1) %><%= sub_4.name %>" disabled>
+                                              <% sub_4.sub_sections.each do |sub_5| %>
+                                                <% if sub_5.sub_sections.any? %>
+                                                  <option label="<%= tree_formatting(4,1) %><%= sub_5.name %>" disabled>
+                                                    <% sub_5.sub_sections.each do |sub_6| %>
+                                                      <option value="<%= sub_6.id %>" <%= 'selected' if @employee.section == sub_6 %>><%= tree_formatting(5,1) %><%= sub_6.name %></option>
+                                                    <% end %>
+                                                  </option>
+                                                <% else %>
+                                                  <option value="<%= sub_5.id %>" <%= 'selected' if @employee.section == sub_5 %>><%= tree_formatting(4,1)%><%= sub_5.name %></option>
+                                                <% end %>
+                                              <% end %>
+                                            </option>
+                                          <% else %>
+                                            <option value="<%= sub_4.id %>" <%= 'selected' if @employee.section == sub_4 %>><%= tree_formatting(3,1) %><%= sub_4.name %></option>
+                                          <% end %>
+                                        <% end %>
+                                      </option>
+                                    <% else %>
+                                      <option value="<%= sub_3.id %>" <%= 'selected' if @employee.section == sub_3 %>><%= tree_formatting(2,1) %><%= sub_3.name %></option>
+                                    <% end %>
+                                  <% end %>
+                                </option>
+                              <% else %>
+                                <option value="<%= sub_2.id %>" <%= 'selected' if @employee.section == sub_2 %>><%= tree_formatting(1,1) %><%= sub_2.name %></option>
+                              <% end %>
+                            <% end %>
+                          </option>
+                        <% else %>
+                          <option value="<%= sub_section.id %>" <%= 'selected' if @employee.section == sub_section %>><%= tree_formatting(0,1) %><%= sub_section.name %></option>
+                        <% end %>
+                      <% end %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :work_type, 'Work Type' %>
+                <%= f.select :work_type, Employee.work_types.map {|k, v| [k.humanize.capitalize, k]}, { selected: @employee.work_type }, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :date_of_social_insurance_joining, 'Social Insurance joining Date' %>
+                <%= f.date_field :date_of_social_insurance_joining, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :social_insurance_number, 'Social Insurance Number' %>
+                <%= f.text_field :social_insurance_number, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :military_status, 'Military Status' %>
+                <%= f.select :military_status, Employee.military_statuses.map {|k, v| [k.humanize.capitalize, k]}, { selected: @employee.military_status }, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :marital_status, 'Marital Status' %>
+                <%= f.select :marital_status, Employee.marital_statuses.map {|k, v| [k.humanize.capitalize, k]}, { selected: @employee.marital_status }, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :nationality, 'Nationality' %>
+                <%= f.text_field :nationality, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :vacation_balance, 'Vacation Balance' %>
+                <%= f.number_field :vacation_balance, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :avatar, 'Avatar' %>
+                <% if @employee.avatar.present? %>
+                  <%= f.file_field :avatar, required: false, class: 'form-control' %>
+                <% else %>
                   <%= f.file_field :avatar, required: true, class: 'form-control' %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <h3>Documents:</h3>
+          <br/>
+
+          <div class="row">
+            <div class="col-md-12">          
+              <div class='form-group'>
+                <%= f.fields_for :documents do |doc| %>
+                  <%= doc.label :name, 'Document Name' %>
+                  <div class="form-group">
+                    <%= doc.text_field :name, placeholder: 'Enter document name...', class: 'form-control' %>
+                  </div>
+
+                  <% if doc.object.new_record? %>
+                    <%= doc.label :file, 'Document File (Upload new document)' %>
+                  <% else %>
+                    <%= doc.label :file, 'Document File (Replace existing document)' %>
+                  <% end %>
+                  <div class="form-group">
+                    <%= doc.file_field :file, placeholder: 'Upload document...', class: 'form-control' %>
+                  </div>
+
+                  <div class="form-group">
+                    <%= doc.link_to_remove "Remove", class:"btn btn-danger pull-right" %>
+                  </div>
+
+                  <br/><br/>
+                <% end %>
+                <div class="form-group">
+                  <%= f.link_to_add "Add more documents", :documents, class:"btn btn-info" %>
+                </div>
+                <small>Documents will be available to download after uploading.</small>
               </div>
             </div>
           </div>

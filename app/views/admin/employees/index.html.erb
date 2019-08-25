@@ -23,6 +23,7 @@
             <th>Full Name</th>
             <th>Email</th>
             <th>Birthdate</th>
+            <th>Level</th>
 						<th>Actions</th>
           </tr>
         </thead>
@@ -33,6 +34,20 @@
               <td><%= employee.full_name %></td>
               <td><%= employee.email %></td>
               <td><%= employee.birthdate&.strftime('%d/%m/%Y') %></td>
+							<td align="center">
+                <%= link_to 'Demote to employee', toggle_level_admin_employee_path(employee),
+                                              method: :post,
+                                              id: "disable_#{employee.id}",
+                                              class: 'btn btn-sm btn-danger',
+                                              onclick: "toggle(#{employee.id});",
+                                              style: employee.supervisor? ? 'display: block;' : 'display: none;' %>
+                <%= link_to 'Promote to supervisor', toggle_level_admin_employee_path(employee),
+                                                 method: :post,
+                                                 id: "enable_#{employee.id}",
+                                                 class: 'btn btn-sm btn-success',
+                                                 onclick: "toggle(#{employee.id});",
+                                                 style: employee.supervisor? ? 'display: none;' : 'display: block;' %>
+              </td>
               <td>
                 <a href="<%= edit_admin_employee_path(employee) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
                 <a href="<%= admin_employee_path(employee) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>

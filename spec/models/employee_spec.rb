@@ -18,4 +18,14 @@ RSpec.describe Employee, type: :model do
       should validate_presence_of(:last_name)
     end
   end
+
+  describe 'Has Associations' do
+    it 'should have many documents' do
+      should have_many(:documents)
+    end
+
+    it 'should belongs to section' do
+      should belong_to(:section).optional
+    end
+  end
 end

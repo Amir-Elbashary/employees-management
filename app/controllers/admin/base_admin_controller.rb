@@ -32,8 +32,8 @@ class Admin::BaseAdminController < ApplicationController
       authenticate_admin!
     elsif current_hr
       authenticate_hr!
-    else
-      redirect_to new_admin_session_path
+    else current_employee
+      authenticate_employee!
     end
   end
 end

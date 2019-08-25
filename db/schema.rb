@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_19_092905) do
+ActiveRecord::Schema.define(version: 2019_08_25_080100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,15 @@ ActiveRecord::Schema.define(version: 2019_08_19_092905) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
+  create_table "documents", force: :cascade do |t|
+    t.string "name"
+    t.string "file"
+    t.bigint "employee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_documents_on_employee_id"
+  end
+
   create_table "employees", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -89,8 +98,12 @@ ActiveRecord::Schema.define(version: 2019_08_19_092905) do
     t.string "nationality"
     t.integer "vacation_balance"
     t.string "avatar"
+    t.bigint "section_id"
+    t.integer "level", default: 0
     t.index ["email"], name: "index_employees_on_email", unique: true
+    t.index ["level"], name: "index_employees_on_level"
     t.index ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true
+    t.index ["section_id"], name: "index_employees_on_section_id"
   end
 
   create_table "hr_roles", force: :cascade do |t|
@@ -167,6 +180,8 @@ ActiveRecord::Schema.define(version: 2019_08_19_092905) do
     t.index ["parent_id"], name: "index_sections_on_parent_id"
   end
 
+  add_foreign_key "documents", "employees"
+  add_foreign_key "employees", "sections"
   add_foreign_key "hr_roles", "hrs"
   add_foreign_key "hr_roles", "roles"
   add_foreign_key "role_permissions", "permissions"

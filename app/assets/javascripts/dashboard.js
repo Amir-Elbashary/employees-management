@@ -28,3 +28,4 @@
 //
 //= require admins.js.coffee
 //= require hrs.js.coffee
+//= require employees.js.coffee
