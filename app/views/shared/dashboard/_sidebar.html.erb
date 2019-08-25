@@ -1,5 +1,8 @@
 <nav class="sidebar-nav">
   <ul id="sidebarnav">
+    <!-- ============================================================== -->
+    <!-- Admin only items -->
+    <!-- ============================================================== -->
     <% if current_admin %>
       <li class="nav-small-cap">--- Settings</li>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-gears"></i><span class="hide-menu">Settings </span></a>
@@ -29,8 +32,36 @@
         </ul>
       </li>
     <% end %>
+    <!-- ============================================================== -->
+    <!-- Admin only items end -->
+    <!-- ============================================================== -->
 
-  <% if can? :read, Employee %>
+    <!-- ============================================================== -->
+    <!-- H.R only items -->
+    <!-- ============================================================== -->
+
+    <!-- ============================================================== -->
+    <!-- H.R only items end -->
+    <!-- ============================================================== -->
+
+    <!-- ============================================================== -->
+    <!-- Employee only items -->
+    <!-- ============================================================== -->
+    <% if current_employee %>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">New Items </span></a>
+        <ul aria-expanded="false" class="collapse">
+          <li><%= link_to 'All Employees', admin_employees_path %></li>
+        </ul>
+      </li>
+    <% end %>
+    <!-- ============================================================== -->
+    <!-- Employee only items end -->
+    <!-- ============================================================== -->
+
+    <!-- ============================================================== -->
+    <!-- Permission required items -->
+    <!-- ============================================================== -->
+    <% if can? :read, Employee %>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Employees </span></a>
         <ul aria-expanded="false" class="collapse">
           <li><%= link_to 'All Employees', admin_employees_path %></li>
@@ -38,5 +69,8 @@
         </ul>
       </li>
     <% end %>
+    <!-- ============================================================== -->
+    <!-- Permission required items end -->
+    <!-- ============================================================== -->
   </ul>
 </nav>

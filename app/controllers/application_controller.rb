@@ -22,16 +22,14 @@ class ApplicationController < ActionController::Base
     when :hr
       new_hr_session_path
     when :employee
-      root_path
+      new_employee_session_path
     end
   end
 
   def after_sign_in_path_for(user)
     case user
-    when current_admin, current_hr
+    when current_admin, current_hr, current_employee
       stored_location_for(user) || admin_path
-    when current_employee
-      stored_location_for(user) || root_path
     end
   end
 end
