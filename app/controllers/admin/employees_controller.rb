@@ -1,6 +1,7 @@
 class Admin::EmployeesController < Admin::BaseAdminController
   load_and_authorize_resource
   before_action :set_sections, except: %i[index destroy]
+  before_action :build_documents, only: %i[new edit]
 
   def new; end
 
@@ -54,10 +55,15 @@ class Admin::EmployeesController < Admin::BaseAdminController
                                      :mobile_numbers, :landline_numbers, :qualification, :graduation_year, :section_id,
                                      :date_of_employment, :job_description, :work_type, :date_of_social_insurance_joining,
                                      :social_insurance_number, :military_status, :marital_status, :nationality, :vacation_balance,
-                                     :avatar, :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
+                                     :avatar, :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h,
+                                     documents_attributes: %i[id name file _destroy])
   end
 
   def set_sections
     @sections = Section.roots.sort
+  end
+
+  def build_documents
+    @employee.documents.build
   end
 end

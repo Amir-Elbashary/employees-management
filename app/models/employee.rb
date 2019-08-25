@@ -14,5 +14,9 @@ class Employee < ApplicationRecord
 
   validates :first_name, :last_name, presence: true
 
+  has_many :documents, dependent: :destroy
   belongs_to :section, optional: true
+
+  accepts_nested_attributes_for :documents, allow_destroy: true,
+                                            reject_if: ->(a) { a[:name].blank? }
 end

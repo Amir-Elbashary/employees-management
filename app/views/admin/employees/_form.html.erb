@@ -22,7 +22,10 @@
       </div>
 			<div class="card-body">
         <br/>
-        <%= form_for [:admin, @employee], html: { help: :block } do |f| %>
+        <%= nested_form_for [:admin, @employee], html: { help: :block } do |f| %>
+          <h3>Employee information:</h3>
+          <br/>
+
           <% if @employee.new_record? %>
             <div class="row">
               <div class="col-md-12">
@@ -308,6 +311,41 @@
                 <% else %>
                   <%= f.file_field :avatar, required: true, class: 'form-control' %>
                 <% end %>
+              </div>
+            </div>
+          </div>
+
+          <h3>Documents:</h3>
+          <br/>
+
+          <div class="row">
+            <div class="col-md-12">          
+              <div class='form-group'>
+                <%= f.fields_for :documents do |doc| %>
+                  <%= doc.label :name, 'Document Name' %>
+                  <div class="form-group">
+                    <%= doc.text_field :name, placeholder: 'Enter document name...', class: 'form-control' %>
+                  </div>
+
+                  <% if doc.object.new_record? %>
+                    <%= doc.label :file, 'Document File (Upload new document)' %>
+                  <% else %>
+                    <%= doc.label :file, 'Document File (Replace existing document)' %>
+                  <% end %>
+                  <div class="form-group">
+                    <%= doc.file_field :file, placeholder: 'Upload document...', class: 'form-control' %>
+                  </div>
+
+                  <div class="form-group">
+                    <%= doc.link_to_remove "Remove", class:"btn btn-danger pull-right" %>
+                  </div>
+
+                  <br/><br/>
+                <% end %>
+                <div class="form-group">
+                  <%= f.link_to_add "Add more documents", :documents, class:"btn btn-info" %>
+                </div>
+                <small>Documents will be available to download after uploading.</small>
               </div>
             </div>
           </div>
