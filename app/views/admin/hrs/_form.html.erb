@@ -1,0 +1,270 @@
+<% content_for :bc_title do %>
+  H.Rs
+<% end %>
+
+<% content_for :bc_current do %>
+  <%= @hr.new_record? ? 'New' : 'Edit' %> H.R
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_hrs_path %>"><button type="button" class="btn btn-info"> All H.Rs</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @hr %>
+
+<div class="row">
+	<div class="col-6">
+		<div class="card">
+      <div class="card-header bg-info">
+        <% if @hr.new_record? %>
+          <h4 class="m-b-0 text-white">Add new H.R</h4>
+        <% else %>
+          <h4 class="m-b-0 text-white">Edit H.R</h4>
+        <% end %>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for [:admin, @hr], html: { help: :block } do |f| %>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :email, 'Email' %>
+                <%= f.text_field :email, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :password, 'Password' %>
+                <%= f.password_field :password, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :password_confirmation, 'Password Confirmation' %>
+                <%= f.password_field :password_confirmation, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :first_name, 'First Name' %>
+                <%= f.text_field :first_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :last_name, 'Last Name' %>
+                <%= f.text_field :last_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :gender, 'Gender' %>
+                <%= f.select :gender, options_for_select(Employee.genders.map {|k, v| [k.humanize.capitalize, v]}), {}, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :birthdate, 'Birthdate' %>
+                <%= f.date_field :birthdate, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :address, 'Address' %>
+                <%= f.text_field :address, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :social_id, 'Social ID' %>
+                <%= f.text_field :social_id, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :personal_email, 'Personal Email' %>
+                <%= f.email_field :personal_email, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :business_email, 'Business Email' %>
+                <%= f.email_field :business_email, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :mobile_numbers, 'Mobile Numbers' %>
+                <%= f.text_field :mobile_numbers, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :landline_numbers, 'Landline Numbers' %>
+                <%= f.text_field :landline_numbers, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :qualification, 'Qualification' %>
+                <%= f.text_field :qualification, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :graduation_year, 'Graduation Year' %>
+                <%= f.number_field :graduation_year, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :date_of_employment, 'Date of Employment' %>
+                <%= f.date_field :date_of_employment, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :job_description, 'Job Description' %>
+                <%= f.text_field :job_description, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :work_type, 'Work Type' %>
+                <%= f.select :gender, options_for_select(Employee.work_types.map {|k, v| [k.humanize.capitalize, v]}), {}, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :date_of_social_insurance_joining, 'Social Insurance joining Date' %>
+                <%= f.date_field :date_of_social_insurance_joining, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :social_insurance_number, 'Social Insurance Number' %>
+                <%= f.text_field :social_insurance_number, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :military_status, 'Military Status' %>
+                <%= f.select :gender, options_for_select(Employee.military_statuses.map {|k, v| [k.humanize.capitalize, v]}), {}, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :marital_status, 'Marital Status' %>
+                <%= f.select :gender, options_for_select(Employee.marital_statuses.map {|k, v| [k.humanize.capitalize, v]}), {}, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :nationality, 'Nationality' %>
+                <%= f.text_field :nationality, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :vacation_balance, 'Vacation Balance' %>
+                <%= f.number_field :vacation_balance, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :avatar, 'Avatar' %>
+                <% if @hr.avatar.present? %>
+                  <%= f.file_field :avatar, required: false, class: 'form-control' %>
+                <% else %>
+                  <%= f.file_field :avatar, required: true, class: 'form-control' %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

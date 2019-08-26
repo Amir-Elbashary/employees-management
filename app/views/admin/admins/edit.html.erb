@@ -1,0 +1,15 @@
+<% content_for :bc_title do %>
+  Admin
+<% end %>
+
+<% content_for :bc_current do %>
+  Profile
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_path %>"><button type="button" class="btn btn-info"></i> Home</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'form' %>

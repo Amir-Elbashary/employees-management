@@ -1,0 +1,13 @@
+<% flash.each do |type, message| %>
+  <script>
+    $.toast({
+      heading: 'Fustany',
+      text: '<%= message %>',
+      position: 'top-right',
+      loaderBg: '#f33c49',
+      icon: '<%= toast_bootstrap_class_for(type) %>',
+      hideAfter: 8000,
+      stack: 6
+    })
+  </script>
+<% end %>

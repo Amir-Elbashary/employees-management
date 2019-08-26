@@ -1,0 +1,5 @@
+<%= form_for @employee, url: admin_employee_path(@employee), method: :patch, html: { help: :block } do |f| %>
+  <%= f.cropbox :avatar %>
+  <%= f.previewbox :avatar %>
+  <%= f.submit 'Crop' %>
+<% end %>

@@ -10,7 +10,8 @@ gem 'puma', '~> 3.11'
 gem 'dotenv-rails'
 gem 'tzinfo-data'
 gem 'bootsnap', '>= 1.1.0', require: false
-# gem 'nested_form'
+gem 'acts_as_tree', '~> 2.9'
+gem 'nested_form'
 
 # ================ Job Related Gems =================
 # gem 'redis', '~> 4.0'
@@ -40,10 +41,10 @@ gem 'rest-client'
 # gem 'will_paginate', '~> 3.1', '>= 3.1.7'
 
 # =============== Images Related Gems ===============
-# gem 'carrierwave'
-# gem 'carrierwave-base64'
-# gem 'carrierwave-crop'
-# gem 'mini_magick', '~> 4.9', '>= 4.9.3'
+gem 'carrierwave'
+gem 'carrierwave-base64'
+gem 'carrierwave-crop'
+gem 'mini_magick', '~> 4.9', '>= 4.9.3'
 
 # =============== Development & Test ================
 group :development, :test do
@@ -72,9 +73,9 @@ group :development do
   gem 'rails-erd', '~> 1.5', '>= 1.5.2'
 
   # =================== Deployment ==================
-  # gem 'capistrano', '~> 3.7', '>= 3.7.1'
-  # gem 'capistrano-rails', '~> 1.2'
-  # gem 'capistrano-passenger', '~> 0.2.0'
-  # gem 'capistrano-rbenv', '~> 2.1'
+  gem 'capistrano', '~> 3.7', '>= 3.7.1'
+  gem 'capistrano-rails', '~> 1.2'
+  gem 'capistrano-passenger', '~> 0.2.0'
+  gem 'capistrano-rbenv', '~> 2.1'
   # gem 'capistrano-sidekiq'
 end

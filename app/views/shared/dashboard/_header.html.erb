@@ -1,0 +1,174 @@
+<header class="topbar">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <!-- ============================================================== -->
+        <!-- Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="<%= admin_path %>">
+                <!-- Logo icon --><b>
+                    <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                    <!-- Dark Logo icon -->
+                    <img src="/dashboard/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                </b>
+                <!--End Logo icon -->
+                <!-- Logo text --><span>
+                <img src="/dashboard/images/logo-text.png" alt="homepage" class="dark-logo" />
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse">
+            <!-- ============================================================== -->
+            <!-- toggle and nav items -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav mr-auto">
+                <!-- This is  -->
+                <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark" href="javascript:void(0)"><i class="sl-icon-menu"></i></a> </li>
+                <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i class="sl-icon-menu"></i></a> </li>
+                <!-- ============================================================== -->
+                <!-- Search -->
+                <!-- ============================================================== -->
+                <li class="nav-item hidden-xs-down search-box"> <a class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i class="icon-Magnifi-Glass2"></i></a>
+                    <form class="app-search">
+                        <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i class="ti-close"></i></a> </form>
+                </li>
+            </ul>
+            <!-- ============================================================== -->
+            <!-- User profile and search -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav my-lg-0">
+                <!-- ============================================================== -->
+                <!-- Comment -->
+                <!-- ============================================================== -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="icon-Bell"></i>
+                      <div id="hearbit-notifications">
+                        <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                      </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
+                        <ul>
+                            <li>
+                                <div class="drop-title">Notifications</div>
+                            </li>
+                            <li>
+                                <div class="message-center">
+                                    <!-- Message -->
+                                    <a href="#">
+                                        <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
+                                        <div class="mail-contnet">
+                                            <h5>Welcome to Fustany</h5> <span class="mail-desc">Try out our Beta Dashboard!</span> <span class="time">8:00 AM</span> </div>
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!-- ============================================================== -->
+                <!-- End Comment -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Messages -->
+                <!-- ============================================================== -->
+                <%#= render 'shared/header_messages' %>
+                <!-- ============================================================== -->
+                <!-- End Messages -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- mega menu -->
+                <!-- ============================================================== -->
+                <%#= render 'shared/header_contact_us' %>
+                <!-- ============================================================== -->
+                <!-- End mega menu -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Language -->
+                <!-- ============================================================== -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="flag-icon flag-icon-gb"></i></a>
+                    <div class="dropdown-menu dropdown-menu-right animated bounceInDown"> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-gb"></i> English</a> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-eg"></i> Arabic (Soon)</a> </div>
+                </li>
+                <!-- ============================================================== -->
+                <!-- Profile -->
+                <!-- ============================================================== -->
+                <li class="nav-item dropdown u-pro">
+                  <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<%= current_active_user.avatar.thumb.url %>" alt="user" class="" /> <span class="hidden-md-down"><%= current_active_user.full_name %> &nbsp;<i class="fa fa-angle-down"></i></span> </a>
+                    <div class="dropdown-menu dropdown-menu-right animated flipInY">
+                        <ul class="dropdown-user">
+                            <li>
+                                <div class="dw-user-box">
+                                  <div class="u-img"><img src="<%= current_active_user.avatar.small_200.url %>" alt="user"></div>
+                                    <div class="u-text">
+                                      <h4><%= current_active_user.full_name %></h4>
+                                      <p class="text-muted"><%#= current_active_user.email %></p><a href="pages-profile.html" class="btn btn-rounded btn-info btn-sm">View Profile</a></div>
+                                </div>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <% if current_admin || current_hr %>
+                              <li><a href="<%= admin_profile_path %>" class='my-profile-btn'><i class="ti-user"></i> My Profile</a></li>
+                            <% else %>
+                              <li><a href="<%= admin_path %>" class='my-profile-btn'><i class="ti-user"></i> My Profile</a></li>
+                            <% end %>
+                            <!--
+                            <li><a href="#"><i class="ti-wallet"></i> My Balance</a></li>
+                            --!>
+                            <li><a href="#"><i class="ti-email"></i> Inbox</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#change_password"><i class="ti-settings"></i> Change Password</a></li>
+                            <li role="separator" class="divider"></li>
+                            <% if current_admin %>
+                              <li><a href="<%= destroy_admin_session_path %>" data-method="delete" class="logout-btn"><i class="fa fa-power-off"></i> Logout</a></li>
+                            <% elsif current_hr %>
+                              <li><a href="<%= destroy_hr_session_path %>" data-method="delete"><i class="fa fa-power-off"></i> Logout</a></li>
+                            <% elsif current_employee %>
+                              <li><a href="<%= destroy_employee_session_path %>" data-method="delete"><i class="fa fa-power-off"></i> Logout</a></li>
+                            <% end %>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!-- sample modal content -->
+<div id="change_password" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Change your password</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+          <%#= form_tag admin_change_password_path, method: :post do %>
+            <div class="modal-body">
+              <div class="row form-group">
+                <div class="col-md-12">
+                  <%#= password_field_tag :current_password, '', autofocus: true, placeholder: 'Enter old password..', class: 'form-control' %>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-12">
+                  <%#= password_field_tag :password, '', placeholder: 'Enter new password..', class: 'form-control' %>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-12">
+                  <%#= password_field_tag :password_confirmation, '', placeholder: 'Confirm new password..', class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <%#= submit_tag "Change", class: 'btn btn-info' %>
+            </div>
+          <%# end %>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.modal -->

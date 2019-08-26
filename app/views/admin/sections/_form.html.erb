@@ -1,0 +1,76 @@
+<% content_for :bc_title do %>
+  Sections
+<% end %>
+
+<% content_for :bc_current do %>
+  Edit Section
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_sections_path %>"><button type="button" class="btn btn-info"> All Sections</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @section %>
+
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header bg-info">
+        <% if @section.new_record? %>
+          <h4 class="m-b-0 text-white">Add new section</h4>
+        <% else %>
+          <h4 class="m-b-0 text-white">Edit section</h4>
+        <% end %>
+      </div>
+      <div class="card-body">  
+        <br/>
+        <%= nested_form_for [:admin, @section], html: { help: :block } do |f| %>
+          <div class="row">
+            <div class="col-md-12">          
+              <div class="form-group">        
+                <%= f.label :name, 'Name' %>
+                <%= f.text_field :name, required: true, class:"form-control"%>
+                <small>This is very important field, make sure you type it correctly!</small>
+              </div>
+            </div>
+          </div>
+
+          <br/><br/>
+          
+          <div class="row">
+            <div class="col-md-12">          
+              <div class='form-group'>
+                <%= f.fields_for :sub_sections do |sub| %>
+                  <%= sub.label :name, 'Sub Section Name' %>
+                  <div class="form-group">
+                    <%= sub.text_field :name, placeholder: 'Enter sub section name...', class: 'form-control' %>
+                  </div>
+
+                  <div class="form-group">
+                    <%= sub.link_to_remove "Remove", class:"btn btn-danger pull-right" %>
+                  </div>
+
+                  <br/><br/>
+                <% end %>
+                <div class="form-group">
+                  <%= f.link_to_add "Add more sub sections", :sub_sections, class:"btn btn-info" %>
+                </div>
+                <small>You can add sub sections of sub sections from indexing page after submitting your new sub categories</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

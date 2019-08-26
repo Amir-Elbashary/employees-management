@@ -1,0 +1,193 @@
+<% content_for :bc_title do %>
+  Sections
+<% end %>
+
+<% content_for :bc_current do %>
+  All Sections
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= new_admin_section_path %>"><button type="button" class="btn btn-info"> New Section</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">Sections</h4>
+    <div class="table-responsive m-t-40">
+      <table id="myTable" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Sub Sections</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sections.each do |section| %>
+            <tr>
+              <td><%= section.name %></td>
+              <td>
+                <button class="btn btn-primary <%= section.sub_sections.any? ? 'fa fa-edit' : 'fa fa-plus' %>" data-toggle="modal" data-target="#addSubCategories_<%= section.id %>"> <%= section.sub_sections.any? ? 'View' : 'Add' %> Sub Sections</button>
+              </td>
+              <td>
+                <a href="<%= edit_admin_section_path(section) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a href="<%= admin_section_path(section) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
+              </td>
+						</tr>
+
+            <!-- Modal -->
+            <div class="modal fade" id="addSubCategories_<%= section.id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel"><%= section.name %> Section</h4>
+                  </div>
+                  <div class="modal-body">
+                    <% section.sub_sections.each do |sub_section| %>
+                      <div class="row">
+                        <div class="col-md-8">
+                          <%= sub_section.name %>
+                        </div>
+                        <div class="col-md-2" align="center">
+                          <%= link_to '', edit_admin_section_path(sub_section), class: 'btn btn-xs btn-success fa fa-edit' %>
+                        </div>
+                        <div class="col-md-2" align="center">
+                          <%= link_to '', admin_section_path(sub_section), method: :delete, class: 'btn btn-xs btn-danger fa fa-trash', data: { confirm: 'WARNING: This will delete the section with it\'s data permanently, Proceed?' } %>
+                        </div>
+                      </div>
+                      <br/>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <% sub_section.sub_sections.each do |sub_sub_section| %>
+                            <div class="row">
+                              <div class="col-md-8">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<%= sub_sub_section.name %>
+                              </div>
+                              <div class="col-md-2" align="center">
+                                <%= link_to '', edit_admin_section_path(sub_sub_section), class: 'btn btn-xs btn-success fa fa-edit' %>
+                              </div>
+                              <div class="col-md-2" align="center">
+                                <%= link_to '', admin_section_path(sub_sub_section), method: :delete, class: 'btn btn-xs btn-danger fa fa-trash', data: { confirm: '' } %>
+                              </div>
+                            </div>
+                            <br/>
+                            <% sub_sub_section.sub_sections.each do |sub_3_section| %>
+                              <div class="row">
+                                <div class="col-md-8">
+                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= sub_3_section.name %>
+                                </div>
+                                <div class="col-md-2">
+                                  <%= link_to '', edit_admin_section_path(sub_3_section), class: 'btn btn-xs btn-success fa fa-edit' %>
+                                </div>
+                                <div class="col-md-2" align="center">
+                                  <%= link_to '', admin_section_path(sub_3_section), method: :delete, class: 'btn btn-xs btn-danger fa fa-trash', data: { confirm: '' } %>
+                                </div>
+                              </div> 
+                              <br/>
+                              <% sub_3_section.sub_sections.each do |sub_4_section| %>
+                                <div class="row">
+                                  <div class="col-md-8">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= sub_4_section.name %>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <%= link_to '', edit_admin_section_path(sub_4_section), class: 'btn btn-xs btn-success fa fa-edit' %>
+                                  </div>
+                                  <div class="col-md-2" align="center">
+                                    <%= link_to '', admin_section_path(sub_4_section), method: :delete, class: 'btn btn-xs btn-danger fa fa-trash', data: { confirm: '' } %>
+                                  </div>
+                                </div>
+                                <br/>
+                                <% sub_4_section.sub_sections.each do |sub_5_section| %>
+                                  <div class="row">
+                                    <div class="col-md-8">
+                                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= sub_5_section.name %>
+                                    </div>
+                                    <div class="col-md-2">
+                                      <%= link_to '', edit_admin_section_path(sub_5_section), class: 'btn btn-xs btn-success fa fa-edit' %>
+                                    </div>
+                                    <div class="col-md-2" align="center">
+                                      <%= link_to '', admin_section_path(sub_5_section), method: :delete, class: 'btn btn-xs btn-danger fa fa-trash', data: { confirm: '' } %>
+                                    </div>
+                                  </div>
+                                  </br>
+                                  <% sub_5_section.sub_sections.each do |sub_6_section| %>
+                                    <div class="row">
+                                      <div class="col-md-8">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= sub_6_section.name %>
+                                      </div>
+                                      <div class="col-md-2">
+                                        <!-- We will stop at level 6 at this time -->
+                                        <!-- To add another level, uncomment the blow line and add another nested block -->
+                                        <%#= link_to '', edit_admin_section_path(sub_6_section), class: 'btn btn-xs btn-success fa fa-edit' %>
+                                      </div>
+                                      <div class="col-md-2" align="center">
+                                        <%= link_to '', admin_section_path(sub_6_section), method: :delete, class: 'btn btn-xs btn-danger fa fa-trash', data: { confirm: '' } %>
+                                      </div>
+                                    </div>
+                                    </br>
+                                  <% end %>
+                                <% end %>
+                              <% end %>
+                            <% end %>
+                            <br/>
+                          <% end %>
+                        </div>
+                      </div>
+                      <br/>
+                    <% end %>
+                  </div>
+                  <br/>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+	$(function() {
+		$('#myTable').DataTable();
+		var table = $('#example').DataTable({
+			"columnDefs": [{
+				"visible": false,
+				"targets": 2
+			}],
+			"order": [
+				[2, 'asc']
+			],
+			"displayLength": 25,
+			"drawCallback": function(settings) {
+				var api = this.api();
+				var rows = api.rows({
+						page: 'current'
+				}).nodes();
+				var last = null;
+				api.column(2, {
+						page: 'current'
+				}).data().each(function(group, i) {
+					if (last !== group) {
+						$(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
+						last = group;
+					}
+				});
+			}
+		});
+		// Order by the grouping
+		$('#example tbody').on('click', 'tr.group', function() {
+			var currentOrder = table.order()[0];
+			if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
+				table.order([2, 'desc']).draw();
+			} else {
+				table.order([2, 'asc']).draw();
+			}
+		});
+	});
+</script>

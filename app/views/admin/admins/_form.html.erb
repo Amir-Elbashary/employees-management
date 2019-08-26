@@ -1,0 +1,203 @@
+<%= render 'shared/error_messages', object: current_admin || current_hr %>
+
+<div class="row">
+	<div class="col-9">
+		<div class="card">
+      <div class="card-header bg-info">
+        <h4 class="m-b-0 text-white">Edit profile</h4>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for current_admin || current_hr, url: admin_profile_path, method: :path, html: { help: :block } do |f| %>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :first_name, 'First Name' %>
+                <%= f.text_field :first_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :last_name, 'Last Name' %>
+                <%= f.text_field :last_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+                <%= f.label :nationality, 'Nationality' %>
+                <%= f.text_field :nationality, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+                <%= f.label :marital_status, 'Marital Status' %>
+                <%= f.select :marital_status, options_for_select(Admin.marital_statuses.map {|k, v| [k.humanize.capitalize, k]}), {}, class: 'form-control custom-select select2' %>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+                <%= f.label :military_status, 'Military Status' %>
+                <%= f.select :military_status, options_for_select(Admin.military_statuses.map {|k, v| [k.humanize.capitalize, k]}), {}, class: 'form-control custom-select select2' %>
+							</div>
+						</div>
+          </div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :gender, 'Gender' %>
+                <%= f.select :gender, options_for_select(Admin.genders.map {|k, v| [k.humanize.capitalize, k]}), {}, class: 'form-control custom-select select2' %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :birthdate, 'Birthdate' %>
+                <%= f.date_field :birthdate, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :mobile_numbers, 'Mobile Numbers' %>
+                <%= f.text_field :mobile_numbers, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :landline_numbers, 'Landline Numbers' %>
+                <%= f.text_field :landline_numbers, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :address, 'Address' %>
+                <%= f.text_field :address, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :social_id, 'Social ID' %>
+                <%= f.text_field :social_id, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :personal_email, 'Personal Email' %>
+                <%= f.text_field :personal_email, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :business_email, 'Business Email' %>
+                <%= f.text_field :business_email, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :qualification, 'Qualification' %>
+                <%= f.text_field :qualification, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :graduation_year, 'Graduation Year' %>
+                <%= f.number_field :graduation_year, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+                <%= f.label :date_of_employment, 'Date of Employment' %>
+                <%= f.date_field :date_of_employment, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+                <%= f.label :job_description, 'Job Description' %>
+                <%= f.text_field :job_description, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+                <%= f.label :work_type, 'Work Type' %>
+                <%= f.select :work_type, options_for_select(Admin.work_types.map {|k, v| [k.humanize.capitalize, k]}), {}, class: 'form-control custom-select select2' %>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+                <%= f.label :vacation_balance, 'Vacation Balance' %>
+                <%= f.number_field :vacation_balance, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :date_of_social_insurance_joining, 'Social Insurance joining date' %>
+                <%= f.date_field :date_of_social_insurance_joining, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :social_insurance_number, 'Social Insurance Number' %>
+                <%= f.text_field :social_insurance_number, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+                <%= f.label :avatar, 'Avatar' %>
+                <%= f.file_field :avatar, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+          <div class="row">
+          </div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :password, 'Password' %>
+                <%= f.password_field :password, class: 'form-control' %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+                <%= f.label :password_confirmation, 'Password Confirmation' %>
+                <%= f.password_field :password_confirmation, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
