@@ -3,7 +3,7 @@ lock "~> 3.11.0"
 
 set :application, 'fms'
 set :repo_url, 'git@github.com:Fustany/fms.git'
-set :branch, 'develop'
+set :branch, 'master'
 
 set :deploy_to, '/home/deploy/fms'
 
