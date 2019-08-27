@@ -20,11 +20,19 @@ RSpec.describe Employee, type: :model do
   end
 
   describe 'Has Associations' do
+    it 'should have many employees' do
+      should have_many(:employees)
+    end
+    
     it 'should have many documents' do
       should have_many(:documents)
     end
 
-    it 'should belongs to section' do
+    it 'should belong to supervisor' do
+      should belong_to(:supervisor).optional
+    end
+
+    it 'should belong to section' do
       should belong_to(:section).optional
     end
   end
