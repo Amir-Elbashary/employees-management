@@ -1,7 +1,7 @@
 require 'rails_helper'
 include AdminHelpers
 
-RSpec.feature 'Deleting H.R' do
+RSpec.feature 'Deleting Employee' do
   before do
     @hr = create(:hr)
     login_as(@hr, scope: :hr)

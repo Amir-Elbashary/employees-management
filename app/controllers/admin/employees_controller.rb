@@ -31,6 +31,8 @@ class Admin::EmployeesController < Admin::BaseAdminController
     end
   end
 
+  def show; end
+
   def destroy
     return unless @employee.destroy
     flash[:notice] = 'Employee was removed from Fustany Team.'
