@@ -12,6 +12,10 @@ Rails.application.routes.draw do
     sessions: 'employees/sessions'
   }
 
+  get '/ceo' => redirect('/admins/sign_in')
+  get '/hr' => redirect('/hrs/sign_in')
+  get '/' => redirect('/employees/sign_in')
+
   namespace :admin do
     get '/', to: 'admins#dashboard'
 

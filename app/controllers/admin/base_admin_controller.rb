@@ -32,7 +32,7 @@ class Admin::BaseAdminController < ApplicationController
       authenticate_admin!
     elsif current_hr
       authenticate_hr!
-    else current_employee
+    else
       authenticate_employee!
     end
   end

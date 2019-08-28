@@ -1,7 +1,7 @@
 require 'rails_helper'
 include AdminHelpers
 
-RSpec.feature 'Listing H.Rs' do
+RSpec.feature 'Listing Employees' do
   before do
     @hr = create(:hr)
     login_as(@hr, scope: :hr)
