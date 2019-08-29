@@ -3,4 +3,4 @@
 //= require admin_login/vendor/bootstrap/js/bootstrap.min.js
 //= require admin_login/vendor/select2/select2.min.js
 //= require admin_login/vendor/tilt/tilt.jquery.min.js
-//= require admin_login/js/main.js
+//= require admin_login/main.js
