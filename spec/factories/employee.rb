@@ -4,6 +4,7 @@ FactoryBot.define do
     password  { 'employeeemployee' }
     first_name { Faker::Name.unique.name }
     last_name { Faker::Name.unique.name }
+    job_description { Faker::Job.title }
     avatar { Faker::Avatar.image }
     section
   end

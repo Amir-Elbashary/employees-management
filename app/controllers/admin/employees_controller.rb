@@ -31,6 +31,8 @@ class Admin::EmployeesController < Admin::BaseAdminController
     end
   end
 
+  def show; end
+
   def destroy
     return unless @employee.destroy
     flash[:notice] = 'Employee was removed from Fustany Team.'
@@ -56,7 +58,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
                                      :date_of_employment, :job_description, :work_type, :date_of_social_insurance_joining,
                                      :social_insurance_number, :military_status, :marital_status, :nationality, :vacation_balance,
                                      :avatar, :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h,
-                                     documents_attributes: %i[id name file _destroy])
+                                     :supervisor_id, documents_attributes: %i[id name file _destroy])
   end
 
   def set_sections
