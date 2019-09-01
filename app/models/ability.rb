@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
   AUTHORIZABLE_MODELS = [Employee]
   END_USERS_MODELS = [Employee]
-  END_USERS_AUTHORIZED_MODELS = []
+  END_USERS_AUTHORIZED_MODELS = [RoomMessage]
 
   def initialize(user)
     case user
