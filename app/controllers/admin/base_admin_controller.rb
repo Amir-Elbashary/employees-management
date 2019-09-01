@@ -1,5 +1,6 @@
 class Admin::BaseAdminController < ApplicationController
   before_action :authenticate
+  before_action :set_main_room
   layout 'dashboard'
   check_authorization
 
@@ -35,5 +36,9 @@ class Admin::BaseAdminController < ApplicationController
     else
       authenticate_employee!
     end
+  end
+
+  def set_main_room
+    @main_room = Room.find_by(name: 'Fustany Team')
   end
 end

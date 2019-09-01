@@ -25,6 +25,7 @@
 //
 //= require dashboard/custom.js
 //= require dashboard/custom.min.js
+//= require dashboard/chat.js
 //
 //= require admins.js.coffee
 //= require hrs.js.coffee

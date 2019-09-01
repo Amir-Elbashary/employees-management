@@ -16,6 +16,7 @@ class Employee < ApplicationRecord
 
   has_many :employees, class_name: 'Employee', foreign_key: 'supervisor_id'
   has_many :documents, dependent: :destroy
+  has_many :room_messages, dependent: :destroy
   belongs_to :supervisor, class_name: 'Employee', foreign_key: 'supervisor_id', optional: true
   belongs_to :section, optional: true
 

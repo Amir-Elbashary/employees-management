@@ -69,6 +69,15 @@
         </ul>
       </li>
     <% end %>
+
+    <% if can? :read, Room %>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Chat </span></a>
+        <ul aria-expanded="false" class="collapse">
+          <li><%= link_to 'Fustany Team', admin_room_path(@main_room) %></li>
+          <li><%= link_to 'Private Chat (Soon)', admin_path %></li>
+        </ul>
+      </li>
+    <% end %>
     <!-- ============================================================== -->
     <!-- Permission required items end -->
     <!-- ============================================================== -->

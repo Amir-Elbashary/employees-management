@@ -28,6 +28,10 @@ RSpec.describe Employee, type: :model do
       should have_many(:documents)
     end
 
+    it 'should have many room messages' do
+      should have_many(:room_messages)
+    end
+
     it 'should belong to supervisor' do
       should belong_to(:supervisor).optional
     end

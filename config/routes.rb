@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     resources :roles
     resources :hrs
     resources :sections
+    resources :rooms
     resources :employees do
       member do
         post :toggle_level
