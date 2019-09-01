@@ -8,7 +8,7 @@ class Admin::RoomsController < Admin::BaseAdminController
   private
 
   def set_messages
-    @room_messages = @room.room_messages
+    @room_messages = @room.room_messages.last(40)
     @new_message = RoomMessage.new(room: @room)
   end
 

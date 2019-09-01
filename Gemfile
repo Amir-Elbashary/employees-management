@@ -14,7 +14,7 @@ gem 'acts_as_tree', '~> 2.9'
 gem 'nested_form'
 
 # ================ Job Related Gems =================
-# gem 'redis', '~> 4.0'
+gem 'redis'
 # gem 'sidekiq'
 # gem "sidekiq-cron", "~> 1.1"
 

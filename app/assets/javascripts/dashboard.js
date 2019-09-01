@@ -2,6 +2,7 @@
 //= require rails-ujs
 //= require jquery/jquery.min.js
 //= require jquery.jcrop
+//= require cable.js 
 // require jquery-ui/widgets/sortable
 // require rails_sortable
 //= require jquery_nested_form

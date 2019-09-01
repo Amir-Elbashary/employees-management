@@ -41,31 +41,33 @@
               <h3 class="box-title">Fustany Team Chat</h3>
             </div>
           </div>
-          <div class="chat-rbox">
+          <div id="chat-area" class="chat-rbox smooth-scroll">
             <ul class="chat-list p-20">
-              <% @room_messages.each do |message| %>
-                <% if message.employee == current_active_user %>
-                  <!--chat Row -->
-                  <li>
-                    <div class="chat-img"><img src="<%= current_employee.avatar.url %>" alt="user" /></div>
-                    <div class="chat-content">
-                      <h5><%= message.employee.full_name %></h5>
-                      <div class="box bg-light-info"><%= message.message %></div>
-                    </div>
-                    <div class="chat-time"><%= message.created_at.strftime('%I:%M %p') %></div>
-                  </li>
-                <% else %>
-                  <!--inverse chat Row -->
-                  <li class="reverse">
-                    <div class="chat-content">
-                      <h5><%= message.employee.full_name %></h5>
-                      <div class="box bg-light-inverse"><%= message.message %></div>
-                    </div>
-                    <div class="chat-img"><img src="<%= current_employee.avatar.url %>" alt="user" /></div>
-                    <div class="chat-time"><%= message.created_at.strftime('%I:%M %p') %></div>
-                  </li>
+              <div class="chat-area" data-channel-subscribe="room" data-room-id="<%= @room.id %>">
+                <% @room_messages.each do |message| %>
+                  <% if message.employee == current_active_user %>
+                    <!--chat Row -->
+                    <li>
+                      <div class="chat-img"><img src="<%= current_employee.avatar.url %>" alt="user" /></div>
+                      <div class="chat-content">
+                        <h5><%= message.employee.full_name %></h5>
+                        <div class="box bg-light-info"><%= message.message %></div>
+                      </div>
+                      <div class="chat-time"><%= message.created_at %></div>
+                    </li>
+                  <% else %>
+                    <!--inverse chat Row -->
+                    <li class="reverse">
+                      <div class="chat-content">
+                        <h5><%= message.employee.full_name %></h5>
+                        <div class="box bg-light-inverse"><%= message.message %></div>
+                      </div>
+                      <div class="chat-img"><img src="<%= message.employee.avatar.url %>" alt="user" /></div>
+                      <div class="chat-time"><%= message.created_at %></div>
+                    </li>
+                  <% end %>
                 <% end %>
-              <% end %>
+              </div>
             </ul>
           </div>
           <%= form_for [:admin, @new_message], remote: true do |f| %>
@@ -92,3 +94,48 @@
 <!-- ============================================================== -->
 <!-- End PAge Content -->
 <!-- ============================================================== -->
+
+
+<!--
+<div class="d-none" data-role="message-template">
+  <div class="chat-message-container">
+    <div class="row no-gutters">
+      <div class="col-auto text-center">
+        <img src="" class="avatar" alt="" data-role="user-avatar">
+      </div>
+
+      <div class="col">
+        <div class="message-content">
+          <p class="mb-1" data-role="message-text"></p>
+
+          <div class="text-right">
+            <small data-role="message-date"></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+-->
+
+<div class="d-none" data-role="message-template">
+  <li class="animated slideInUp">
+    <div class="chat-img"><img src="" alt="user" data-role="user-avatar" /></div>
+    <div class="chat-content">
+      <h5 data-role="message-sender"></h5>
+      <div class="box bg-light-info" data-role="message-text"></div>
+    </div>
+    <div class="chat-time" data-role="message-date"></div>
+  </li>
+</div>
+
+<div class="d-none" data-role="inv-message-template">
+  <li class="reverse animated slideInUp">
+    <div class="chat-content">
+      <h5 data-role="message-sender"></h5>
+      <div class="box bg-light-inverse" data-role="message-text"></div>
+    </div>
+    <div class="chat-img"><img src="" alt="user" data-role="user-avatar" /></div>
+    <div class="chat-time" data-role="message-date"></div>
+  </li>
+</div>
