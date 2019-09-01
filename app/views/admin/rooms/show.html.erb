@@ -74,7 +74,7 @@
             <div class="card-body b-t">
               <div class="row">
                 <div class="col-8">
-                  <%= f.text_area :message, required: true, placeholder: 'Type your message here...', class: 'form-control b-0' %>
+                  <%= f.text_field :message, required: true, autocomplete: :off, placeholder: 'Type your message here...', id: 'new_room_message', class: 'form-control b-0' %>
                 </div>
                 <div class="col-4 text-right">
                   <%= f.submit 'Send', class: 'btn btn-info btn-lg' %>
