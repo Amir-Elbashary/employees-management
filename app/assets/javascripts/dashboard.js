@@ -2,6 +2,7 @@
 //= require rails-ujs
 //= require jquery/jquery.min.js
 //= require jquery.jcrop
+//= require cable.js 
 // require jquery-ui/widgets/sortable
 // require rails_sortable
 //= require jquery_nested_form
@@ -25,6 +26,7 @@
 //
 //= require dashboard/custom.js
 //= require dashboard/custom.min.js
+//= require dashboard/chat.js
 //
 //= require admins.js.coffee
 //= require hrs.js.coffee
