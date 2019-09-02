@@ -4,7 +4,6 @@ $(function() {
         room_id = $element.data('room-id')
         messageTemplate = $('[data-role="message-template"]');
         invMessageTemplate = $('[data-role="inv-message-template"]');
-    console.log($('body').data('current-user-id'))
 
     $element.animate({ scrollTop: $element.prop("scrollHeight")}, 1000)        
 
