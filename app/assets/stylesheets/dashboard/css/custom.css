@@ -1,3 +1,7 @@
+.smooth-scroll {
+ scroll-behavior: smooth;
+}
+
 .toggle-btn {
   padding: 5px 6px !important;
 }

@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Admin.create(email: 'amira@fustany.com', password: 'AmiraAmira', password_confirmation: 'AmiraAmira', first_name: 'Amira', last_name: 'Azzouz')
+puts 'Admin created'
+
+Room.create(name: 'Fustany Team')
+puts 'Main chat room created'

@@ -8,11 +8,7 @@ class ApplicationController < ActionController::Base
   end
   
   def current_ability
-    if request.fullpath =~ /\/admin/
-      @current_ability ||= Ability.new(current_admin || current_hr)
-    else
-      @current_ability ||= Ability.new(current_employee)
-    end
+    @current_ability ||= Ability.new(current_active_user)
   end 
       
   def after_sign_out_path_for(resource)
