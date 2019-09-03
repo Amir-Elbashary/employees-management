@@ -1,5 +1,5 @@
 class VacationRequest < ApplicationRecord
-  enum status: %i[pending escalated approved declined]
+  enum status: %i[pending confirmed refused escalated approved declined]
 
   validates :starts_on, :ends_on, :reason, presence: true
 

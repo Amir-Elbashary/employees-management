@@ -5,7 +5,9 @@ class Admin::SettingsController < Admin::BaseAdminController
   def dashboard; end
 
   def refresh_permissions
-    custom_actions = { 'Employee' => ['toggle_level'] }
+    custom_actions = { 'Employee' => ['toggle_level'],
+                       'VacationRequest' => ['pending']
+                     }
 
     added_permissions = 0
 

@@ -35,7 +35,19 @@ Rails.application.routes.draw do
     resources :sections
     resources :rooms
     resources :room_messages
-    resources :vacation_requests
+    resources :vacation_requests do
+      collection do
+        get :pending
+      end
+
+      member do
+        post :escalate
+        post :approve
+        post :decline
+        post :confirm
+        post :refuse
+      end
+    end
     resources :employees do
       member do
         post :toggle_level

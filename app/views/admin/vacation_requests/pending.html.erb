@@ -3,7 +3,7 @@
 <% end %>
 
 <% content_for :bc_current do %>
-  All Requests
+  Pending Requests
 <% end %>
 
 <% content_for :bc_buttons do %>
@@ -17,7 +17,7 @@
 <!-- ============================================================== -->
 <div class="card">
 	<div class="card-body">
-    <h4 class="card-title">Your Requests</h4>
+    <h4 class="card-title">Pending Requests</h4>
     <div class="table-responsive m-t-40">
       <table id="myTable" class="table table-bordered table-striped">
         <thead>
@@ -38,13 +38,24 @@
               <td><%= request.starts_on.strftime('%d-%m-%Y') %></td>
               <td><%= request.ends_on.strftime('%d-%m-%Y') %></td>
               <td><%= request.status.humanize %></td>
-              <td>
-                <% if request.pending? %>
-                  <a href="<%= edit_admin_vacation_request_path(request) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                  <a href="<%= escalate_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Escalate" data-confirm="Are you sure, this is irreversable?" class="escalate-link"> <i class="fa fa-arrow-up m-r-10"></i> </a>
-                  <a href="<%= admin_vacation_request_path(request) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
-                <% end %>
-              </td>
+
+              <% if current_hr %>
+                <td>
+                  <% if request.confirmed? || request.escalated? %>
+                    <a href="<%= approve_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Approve" data-confirm="Are you sure ?" class="approve-link"> <i class="fa fa-check text-success m-r-10"></i> </a>
+                    <a href="<%= decline_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Decline" data-confirm="Are you sure ?" class="decline-link"> <i class="fa fa-times text-danger m-r-10"></i> </a>
+                  <% end %>
+                </td>
+              <% end %>
+
+              <% if current_employee&.supervisor? %>
+                <td>
+                  <% if request.pending? %>
+                    <a href="<%= confirm_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Confirm" data-confirm="Are you sure ?" class="confirm-link"> <i class="fa fa-check text-success m-r-10"></i> </a>
+                    <a href="<%= refuse_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Refuse" data-confirm="Are you sure ?" class="refuse-link"> <i class="fa fa-times text-danger m-r-10"></i> </a>
+                  <% end %>
+                </td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>
