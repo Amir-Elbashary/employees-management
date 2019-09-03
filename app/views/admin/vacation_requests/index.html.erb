@@ -1,0 +1,55 @@
+<% content_for :bc_title do %>
+  Vacation Requests
+<% end %>
+
+<% content_for :bc_current do %>
+  All Requests
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= new_admin_vacation_request_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> New Request</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<div class="card">
+	<div class="card-body">
+    <h4 class="card-title">Requests</h4>
+    <div class="table-responsive m-t-40">
+      <table id="myTable" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Avatar</th>
+            <th>Full Name</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Status</th>
+						<th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @vacation_requests.each do |request| %>
+            <tr>
+              <td><%= image_tag(request.employee.avatar.thumb.url, class: 'table-thumb') %></td>
+              <td><%= request.employee.full_name %></td>
+              <td><%= request.starts_on.strftime('%d-%m-%Y') %></td>
+              <td><%= request.ends_on.strftime('%d-%m-%Y') %></td>
+              <td><%= request.status.humanize %></td>
+              <td>
+                <a href="<%= edit_admin_vacation_request_path(request) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a href="<%= admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Escalate" data-confirm="Are you sure, this is irreversable?"> <i class="fa fa-arrow-up m-r-10"></i> </a>
+                <a href="<%= admin_vacation_request_path(request) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+<!-- ============================================================== -->

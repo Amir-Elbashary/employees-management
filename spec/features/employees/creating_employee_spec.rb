@@ -34,6 +34,7 @@ RSpec.feature 'Creating employee by H.R' do
     expect(page).to have_content('Last name can\'t be blank')
     expect(page).to have_content('Email can\'t be blank')
     expect(page).to have_content('Password can\'t be blank')
+    expect(Employee.count).to eq(0)
   end
 
   scenario 'with duplicated data' do
@@ -47,5 +48,6 @@ RSpec.feature 'Creating employee by H.R' do
     click_button 'Submit'
     
     expect(page).to have_content('Email has already been taken')
+    expect(Employee.count).to eq(1)
   end
 end

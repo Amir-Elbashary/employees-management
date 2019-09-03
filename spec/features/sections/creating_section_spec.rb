@@ -25,5 +25,6 @@ RSpec.feature 'Creating section' do
     click_button 'Submit'
     
     expect(page).to have_content('Name can\'t be blank')
+    expect(Section.count).to eq(0)
   end
 end

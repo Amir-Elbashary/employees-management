@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     resources :sections
     resources :rooms
     resources :room_messages
+    resources :vacation_requests
     resources :employees do
       member do
         post :toggle_level
