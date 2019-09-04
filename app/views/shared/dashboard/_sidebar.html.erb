@@ -39,14 +39,6 @@
     <!-- ============================================================== -->
     <!-- H.R only items -->
     <!-- ============================================================== -->
-
-    <!-- ============================================================== -->
-    <!-- H.R only items end -->
-    <!-- ============================================================== -->
-
-    <!-- ============================================================== -->
-    <!-- Permission required items -->
-    <!-- ============================================================== -->
     <% if can? :read, Employee %>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Employees </span></a>
         <ul aria-expanded="false" class="collapse">
@@ -55,7 +47,13 @@
         </ul>
       </li>
     <% end %>
+    <!-- ============================================================== -->
+    <!-- H.R only items end -->
+    <!-- ============================================================== -->
 
+    <!-- ============================================================== -->
+    <!-- Permission required items -->
+    <!-- ============================================================== -->
     <% if can? :read, Room %>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Chat </span></a>
         <ul aria-expanded="false" class="collapse">

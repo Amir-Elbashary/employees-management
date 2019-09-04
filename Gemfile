@@ -21,7 +21,6 @@ gem 'redis'
 # =============== Authentication Gems ===============
 gem 'devise', '~> 4.6', '>= 4.6.1'
 gem 'cancancan', '~> 2.3'
-# gem 'omniauth-facebook', '~> 5.0'
 
 # =============== Assets Related Gems ===============
 gem 'jquery-rails'

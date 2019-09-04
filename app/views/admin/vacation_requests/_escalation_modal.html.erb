@@ -12,7 +12,7 @@
           </div>
           <div class="form-group">
             <%= f.label :escalation_reason, 'Escalation Reason' %>:
-            <%= f.text_area :escalation_reason, class: 'form-control' %>
+            <%= f.text_area :escalation_reason, required: true, placeholder: 'Why did you decide to escalte your request?', class: 'form-control' %>
           </div>
         </div>
         <div class="modal-footer">
