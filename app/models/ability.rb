@@ -20,6 +20,7 @@ class Ability
     when Employee
       # Employees have access to specific models only
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
+      can :change_password, Admin
       cannot :manage, Employee
       can :read, Room
     end

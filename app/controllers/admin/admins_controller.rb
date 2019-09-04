@@ -23,6 +23,15 @@ class Admin::AdminsController < Admin::BaseAdminController
     end
   end
 
+  def change_password
+    if current_active_user.update_with_password(password_params)
+      flash[:notice] = 'Password has been changed, Please re-login'
+    else
+      flash[:danger] = current_active_user.errors.full_messages.join(', ')
+    end 
+    redirect_to admin_path     
+  end
+
   # def toggle_state
   #   unless can? :toggle, params[:model].constantize
   #     flash[:notice] = 'You are not authorized to perform this action'
@@ -39,6 +48,10 @@ class Admin::AdminsController < Admin::BaseAdminController
   # end
 
   private
+
+  def password_params
+    params.permit(:current_password, :password, :password_confirmation)
+  end
 
   def admin_params
     if current_admin

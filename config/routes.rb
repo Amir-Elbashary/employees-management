@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
     get :profile, to: 'admins#edit'
     post :profile, to: 'admins#update'
+    post :change_password, to: 'admins#change_password'
 
     resources :settings, only: :index do
       collection do

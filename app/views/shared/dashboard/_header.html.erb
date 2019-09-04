@@ -146,29 +146,29 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
-          <%#= form_tag admin_change_password_path, method: :post do %>
+          <%= form_tag admin_change_password_path, method: :post do %>
             <div class="modal-body">
               <div class="row form-group">
                 <div class="col-md-12">
-                  <%#= password_field_tag :current_password, '', autofocus: true, placeholder: 'Enter old password..', class: 'form-control' %>
+                  <%= password_field_tag :current_password, '', required: true, autofocus: true, placeholder: 'Enter old password..', class: 'form-control' %>
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-md-12">
-                  <%#= password_field_tag :password, '', placeholder: 'Enter new password..', class: 'form-control' %>
+                  <%= password_field_tag :password, '', required: true, placeholder: 'Enter new password..', class: 'form-control' %>
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-md-12">
-                  <%#= password_field_tag :password_confirmation, '', placeholder: 'Confirm new password..', class: 'form-control' %>
+                  <%= password_field_tag :password_confirmation, '', required: true, placeholder: 'Confirm new password..', class: 'form-control' %>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <%#= submit_tag "Change", class: 'btn btn-info' %>
+              <%= submit_tag "Change", class: 'btn btn-info' %>
             </div>
-          <%# end %>
+          <% end %>
       </div>
     </div>
   </div>
