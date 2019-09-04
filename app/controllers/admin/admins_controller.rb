@@ -28,8 +28,8 @@ class Admin::AdminsController < Admin::BaseAdminController
       flash[:notice] = 'Password has been changed, Please re-login'
     else
       flash[:danger] = current_active_user.errors.full_messages.join(', ')
-    end 
-    redirect_to admin_path     
+    end
+    redirect_to admin_path
   end
 
   # def toggle_state

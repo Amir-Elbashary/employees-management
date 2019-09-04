@@ -3,14 +3,14 @@ class ApplicationController < ActionController::Base
   helper_method :current_active_user, :current_ability
   skip_before_action :verify_authenticity_token, only: :reorder
 
-	def current_active_user      
+  def current_active_user
     current_admin || current_hr || current_employee
   end
-  
+
   def current_ability
     @current_ability ||= Ability.new(current_active_user)
-  end 
-      
+  end
+
   def after_sign_out_path_for(resource)
     case resource
     when :admin

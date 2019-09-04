@@ -55,10 +55,12 @@ class Admin::EmployeesController < Admin::BaseAdminController
     params.require(:employee).permit(:email, :password, :password_confirmation, :first_name, :last_name,
                                      :gender, :birthdate, :address, :social_id, :personal_email, :business_email,
                                      :mobile_numbers, :landline_numbers, :qualification, :graduation_year, :section_id,
-                                     :date_of_employment, :job_description, :work_type, :date_of_social_insurance_joining,
-                                     :social_insurance_number, :military_status, :marital_status, :nationality, :vacation_balance,
+                                     :date_of_employment, :job_description, :work_type,
+                                     :date_of_social_insurance_joining, :social_insurance_number, :military_status,
+                                     :marital_status, :nationality, :vacation_balance,
                                      :avatar, :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h,
-                                     :supervisor_id, :salary, :bank_account, documents_attributes: %i[id name file _destroy])
+                                     :supervisor_id, :salary, :bank_account,
+                                     documents_attributes: %i[id name file _destroy])
   end
 
   def set_sections
