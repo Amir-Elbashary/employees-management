@@ -6,7 +6,7 @@ class Admin::SettingsController < Admin::BaseAdminController
 
   def refresh_permissions
     custom_actions = { 'Employee' => ['toggle_level'],
-                       'VacationRequest' => ['pending']
+                       'VacationRequest' => ['pending', 'approve', 'decline']
                      }
 
     added_permissions = 0

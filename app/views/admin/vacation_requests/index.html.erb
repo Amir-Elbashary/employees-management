@@ -37,11 +37,15 @@
               <td><%= request.employee.full_name %></td>
               <td><%= request.starts_on.strftime('%d-%m-%Y') %></td>
               <td><%= request.ends_on.strftime('%d-%m-%Y') %></td>
-              <td><%= request.status.humanize %></td>
+              <td><%= request.status.humanize %><%= ' (Waiting for H.R)' if request.confirmed? %></td>
               <td>
                 <% if request.pending? %>
                   <a href="<%= edit_admin_vacation_request_path(request) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                  <a href="<%= escalate_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Escalate" data-confirm="Are you sure, this is irreversable?" class="escalate-link"> <i class="fa fa-arrow-up m-r-10"></i> </a>
+
+                  <%= link_to escalation_admin_vacation_request_path(request), remote: true, data: { toggle: 'tooltip', 'original-title': 'Escalate' }, class: 'escalate-link' do %>
+                    <i class="fa fa-arrow-up m-r-10"></i>
+                  <% end %>
+
                   <a href="<%= admin_vacation_request_path(request) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
                 <% end %>
               </td>
@@ -55,3 +59,6 @@
 <!-- ============================================================== -->
 <!-- End PAge Content -->
 <!-- ============================================================== -->
+<div id="escalation-modal">
+  <!-- Escalation modal shows here via escalation.js.erb (AJAX) -->
+</div>

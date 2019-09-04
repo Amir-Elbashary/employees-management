@@ -26,6 +26,9 @@
             <th>Full Name</th>
             <th>From</th>
             <th>To</th>
+            <% if current_hr %>
+              <th>Vacation Balance</th>
+            <% end %>
             <th>Status</th>
 						<th>Actions</th>
           </tr>
@@ -37,7 +40,10 @@
               <td><%= request.employee.full_name %></td>
               <td><%= request.starts_on.strftime('%d-%m-%Y') %></td>
               <td><%= request.ends_on.strftime('%d-%m-%Y') %></td>
-              <td><%= request.status.humanize %></td>
+              <% if current_hr %>
+                <td><%= request.employee.vacation_balance %></td>
+              <% end %>
+              <td title="<%= request.escalation_reason if request.escalated? %>"><%= request.status.humanize %><%= ' (Hover to show reason)' if request.escalated? %></td>
 
               <% if current_hr %>
                 <td>

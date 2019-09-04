@@ -39,7 +39,10 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def pending; end
 
+  def escalation; end
+
   def escalate
+    return unless @vacation_request.update(vacation_request_params)
     @vacation_request.escalated!
     redirect_to admin_vacation_requests_path
   end
@@ -51,6 +54,21 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def refuse
     @vacation_request.refused!
+    redirect_to pending_admin_vacation_requests_path
+  end
+
+  def approve
+    @vacation_request.approved!
+
+    employee = @vacation_request.employee
+    vacation_duration = (@vacation_request.ends_on - @vacation_request.starts_on).to_i
+
+    employee.update(vacation_balance: employee.vacation_balance.to_i - vacation_duration)
+    redirect_to pending_admin_vacation_requests_path
+  end
+
+  def decline
+    @vacation_request.declined!
     redirect_to pending_admin_vacation_requests_path
   end
 
