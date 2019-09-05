@@ -3,14 +3,13 @@ lock "~> 3.11.0"
 
 set :application, 'fms'
 set :repo_url, 'git@github.com:Fustany/fms.git'
-set :branch, 'master'
+set :branch, 'fix_sidekiq_issue'
 
 set :deploy_to, '/home/deploy/fms'
 
-# set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
-# append :linked_files, "config/database.yml", "config/secrets.yml", "config/sidekiq.yml", ".env"
+set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
 
-append :linked_files, "config/database.yml", "config/secrets.yml", ".env"
+append :linked_files, "config/database.yml", "config/secrets.yml", "config/sidekiq.yml", ".env"
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", "public/system", "public/uploads"
 
 namespace :deploy do           
@@ -25,9 +24,9 @@ namespace :deploy do
   after :finishing, 'deploy:cleanup'
 end
 
-after 'deploy:starting', 'sidekiq:quiet'
-after 'deploy:reverted', 'sidekiq:restart'
-after 'deploy:published', 'sidekiq:restart'
+# after 'deploy:starting', 'sidekiq:quiet'
+# after 'deploy:reverted', 'sidekiq:restart'
+# after 'deploy:published', 'sidekiq:restart'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
