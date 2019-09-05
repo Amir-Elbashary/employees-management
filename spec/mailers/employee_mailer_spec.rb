@@ -1,5 +1,5 @@
 require "rails_helper"
 
 RSpec.describe EmployeeMailer, type: :mailer do
-  pending "add some examples to (or delete) #{__FILE__}"
+  # Tests are enough with mail visual preview
 end
