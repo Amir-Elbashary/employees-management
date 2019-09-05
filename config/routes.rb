@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 
   devise_for :admins, controllers: {
     sessions: 'admins/sessions'
@@ -21,6 +23,7 @@ Rails.application.routes.draw do
 
     get :profile, to: 'admins#edit'
     post :profile, to: 'admins#update'
+    post :change_password, to: 'admins#change_password'
 
     resources :settings, only: :index do
       collection do
@@ -35,8 +38,23 @@ Rails.application.routes.draw do
     resources :sections
     resources :rooms
     resources :room_messages
+    resources :vacation_requests do
+      collection do
+        get :pending
+      end
+
+      member do
+        get :escalation
+        patch :escalate
+        post :approve
+        post :decline
+        post :confirm
+        post :refuse
+      end
+    end
     resources :employees do
       member do
+        post :resend_mail
         post :toggle_level
       end
     end

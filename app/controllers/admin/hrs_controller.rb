@@ -35,6 +35,6 @@ class Admin::HrsController < Admin::BaseAdminController
 
   def hr_params
     params.require(:hr).permit(:email, :password, :password_confirmation,
-                                       :first_name, :last_name, :avatar)
+                               :first_name, :last_name, :avatar)
   end
 end

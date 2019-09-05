@@ -1,0 +1,6 @@
+# Run this command to start sidekiq server
+# bundle exec sidekiq -C ./config/sidekiq.yml
+:queues:
+  - critical
+  - default
+  - low

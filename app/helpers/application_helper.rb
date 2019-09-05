@@ -3,7 +3,7 @@ module ApplicationHelper
     case flash_type
       when 'success'
         "alert-success" # Green
-      when 'error'
+      when 'danger'
         "alert-danger" # Red
       when 'alert'
         "alert-warning" # Yellow
@@ -30,7 +30,7 @@ module ApplicationHelper
   end
 
   def formatted_date(date)
-    date.strftime('%d/%m/%Y') unless date.nil?
+    date.strftime('%d-%m-%Y') unless date.nil?
   end
 
   def tree_formatting(spaces, dashes)

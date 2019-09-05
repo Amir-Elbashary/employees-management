@@ -25,6 +25,9 @@ module Fms
     # Including lib folder on startup
     config.autoload_paths << Rails.root.join('lib')
 
+    # User sidekiq adapter for active jobs
+    config.active_job.queue_adapter = :sidekiq
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

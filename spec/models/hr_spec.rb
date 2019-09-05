@@ -18,4 +18,10 @@ RSpec.describe Hr, type: :model do
       should validate_presence_of(:last_name)
     end
   end
+
+  describe 'Has Associations' do
+    it 'should have many vacation requests' do
+      should have_many(:vacation_requests)
+    end
+  end
 end

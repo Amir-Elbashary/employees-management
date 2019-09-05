@@ -1,0 +1,74 @@
+<% content_for :bc_title do %>
+  Vacation Requests
+<% end %>
+
+<% content_for :bc_current do %>
+  Pending Requests
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= new_admin_vacation_request_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> New Request</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<div class="card">
+	<div class="card-body">
+    <h4 class="card-title">Pending Requests</h4>
+    <div class="table-responsive m-t-40">
+      <table id="myTable" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Avatar</th>
+            <th>Full Name</th>
+            <th>From</th>
+            <th>To</th>
+            <% if current_hr %>
+              <th>Vacation Balance</th>
+            <% end %>
+            <th>Status</th>
+						<th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @vacation_requests.each do |request| %>
+            <tr>
+              <td><%= image_tag(request.employee.avatar.thumb.url, class: 'table-thumb') %></td>
+              <td><%= request.employee.full_name %></td>
+              <td><%= request.starts_on.strftime('%d-%m-%Y') %></td>
+              <td><%= request.ends_on.strftime('%d-%m-%Y') %></td>
+              <% if current_hr %>
+                <td><%= request.employee.vacation_balance %></td>
+              <% end %>
+              <td title="<%= request.escalation_reason if request.escalated? %>"><%= request.status.humanize %><%= ' (Hover to show reason)' if request.escalated? %></td>
+
+              <% if current_hr %>
+                <td>
+                  <% if request.confirmed? || request.escalated? %>
+                    <a href="<%= approve_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Approve" data-confirm="Are you sure ?" class="approve-link"> <i class="fa fa-check text-success m-r-10"></i> </a>
+                    <a href="<%= decline_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Decline" data-confirm="Are you sure ?" class="decline-link"> <i class="fa fa-times text-danger m-r-10"></i> </a>
+                  <% end %>
+                </td>
+              <% end %>
+
+              <% if current_employee&.supervisor? %>
+                <td>
+                  <% if request.pending? %>
+                    <a href="<%= confirm_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Confirm" data-confirm="Are you sure ?" class="confirm-link"> <i class="fa fa-check text-success m-r-10"></i> </a>
+                    <a href="<%= refuse_admin_vacation_request_path(request) %>" data-method="post" data-toggle="tooltip" data-original-title="Refuse" data-confirm="Are you sure ?" class="refuse-link"> <i class="fa fa-times text-danger m-r-10"></i> </a>
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+<!-- ============================================================== -->

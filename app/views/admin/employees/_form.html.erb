@@ -184,6 +184,24 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
+                <%= f.label :salary, 'Salary' %>
+                <%= f.number_field :salary, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :bank_account, 'Bank Account Number' %>
+                <%= f.text_field :bank_account, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
                 <%= f.label :section_id, 'Section' %>
                 <select name="employee[section_id]" class="form-control" required>
                   <%= @sections.each do |section| %>
