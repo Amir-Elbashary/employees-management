@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 
   devise_for :admins, controllers: {
     sessions: 'admins/sessions'
@@ -52,6 +54,7 @@ Rails.application.routes.draw do
     end
     resources :employees do
       member do
+        post :resend_mail
         post :toggle_level
       end
     end

@@ -9,6 +9,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
     if @employee.save
       flash[:notice] = "#{@employee.full_name} has joined Fustany Team."
       redirect_to admin_employees_path
+      Mail::WelcomeWorker.perform_async(@employee.id)
     else
       render :new
     end
@@ -47,6 +48,12 @@ class Admin::EmployeesController < Admin::BaseAdminController
     else
       employee.supervisor!
     end
+  end
+
+  def resend_mail
+    Mail::WelcomeWorker.perform_async(@employee.id)
+    flash[:notice] = 'Mail sent! it may take sometime based on server load'
+    redirect_to admin_employees_path
   end
 
   private

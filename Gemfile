@@ -15,7 +15,7 @@ gem 'nested_form'
 
 # ================ Job Related Gems =================
 gem 'redis'
-# gem 'sidekiq'
+gem 'sidekiq'
 # gem "sidekiq-cron", "~> 1.1"
 
 # =============== Authentication Gems ===============
@@ -76,5 +76,5 @@ group :development do
   gem 'capistrano-rails', '~> 1.2'
   gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rbenv', '~> 2.1'
-  # gem 'capistrano-sidekiq'
+  gem 'capistrano-sidekiq'
 end

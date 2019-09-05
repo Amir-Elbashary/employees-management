@@ -1,1 +1,10 @@
-Welcome to Fustany <%= @employee.full_name %>
+<h2>Welcome <%= @employee.full_name %> to Fustany Team</h2>
+===========================================================
+
+<p>Here is our <a href="http://team.fustany.com" target="_blank">Communication platform</a></p>
+<p>You can login using the following credentials:</p>
+<p>
+  Email: <b><%= @employee.email %></b>
+  <br/>
+  Password: <b>12345678</b> <i>(It's strongly recommended that you change your password as soon as you login)</i>
+</p>

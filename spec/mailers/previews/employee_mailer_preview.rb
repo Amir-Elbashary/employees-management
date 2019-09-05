@@ -2,7 +2,7 @@
 class EmployeeMailerPreview < ActionMailer::Preview
 
   def welcome_preview
-    @employee = Employee.first
+    @employee = Employee.first.id
     EmployeeMailer.welcome(@employee)
   end
 end
