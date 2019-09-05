@@ -7,10 +7,9 @@ set :branch, 'master'
 
 set :deploy_to, '/home/deploy/fms'
 
-# set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
-# append :linked_files, "config/database.yml", "config/secrets.yml", "config/sidekiq.yml", ".env"
+set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
 
-append :linked_files, "config/database.yml", "config/secrets.yml", ".env"
+append :linked_files, "config/database.yml", "config/secrets.yml", "config/sidekiq.yml", ".env"
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", "public/system", "public/uploads"
 
 namespace :deploy do           
