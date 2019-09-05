@@ -15,7 +15,7 @@ gem 'nested_form'
 
 # ================ Job Related Gems =================
 gem 'redis'
-gem 'sidekiq'
+gem 'sidekiq', '~> 5.2.7'
 # gem "sidekiq-cron", "~> 1.1"
 
 # =============== Authentication Gems ===============
