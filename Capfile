@@ -23,7 +23,7 @@ require 'capistrano/rbenv'
 set :rbenv_type, :user
 set :rbenv_ruby, '2.5.3'
 
-# require 'capistrano/sidekiq'
+require 'capistrano/sidekiq'
 
 # Include tasks from other gems included in your Gemfile
 #

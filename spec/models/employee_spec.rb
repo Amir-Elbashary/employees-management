@@ -28,6 +28,10 @@ RSpec.describe Employee, type: :model do
       should have_many(:documents)
     end
 
+    it 'should have many vacation requests' do
+      should have_many(:vacation_requests)
+    end
+
     it 'should have many room messages' do
       should have_many(:room_messages)
     end

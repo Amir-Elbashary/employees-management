@@ -57,7 +57,7 @@
                                     <a href="#">
                                         <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
                                         <div class="mail-contnet">
-                                            <h5>Welcome to Fustany</h5> <span class="mail-desc">Try out our Beta Dashboard!</span> <span class="time">8:00 AM</span> </div>
+                                            <h5>Welcome to Fustany</h5> <span class="mail-desc">We're growing strong!</span> <span class="time">8:00 AM</span> </div>
                                     </a>
                                 </div>
                             </li>
@@ -70,29 +70,6 @@
                 <!-- ============================================================== -->
                 <!-- End Comment -->
                 <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Messages -->
-                <!-- ============================================================== -->
-                <%#= render 'shared/header_messages' %>
-                <!-- ============================================================== -->
-                <!-- End Messages -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- mega menu -->
-                <!-- ============================================================== -->
-                <%#= render 'shared/header_contact_us' %>
-                <!-- ============================================================== -->
-                <!-- End mega menu -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Language -->
-                <!-- ============================================================== -->
-                <!--
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="flag-icon flag-icon-gb"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right animated bounceInDown"> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-gb"></i> English</a> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-eg"></i> Arabic (Soon)</a> </div>
-                </li>
-                -->
                 <!-- ============================================================== -->
                 <!-- Profile -->
                 <!-- ============================================================== -->
@@ -114,9 +91,7 @@
                             <% else %>
                               <li><a href="<%= admin_path %>" class='my-profile-btn'><i class="ti-user"></i> My Profile</a></li>
                             <% end %>
-                            <!--
-                            <li><a href="#"><i class="ti-wallet"></i> My Balance</a></li>
-                            --!>
+                            
                             <li><a href="#"><i class="ti-email"></i> Inbox</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>
@@ -146,29 +121,29 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
-          <%#= form_tag admin_change_password_path, method: :post do %>
+          <%= form_tag admin_change_password_path, method: :post do %>
             <div class="modal-body">
               <div class="row form-group">
                 <div class="col-md-12">
-                  <%#= password_field_tag :current_password, '', autofocus: true, placeholder: 'Enter old password..', class: 'form-control' %>
+                  <%= password_field_tag :current_password, '', required: true, autofocus: true, placeholder: 'Enter old password..', class: 'form-control' %>
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-md-12">
-                  <%#= password_field_tag :password, '', placeholder: 'Enter new password..', class: 'form-control' %>
+                  <%= password_field_tag :password, '', required: true, placeholder: 'Enter new password..', class: 'form-control' %>
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-md-12">
-                  <%#= password_field_tag :password_confirmation, '', placeholder: 'Confirm new password..', class: 'form-control' %>
+                  <%= password_field_tag :password_confirmation, '', required: true, placeholder: 'Confirm new password..', class: 'form-control' %>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <%#= submit_tag "Change", class: 'btn btn-info' %>
+              <%= submit_tag "Change", class: 'btn btn-info' %>
             </div>
-          <%# end %>
+          <% end %>
       </div>
     </div>
   </div>

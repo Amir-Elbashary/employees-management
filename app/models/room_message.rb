@@ -11,7 +11,7 @@ class RoomMessage < ApplicationRecord
   end
 
   def created_at
-    attributes['created_at'].strftime("%I:%M %p")
+    attributes['created_at'].strftime('%I:%M %p')
   end
 
   default_scope { order(created_at: :asc) }

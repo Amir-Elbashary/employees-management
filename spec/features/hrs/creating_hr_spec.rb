@@ -31,6 +31,7 @@ RSpec.feature 'Creating H.R by admin' do
     expect(page).to have_content('Last name can\'t be blank')
     expect(page).to have_content('Email can\'t be blank')
     expect(page).to have_content('Password can\'t be blank')
+    expect(Hr.count).to eq(0)
   end
 
   scenario 'with duplicated data' do
@@ -44,5 +45,6 @@ RSpec.feature 'Creating H.R by admin' do
     click_button 'Submit'
     
     expect(page).to have_content('Email has already been taken')
+    expect(Hr.count).to eq(1)
   end
 end

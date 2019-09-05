@@ -15,13 +15,12 @@ gem 'nested_form'
 
 # ================ Job Related Gems =================
 gem 'redis'
-# gem 'sidekiq'
+gem 'sidekiq'
 # gem "sidekiq-cron", "~> 1.1"
 
 # =============== Authentication Gems ===============
 gem 'devise', '~> 4.6', '>= 4.6.1'
 gem 'cancancan', '~> 2.3'
-# gem 'omniauth-facebook', '~> 5.0'
 
 # =============== Assets Related Gems ===============
 gem 'jquery-rails'
@@ -77,5 +76,5 @@ group :development do
   gem 'capistrano-rails', '~> 1.2'
   gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rbenv', '~> 2.1'
-  # gem 'capistrano-sidekiq'
+  gem 'capistrano-sidekiq'
 end

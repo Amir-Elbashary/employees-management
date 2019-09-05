@@ -1,0 +1,72 @@
+<% content_for :bc_title do %>
+  Vacation Requests
+<% end %>
+
+<% content_for :bc_current do %>
+  Submit Request
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_vacation_requests_path %>"><button type="button" class="btn btn-info"> All Requests</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @vacation_request %>
+
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header bg-info">
+        <% if @vacation_request.new_record? %>
+          <h4 class="m-b-0 text-white">Submit new request</h4>
+        <% else %>
+          <h4 class="m-b-0 text-white">Edit request</h4>
+        <% end %>
+      </div>
+      <div class="card-body">  
+        <br/>
+        <%= form_for [:admin, @vacation_request], html: { help: :block } do |f| %>
+          <%= f.hidden_field :employee_id, value: current_employee.id %>
+
+          <div class="row">
+            <div class="col-md-12">          
+              <div class="form-group">        
+                <%= f.label :starts_on, 'Starts on' %>
+                <%= f.date_field :starts_on, required: true, class: "form-control" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">          
+              <div class="form-group">        
+                <%= f.label :ends_on, 'Ends on' %>
+                <%= f.date_field :ends_on, required: true, class: "form-control" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">          
+              <div class="form-group">        
+                <%= f.label :reason, 'Reason' %>
+                <%= f.text_area :reason, required: true, class: "form-control" %>
+              </div>
+            </div>
+          </div>
+
+          <br/><br/>
+          
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

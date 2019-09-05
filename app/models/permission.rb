@@ -3,9 +3,9 @@ class Permission < ApplicationRecord
   has_many :roles, through: :role_permissions
 
   def name
-    crud = ['create', 'read', 'update', 'destroy']
+    crud = %w[create read update destroy]
     if crud.include?(action)
-      "#{action.titleize} #{target_model_name}"
+      "Can #{action.titleize} #{target_model_name}"
     else
       "#{action.titleize} #{target_model_name}"
     end
