@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_04_111201) do
+ActiveRecord::Schema.define(version: 2019_09_10_133446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,16 @@ ActiveRecord::Schema.define(version: 2019_09_04_111201) do
     t.string "avatar"
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "attendances", force: :cascade do |t|
+    t.bigint "employee_id"
+    t.datetime "checkin"
+    t.datetime "checkout"
+    t.float "time_spent", default: 0.0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_attendances_on_employee_id"
   end
 
   create_table "documents", force: :cascade do |t|
@@ -103,6 +113,8 @@ ActiveRecord::Schema.define(version: 2019_09_04_111201) do
     t.integer "supervisor_id"
     t.integer "salary", default: 0
     t.string "bank_account"
+    t.string "access_token"
+    t.integer "access_token_status", default: 0
     t.index ["email"], name: "index_employees_on_email", unique: true
     t.index ["level"], name: "index_employees_on_level"
     t.index ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true
@@ -218,6 +230,7 @@ ActiveRecord::Schema.define(version: 2019_09_04_111201) do
     t.index ["supervisor_id"], name: "index_vacation_requests_on_supervisor_id"
   end
 
+  add_foreign_key "attendances", "employees"
   add_foreign_key "documents", "employees"
   add_foreign_key "employees", "sections"
   add_foreign_key "hr_roles", "hrs"

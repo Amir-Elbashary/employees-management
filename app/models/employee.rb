@@ -5,6 +5,7 @@ class Employee < ApplicationRecord
   enum marital_status: %i[single engaged married]
   enum military_status: %i[completed exemption postponed currently_serving does_not_apply]
   enum level: %i[employee supervisor]
+  enum access_token_status: %i[listening exists]
   mount_uploader :avatar, AvatarUploader
   crop_uploaded :avatar
 
@@ -16,6 +17,7 @@ class Employee < ApplicationRecord
 
   has_many :employees, class_name: 'Employee', foreign_key: 'supervisor_id'
   has_many :documents, dependent: :destroy
+  has_many :attendances, dependent: :destroy
   has_many :vacation_requests, dependent: :destroy
   has_many :room_messages, dependent: :destroy
   belongs_to :supervisor, class_name: 'Employee', foreign_key: 'supervisor_id', optional: true

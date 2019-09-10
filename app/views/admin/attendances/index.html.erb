@@ -1,0 +1,51 @@
+<% content_for :bc_title do %>
+  Attendance
+<% end %>
+
+<% content_for :bc_current do %>
+  All Attendances
+<% end %>
+
+<% content_for :bc_buttons do %>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<% if cookies[:ft_att_ver] == current_employee.access_token %>
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Attendance</h4>
+      <div class="table-responsive m-t-40">
+        <table id="myTable" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Checkin</th>
+              <th>Checkout</th>
+              <th>Time Spent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @attendances.each do |attendance| %>
+              <tr>
+                <td><%= formatted_date(attendance.checkin) %></td>
+                <td><%= formatted_time(attendance.checkin) %></td>
+                <td><%= formatted_time(attendance.checkout) || 'Still working...' %></td>
+                <td><%= attendance.time_spent || 'Waiting for checkout...' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <strong><h2 class="text-danger">Device authentication required!</h2><strong>
+  <strong> 
+    <p>You see this now because either you cleared your browsing data or you're using different browser than the one you verified before.</p>
+    <p>Please contact your supervisor (<%= current_employee.supervisor.full_name %>), or contact the H.R directly</p>
+    <br/>
+    <p>Thanks,<br>
+    Fustany Technical Support Team.</p>
+  </strong>
+<% end %>

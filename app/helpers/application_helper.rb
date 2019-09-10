@@ -33,6 +33,10 @@ module ApplicationHelper
     date.strftime('%d-%m-%Y') unless date.nil?
   end
 
+  def formatted_time(time)
+    time.strftime('%I:%M %p') unless time.nil?
+  end
+
   def tree_formatting(spaces, dashes)
     tree_spaces = '|' + ('&nbsp;' * 6)
     tree_dashes = '|' + ('-' * 4)
