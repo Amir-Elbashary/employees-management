@@ -6,7 +6,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def index
     if current_employee.access_token != 'expired' && current_employee.listening?
-      cookies[:ft_att_ver] = { value: current_employee.access_token, expires: 60.seconds }
+      cookies[:ft_att_ver] = { value: current_employee.access_token, expires: 1.year }
       current_employee.exists!
     end
   end
