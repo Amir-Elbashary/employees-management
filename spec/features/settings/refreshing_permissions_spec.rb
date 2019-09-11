@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.feature 'Refreshing permissions' do
+  before do
+    @settings = create(:setting)
+  end
+
   context 'while logged in as H.R' do
     it 'should return not authorized' do
       @hr = create(:hr)
@@ -18,7 +22,7 @@ RSpec.feature 'Refreshing permissions' do
       visit dashboard_admin_settings_path
 
       expect(page).to have_button('Refresh Permissions')
-      click_button('Refresh Permissions')
+      find('.refresh-link').click
       expect(page).to have_content("Permissions refreshed successfully, #{Permission.count} permissions added")
     end
   end

@@ -5,7 +5,7 @@ class Employee < ApplicationRecord
   enum marital_status: %i[single engaged married]
   enum military_status: %i[completed exemption postponed currently_serving does_not_apply]
   enum level: %i[employee supervisor]
-  enum access_token_status: %i[listening exists]
+  enum access_token_status: %i[waiting_for_token token_verified]
   mount_uploader :avatar, AvatarUploader
   crop_uploaded :avatar
 

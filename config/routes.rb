@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     post :profile, to: 'admins#update'
     post :change_password, to: 'admins#change_password'
 
-    resources :settings, only: :index do
+    resources :settings, only: %i[index update] do
       collection do
         get :dashboard
 

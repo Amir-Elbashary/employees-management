@@ -1,3 +1,54 @@
-<h2>Dashboard Settings</h2>
-<h3>-- Roles</h3>
-<%= button_to 'Refresh Permissions', refresh_permissions_admin_settings_path, method: :post, class: 'btn btn-warning' %>
+<% content_for :bc_title do %>
+  Dashboard Settings
+<% end %>
+
+<% content_for :bc_current do %>
+  Settings
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= refresh_permissions_admin_settings_path %>" data-method="post" class="refresh-link"><button type="button" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh Permissions</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header bg-info">
+        <h4 class="m-b-0 text-white">Settings:</h4>
+      </div>
+      <div class="card-body">  
+        <br/>
+        <%= form_for [:admin, @settings], method: :patch, html: { id: 'settings-form', help: :block } do |f| %>
+
+          <div class="row">
+            <div class="col-md-12">          
+              <div class="form-group">        
+                <%= f.label :ip_addresses, 'Allowed IP Addresses' %>
+                <br/>
+                <%= f.text_field :ip_addresses, value: @settings.ip_addresses[0], multiple: true, data: { role: 'tagsinput' }, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Save', class: 'btn btn-md btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $("#settings-form").on("keypress", function (e) {
+    if (e.keyCode == 13) {
+      return false;            
+    } 
+  });
+</script>
