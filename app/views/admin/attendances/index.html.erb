@@ -16,6 +16,12 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Attendance</h4>
+        <%= link_to checkin_admin_attendances_path, method: :post do %>
+          <button class="btn btn-success"><b>Check-in!</b></button>
+        <% end %>
+        <%= link_to checkout_admin_attendances_path, method: :post do %>
+          <button class="btn btn-warning"><b>Check-out!</b></button>
+        <% end %>
         <div class="table-responsive m-t-40">
           <table id="myTable" class="table table-bordered table-striped">
             <thead>

@@ -5,6 +5,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   before_action :require_authorized_network, except: %i[index grant revoke]
   before_action :set_attendances, only: :index
   before_action :set_employee, only: %i[grant revoke]
+  before_action :set_messages, only: %i[checkin checkout]
 
   def index
     return unless current_employee
@@ -29,7 +30,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def checkin
     if @current_attendance
-      flash[:notice] = 'You have already checked-in today'
+      flash[:notice] = "You have already checked-in today, #{@messages[:checkin].sample}"
     else
       Attendance.create(employee: current_employee, checkin: DateTime.now)
       flash[:notice] = "Thank you #{current_employee.first_name}, Wishing you good and productive day."
@@ -40,7 +41,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def checkout
     if @current_attendance.checkout
-      flash[:notice] = 'You have already checked-out today'
+      flash[:notice] = "You have already checked-out today, #{@messages[:checkout].sample}"
     else
       if @current_attendance.update(checkout: DateTime.now)
         checkin = @current_attendance.checkin
@@ -88,5 +89,29 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def set_settings
     @settings = Setting.first
+  end
+
+  def set_messages
+    @messages = { checkin: [
+                    'Have you attended twice?',
+                    'Are you ok dear ?',
+                    'Looks like you forgot your coffee!',
+                    'Didn\'t you hear any welcomes today ?',
+                    'Refresh your memory!',
+                    'Maybe you need a break?',
+                    'Don\'t worry, we have an excellent memory.',
+                    'Why do you insist ?'
+                  ],
+                  checkout: [
+                    'I\'m sure!',
+                    'Looks like you had a long day.',
+                    'Haven\'t you take your break?',
+                    'You can count on us.',
+                    'And you did great today!',
+                    'Go home safe.',
+                    'We need you refreshed tomorrow!',
+                    'Why do you insist ?'
+                  ]
+                }
   end
 end

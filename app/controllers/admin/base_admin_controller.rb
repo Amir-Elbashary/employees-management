@@ -40,6 +40,6 @@ class Admin::BaseAdminController < ApplicationController
 
   def set_entities
     @main_room = Room.find_by(name: 'Fustany Team')
-    @current_attendance = current_employee&.attendances.where(created_at: DateTime.now.at_beginning_of_day..DateTime.now.at_end_of_day).first
+    @current_attendance = current_employee&.attendances&.where(created_at: DateTime.now.at_beginning_of_day..DateTime.now.at_end_of_day)&.first
   end
 end
