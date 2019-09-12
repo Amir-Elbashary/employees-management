@@ -1,6 +1,6 @@
 class Admin::BaseAdminController < ApplicationController
   before_action :authenticate
-  before_action :set_main_room
+  before_action :set_entities
   layout 'dashboard'
   check_authorization
 
@@ -38,7 +38,8 @@ class Admin::BaseAdminController < ApplicationController
     end
   end
 
-  def set_main_room
+  def set_entities
     @main_room = Room.find_by(name: 'Fustany Team')
+    @current_attendance = current_employee&.attendances.where(created_at: DateTime.now.at_beginning_of_day..DateTime.now.at_end_of_day).first
   end
 end

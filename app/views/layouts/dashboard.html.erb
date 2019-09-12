@@ -79,8 +79,11 @@
           <!-- Page Content -->
           <!-- ============================================================== -->
           <%= render partial: "shared/toast_flash_messages", flash: flash %>
+
           <div id="ac-notifications">
+            <%= render 'shared/dashboard/attendance_notification' %>
           </div>
+
           <%= yield %>
           <!-- ============================================================== -->
           <!-- End Page Content -->

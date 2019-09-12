@@ -39,6 +39,13 @@ Rails.application.routes.draw do
     resources :rooms
     resources :room_messages
     resources :attendances do
+      collection do
+        post :checkin
+        post :checkout
+        post :checkin_reminder
+        post :checkout_reminder
+      end
+
       member do
         post :grant
         post :revoke

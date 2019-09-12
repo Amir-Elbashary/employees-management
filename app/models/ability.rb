@@ -24,6 +24,10 @@ class Ability
       cannot :manage, Employee
       can :read, [Room, Attendance]
       can :create, Attendance
+      can :checkin, Attendance
+      can :checkout, Attendance
+      can :checkin_reminder, Attendance
+      can :checkout_reminder, Attendance
     end
   end
 

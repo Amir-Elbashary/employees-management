@@ -1,0 +1,37 @@
+<% if current_employee && !@current_attendance %>
+  <% unless cookies[:ft_att_ci_rem] %>
+    <div class="alert alert-warning">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+      <h3 class="text-warning"><i class="fa fa-exclamation-triangle"></i> <%= current_employee.first_name %>, You haven't check-in yet!</h3><b> Fustany Team is still missing you, and they are waiting for your presence!</b>
+      <br>
+      <b>Please make sure to check-in as soon as possible.</b>
+      <br><br>
+      <%= link_to checkin_admin_attendances_path, method: :post do %>
+        <button class="btn btn-success"><b>Check-in now!</b></button>
+      <% end %>
+      <%= link_to checkin_reminder_admin_attendances_path, method: :post do %>
+        <button class="btn btn-info"><b>Remind me in 2 hours!</b></button>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <% unless @current_attendance.checkout %>
+    <% unless cookies[:ft_att_co_rem] %>
+      <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+        <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Glad to see you today <%= current_employee.first_name %></h3><b> They say you're so creative!</b>
+        <br>
+        <b>Show them what you've got!</b>
+        <br><br>
+        <b>Don't forget to check-out before you leave.</b>
+        <br><br>
+        <%= link_to checkout_admin_attendances_path, method: :post do %>
+          <button class="btn btn-success"><b>I'm going home!</b></button>
+        <% end %>
+        <%= link_to checkout_reminder_admin_attendances_path, method: :post do %>
+          <button class="btn btn-info"><b>Remind me in 2 hours!</b></button>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
