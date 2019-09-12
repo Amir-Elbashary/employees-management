@@ -24,6 +24,7 @@
             <th>Email</th>
             <th>Birthdate</th>
             <th>Level</th>
+            <th>Attendance</th>
 						<th>Actions</th>
           </tr>
         </thead>
@@ -47,6 +48,10 @@
                                                  class: 'btn btn-sm btn-success',
                                                  onclick: "toggle(#{employee.id});",
                                                  style: employee.supervisor? ? 'display: none;' : 'display: block;' %>
+              </td>
+              <td>
+                <a href="<%= grant_admin_attendance_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Grant browser access" data-confirm="After clicking ok, Please ask an employee to checkin at least once!"> <i class="fa fa-check text-success m-r-10"></i> </a>
+                <a href="<%= revoke_admin_attendance_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Revoke" data-confirm="Are you sure ?"> <i class="fa fa-times text-danger m-r-10"></i> </a>
               </td>
               <td>
                 <a href="<%= resend_mail_admin_employee_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Resend Welcome Mail" data-confirm="Resend welcome mail?"> <i class="fa fa-envelope text-inverse m-r-10"></i> </a>

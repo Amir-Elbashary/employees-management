@@ -1,0 +1,54 @@
+<% content_for :bc_title do %>
+  Attendance
+<% end %>
+
+<% content_for :bc_current do %>
+  All Attendances
+<% end %>
+
+<% content_for :bc_buttons do %>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<% if current_admin || (@settings.ip_addresses[0].split(',').include?(request.remote_ip)) %>
+  <% if current_admin || (cookies[:ft_att_ver] == current_employee.access_token) %>
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Attendance</h4>
+        <%= link_to checkin_admin_attendances_path, method: :post do %>
+          <button class="btn btn-success"><b>Check-in!</b></button>
+        <% end %>
+        <%= link_to checkout_admin_attendances_path, method: :post do %>
+          <button class="btn btn-warning"><b>Check-out!</b></button>
+        <% end %>
+        <div class="table-responsive m-t-40">
+          <table id="myTable" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Checkin</th>
+                <th>Checkout</th>
+                <th>Time Spent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @attendances.each do |attendance| %>
+                <tr>
+                  <td><%= formatted_date(attendance.checkin) %></td>
+                  <td><%= formatted_time(attendance.checkin) %></td>
+                  <td><%= formatted_time(attendance.checkout) || 'Still working...' %></td>
+                  <td><%= attendance.time_spent || 'Waiting for checkout...' %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <%= render 'unauthorized_device' %>
+  <% end %>
+<% else %>
+  <%= render 'unauthorized_network' %>
+<% end %>

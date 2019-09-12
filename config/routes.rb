@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     post :profile, to: 'admins#update'
     post :change_password, to: 'admins#change_password'
 
-    resources :settings, only: :index do
+    resources :settings, only: %i[index update] do
       collection do
         get :dashboard
 
@@ -38,6 +38,19 @@ Rails.application.routes.draw do
     resources :sections
     resources :rooms
     resources :room_messages
+    resources :attendances do
+      collection do
+        post :checkin
+        post :checkout
+        post :checkin_reminder
+        post :checkout_reminder
+      end
+
+      member do
+        post :grant
+        post :revoke
+      end
+    end
     resources :vacation_requests do
       collection do
         get :pending

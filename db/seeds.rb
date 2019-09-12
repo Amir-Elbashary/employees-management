@@ -10,3 +10,6 @@ puts 'Admin created'
 
 Room.create(name: 'Fustany Team')
 puts 'Main chat room created'
+
+Setting.create(ip_addresses: [])
+puts 'Settings Generated'

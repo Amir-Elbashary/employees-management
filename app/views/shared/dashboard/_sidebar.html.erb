@@ -67,6 +67,14 @@
       </li>
     <% end %>
 
+    <% if can? :read, Attendance %>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Attendance </span></a>
+        <ul aria-expanded="false" class="collapse">
+          <li><%= link_to 'Attendance Log', admin_attendances_path %></li>
+        </ul>
+      </li>
+    <% end %>
+
     <% if current_employee || (can? :read, VacationRequest) %>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Vacations </span></a>
         <ul aria-expanded="false" class="collapse">
