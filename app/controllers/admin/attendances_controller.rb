@@ -40,17 +40,17 @@ class Admin::AttendancesController < Admin::BaseAdminController
   end
 
   def checkout
-    if @current_attendance.checkout
+    if @current_attendance&.checkout
       flash[:notice] = "You have already checked-out today, #{@messages[:checkout].sample}"
     else
-      if @current_attendance.update(checkout: DateTime.now)
+      if @current_attendance&.update(checkout: DateTime.now)
         checkin = @current_attendance.checkin
         checkout = @current_attendance.checkout
         time_spent = ((checkout - checkin) / 60 / 60).round(2)
         @current_attendance.update(time_spent: time_spent)
         flash[:notice] = "Thanks #{current_employee.first_name}, Goodbye."
       else
-        flash[:danger] = 'An error occured, Please contact technical team'
+        flash[:danger] = 'You haven\'t check-in today yet, Let\'s start a productive day!'
       end
     end
 
