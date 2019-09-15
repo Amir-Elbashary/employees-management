@@ -11,11 +11,11 @@
 
 <%= render 'shared/dashboard/breadcrumb' %>
 
-<% if current_admin || (@settings.ip_addresses[0].split(',').include?(request.remote_ip)) %>
-  <% if current_admin || (cookies[:ft_att_ver] == current_employee.access_token) %>
+<% if current_admin || current_hr || (@settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)) %>
+  <% if current_admin || current_hr || (cookies[:ft_att_ver] == current_employee.access_token) %>
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Attendance</h4>
+        <h4 class="card-title">Attendance Sheet</h4>
         <%= link_to checkin_admin_attendances_path, method: :post, data: { confirm: 'Got your coffee ?, Ready to start?' } do %>
           <button class="btn btn-success"><b>Check-in!</b></button>
         <% end %>

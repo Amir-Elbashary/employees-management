@@ -3,6 +3,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   skip_load_resource only: %i[index grant revoke]
   before_action :set_settings
   before_action :require_authorized_network, except: %i[index grant revoke]
+  before_action :require_authorized_device, except: %i[index grant revoke]
   before_action :set_attendances, only: :index
   before_action :set_employee, only: %i[grant revoke]
   before_action :set_messages, only: %i[checkin checkout]
@@ -72,6 +73,12 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def require_authorized_network
     return if @settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)
     flash[:danger] = 'Unauthorized network detected, Please connect to an authorized network!'
+    redirect_to admin_path
+  end
+
+  def require_authorized_device
+    return if cookies[:ft_att_ver] == current_employee.access_token
+    flash[:danger] = 'Unauthorized device detected, Please connect via an authorized device!'
     redirect_to admin_path
   end
 
