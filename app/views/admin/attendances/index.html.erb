@@ -26,6 +26,8 @@
           <table id="myTable" class="table table-bordered table-striped">
             <thead>
               <tr>
+                <th>Avatar</th>
+                <th>Name</th>
                 <th>Date</th>
                 <th>Checkin</th>
                 <th>Checkout</th>
@@ -35,6 +37,8 @@
             <tbody>
               <% @attendances.each do |attendance| %>
                 <tr>
+                  <td><%= image_tag(attendance.employee.avatar.thumb.url, class: 'table-thumb') %></td>
+                  <td><%= link_to attendance.employee.full_name, admin_employee_path(attendance.employee) %></td>
                   <td><%= formatted_date(attendance.checkin) %></td>
                   <td><%= formatted_time(attendance.checkin) %></td>
                   <td><%= formatted_time(attendance.checkout) || 'Still working...' %></td>
