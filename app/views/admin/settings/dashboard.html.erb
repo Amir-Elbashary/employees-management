@@ -25,7 +25,7 @@
           <div class="row">
             <div class="col-md-12">          
               <div class="form-group">        
-                <%= f.label :ip_addresses, 'Allowed IP Addresses' %>
+                <%= f.label :ip_addresses, 'Allowed IP Addresses' %> <b>(Current IP: <%= request.remote_ip %>)</b>
                 <br/>
                 <%= f.text_field :ip_addresses, value: @settings.ip_addresses[0], multiple: true, data: { role: 'tagsinput' }, class: 'form-control' %>
               </div>
