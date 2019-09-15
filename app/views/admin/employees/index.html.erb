@@ -50,7 +50,7 @@
                                                  style: employee.supervisor? ? 'display: none;' : 'display: block;' %>
               </td>
               <td>
-                <a href="<%= grant_admin_attendance_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Grant browser access" data-confirm="After clicking ok, Please ask an employee to checkin at least once!"> <i class="fa fa-check text-success m-r-10"></i> </a>
+                <a href="<%= grant_admin_attendance_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Grant browser access" data-confirm="After clicking ok, Please ask an employee to checkin at least once!" class="grant-link"> <i class="fa fa-check text-success m-r-10"></i> </a>
                 <a href="<%= revoke_admin_attendance_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Revoke" data-confirm="Are you sure ?"> <i class="fa fa-times text-danger m-r-10"></i> </a>
               </td>
               <td>
