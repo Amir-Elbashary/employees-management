@@ -3,6 +3,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   skip_load_resource only: %i[index grant revoke]
   before_action :set_settings
   before_action :require_authorized_network, except: %i[index grant revoke]
+  before_action :require_authorized_device, except: %i[index grant revoke]
   before_action :set_attendances, only: :index
   before_action :set_employee, only: %i[grant revoke]
   before_action :set_messages, only: %i[checkin checkout]
@@ -40,17 +41,17 @@ class Admin::AttendancesController < Admin::BaseAdminController
   end
 
   def checkout
-    if @current_attendance.checkout
+    if @current_attendance&.checkout
       flash[:notice] = "You have already checked-out today, #{@messages[:checkout].sample}"
     else
-      if @current_attendance.update(checkout: DateTime.now)
+      if @current_attendance&.update(checkout: DateTime.now)
         checkin = @current_attendance.checkin
         checkout = @current_attendance.checkout
         time_spent = ((checkout - checkin) / 60 / 60).round(2)
         @current_attendance.update(time_spent: time_spent)
         flash[:notice] = "Thanks #{current_employee.first_name}, Goodbye."
       else
-        flash[:danger] = 'An error occured, Please contact technical team'
+        flash[:danger] = 'You haven\'t check-in today yet, Let\'s start a productive day!'
       end
     end
 
@@ -72,6 +73,12 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def require_authorized_network
     return if @settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)
     flash[:danger] = 'Unauthorized network detected, Please connect to an authorized network!'
+    redirect_to admin_path
+  end
+
+  def require_authorized_device
+    return if cookies[:ft_att_ver] == current_employee.access_token
+    flash[:danger] = 'Unauthorized device detected, Please connect via an authorized device!'
     redirect_to admin_path
   end
 
