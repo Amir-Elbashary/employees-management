@@ -23,5 +23,9 @@ RSpec.describe Hr, type: :model do
     it 'should have many vacation requests' do
       should have_many(:vacation_requests)
     end
+
+    it 'should have many attendances' do
+      should have_many(:attendances)
+    end
   end
 end

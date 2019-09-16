@@ -40,6 +40,22 @@ class Admin::BaseAdminController < ApplicationController
 
   def set_entities
     @main_room = Room.find_by(name: 'Fustany Team')
-    @current_attendance = current_employee&.attendances&.where(created_at: DateTime.now.at_beginning_of_day..DateTime.now.at_end_of_day)&.first
+    @current_attendance = current_active_user&.attendances&.where(created_at: Time.zone.now.at_beginning_of_day..Time.zone.now.at_end_of_day)&.first
+
+    @time_spent_percentage = if @current_attendance
+                               start_time = @current_attendance.checkin
+                               current_time = Time.zone.now
+                               ((((current_time - start_time) / 60 / 60).round(2)) / 8 * 100).round(2)
+                             else
+                               0
+                             end
+
+    @progress_color = if @time_spent_percentage < 50
+                        'danger'
+                      elsif @time_spent_percentage.between?(50, 90)
+                        'info'
+                      elsif @time_spent_percentage > 90
+                        'success'
+                      end
   end
 end
