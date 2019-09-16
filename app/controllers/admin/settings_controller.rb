@@ -45,7 +45,7 @@ class Admin::SettingsController < Admin::BaseAdminController
   private
 
   def settings_params
-    params.require(:setting).permit(ip_addresses: [])
+    params.require(:setting).permit(:work_from_home, ip_addresses: [])
   end
 
   def set_settings
