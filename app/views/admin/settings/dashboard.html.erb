@@ -33,6 +33,16 @@
           </div>
 
           <div class="row">
+            <div class="col-md-12">          
+              <div class="form-group">        
+                <%= f.label :work_from_home, 'Work from home limit' %> <b>(Number of days)</b>
+                <br/>
+                <%= f.number_field :work_from_home, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
             <div class="col-md-12">
               <div class="form-group">
                 <%= f.submit 'Save', class: 'btn btn-md btn-primary' %>

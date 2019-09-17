@@ -3,6 +3,7 @@ include AdminHelpers
 
 RSpec.feature 'Processing pending vacation requests as H.R' do
   before do
+    @settings = create(:setting, work_from_home: 2)
     @hr = create(:hr)
     @employee = create(:employee, vacation_balance: 20)
     assign_permission(@hr, :pending, VacationRequest)
@@ -23,19 +24,104 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
     end
   end
 
-  scenario 'can approve the request' do
-    assign_permission(@hr, :approve, VacationRequest)
-    @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, status: 1)
+  describe 'approving requests' do
+    context 'when request type is vacation' do
+      it 'should be approved and detucted from vacation balance' do
+        assign_permission(@hr, :approve, VacationRequest)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, kind: 0, status: 1)
 
-    visit pending_admin_vacation_requests_path
+        visit pending_admin_vacation_requests_path
 
-    expect(Employee.employee.first.vacation_balance).to eq(20)
-    expect(page).to have_content('Confirmed')
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Confirmed')
 
-    find('.approve-link').click
+        find('.approve-link').click
 
-    expect(Employee.employee.first.vacation_balance).to eq(18)
-    expect(page).to have_content('Approved')
+        expect(Employee.employee.first.vacation_balance).to eq(18)
+        expect(page).to have_content('Approved')
+      end
+    end
+
+    context 'when request type is work from home' do
+      it 'should be approved, not deducted from vanacation balance and counted as work from home if work from home limit is not reached and within the allowed limit of days' do
+        assign_permission(@hr, :approve, VacationRequest)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, kind: 1, status: 1)
+
+        visit pending_admin_vacation_requests_path
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Confirmed')
+
+        find('.approve-link').click
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Approved')
+      end
+
+      it 'should not be approved or counted as work from home if work from home limit is not reached and requested days are longer than the allowed limit of days' do
+        assign_permission(@hr, :approve, VacationRequest)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 5.days, employee: @employee, kind: 1, status: 1)
+
+        visit pending_admin_vacation_requests_path
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Confirmed')
+
+        find('.approve-link').click
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Request duration is longer than the allowed limit of days.')
+      end
+
+      it 'should not be approved if work from home limit is reached' do
+        assign_permission(@hr, :approve, VacationRequest)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, kind: 1, status: 4)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 4.days, ends_on: Date.today + 6.days, employee: @employee, kind: 1, status: 1)
+
+        visit pending_admin_vacation_requests_path
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Confirmed')
+
+        find('.approve-link').click
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Work from home limit reached for this employee.')
+      end
+
+      it 'should not be approved if work from home limit is going to be passed after approving the current request' do
+        assign_permission(@hr, :approve, VacationRequest)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 3.days, employee: @employee, kind: 1, status: 4)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 4.days, ends_on: Date.today + 6.days, employee: @employee, kind: 1, status: 1)
+
+        visit pending_admin_vacation_requests_path
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Confirmed')
+
+        find('.approve-link').click
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Not enough work from home days left for this employee.')
+      end
+    end
+
+    context 'when request type is sick leave' do
+      it 'should be approved and not detucted from vacation balance' do
+        assign_permission(@hr, :approve, VacationRequest)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, kind: 2, status: 1)
+
+        visit pending_admin_vacation_requests_path
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Confirmed')
+
+        find('.approve-link').click
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Approved')
+      end
+    end
   end
 
   scenario 'can decline the request' do

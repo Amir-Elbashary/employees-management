@@ -33,8 +33,14 @@ class Admin::AttendancesController < Admin::BaseAdminController
     if @current_attendance
       flash[:notice] = "You have already checked-in today, #{@messages[:checkin].sample}"
     else
-      Attendance.create(employee: current_employee, checkin: DateTime.now)
-      flash[:notice] = "Thank you #{current_employee.first_name}, Wishing you good and productive day."
+      if current_admin
+        Attendance.create(admin: current_admin, checkin: DateTime.now)
+      elsif current_hr
+        Attendance.create(hr: current_hr, checkin: DateTime.now)
+      elsif current_employee
+        Attendance.create(employee: current_employee, checkin: DateTime.now)
+      end
+      flash[:notice] = "Thank you #{current_active_user.first_name}, Wishing you good and productive day."
     end
 
     redirect_to request.referer
@@ -49,7 +55,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
         checkout = @current_attendance.checkout
         time_spent = ((checkout - checkin) / 60 / 60).round(2)
         @current_attendance.update(time_spent: time_spent)
-        flash[:notice] = "Thanks #{current_employee.first_name}, Goodbye."
+        flash[:notice] = "Thanks #{current_active_user.first_name}, Goodbye."
       else
         flash[:danger] = 'You haven\'t check-in today yet, Let\'s start a productive day!'
       end
@@ -71,12 +77,14 @@ class Admin::AttendancesController < Admin::BaseAdminController
   private
 
   def require_authorized_network
+    return unless current_employee
     return if @settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)
     flash[:danger] = 'Unauthorized network detected, Please connect to an authorized network!'
     redirect_to admin_path
   end
 
   def require_authorized_device
+    return unless current_employee
     return if cookies[:ft_att_ver] == current_employee.access_token
     flash[:danger] = 'Unauthorized device detected, Please connect via an authorized device!'
     redirect_to admin_path

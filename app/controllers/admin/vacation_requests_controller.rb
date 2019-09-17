@@ -6,6 +6,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   before_action :set_pending_requests, only: :pending
   before_action :ensure_same_employee, only: :edit
   before_action :validate_dates, only: %i[create update]
+  before_action :set_settings, only: :approve
 
   def new; end
 
@@ -58,12 +59,44 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   end
 
   def approve
-    @vacation_request.approved!
-
     employee = @vacation_request.employee
-    vacation_duration = (@vacation_request.ends_on - @vacation_request.starts_on).to_i
+    work_from_home_days = @settings.work_from_home
 
-    employee.update(vacation_balance: employee.vacation_balance.to_i - vacation_duration)
+    if @vacation_request.vacation?
+      vacation_duration = (@vacation_request.ends_on - @vacation_request.starts_on).to_i
+      if employee.update(vacation_balance: employee.vacation_balance.to_i - vacation_duration)
+        flash[:notice] = 'Vacation request Approved.'
+        @vacation_request.approved!
+      end
+    end
+
+    if @vacation_request.sick_leave?
+      flash[:notice] = 'Sick leave request approved.'
+      @vacation_request.approved!
+    end
+
+    if @vacation_request.work_from_home?
+      request_duration = (@vacation_request.ends_on - @vacation_request.starts_on).to_i
+      work_from_home_requests = employee.vacation_requests.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month).approved.work_from_home
+      days_taken = 0
+
+      work_from_home_requests.each do |request|
+        duration = (request.ends_on - request.starts_on).to_i
+        days_taken += duration
+      end
+
+      if request_duration > work_from_home_days
+        flash[:notice] = 'Request duration is longer than the allowed limit of days.'
+      elsif days_taken >= work_from_home_days
+        flash[:danger] = 'Work from home limit reached for this employee.'
+      elsif (days_taken + request_duration) > work_from_home_days
+        flash[:danger] = 'Not enough work from home days left for this employee.'
+      elsif (days_taken + request_duration) <= work_from_home_days
+        flash[:notice] = 'Work from home request approved.'
+        @vacation_request.approved!
+      end
+    end
+
     redirect_to pending_admin_vacation_requests_path
   end
 
@@ -76,7 +109,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def vacation_request_params
     params.require(:vacation_request).permit(:employee_id, :hr_id, :supervisor_id,
-                                             :starts_on, :ends_on, :reason,
+                                             :starts_on, :ends_on, :reason, :kind,
                                              :supervisor_feedback, :hr_feedback, :escalation_reason)
   end
 
@@ -109,5 +142,9 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     return if current_hr || current_employee.supervisor?
     flash[:danger] = 'You are not allowed!'
     redirect_to admin_vacation_requests_path
+  end
+
+  def set_settings
+    @settings = Setting.first
   end
 end

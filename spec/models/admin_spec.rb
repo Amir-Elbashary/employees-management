@@ -18,4 +18,10 @@ RSpec.describe Admin, type: :model do
       should validate_presence_of(:last_name)
     end
   end
+
+  describe 'Has Associations' do
+    it 'should have many attendances' do
+      should have_many(:attendances)
+    end
+  end
 end
