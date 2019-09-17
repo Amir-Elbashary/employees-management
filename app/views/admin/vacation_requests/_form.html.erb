@@ -48,6 +48,15 @@
           </div>
 
           <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :kind, 'Type' %>
+                <%= f.select :kind, VacationRequest.kinds.map { |k, v| [k.humanize.capitalize, k] }, { selected: @vacation_request.kind }, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
             <div class="col-md-12">          
               <div class="form-group">        
                 <%= f.label :reason, 'Reason' %>

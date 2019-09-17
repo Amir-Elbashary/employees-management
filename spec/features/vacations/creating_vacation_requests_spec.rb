@@ -10,6 +10,7 @@ RSpec.feature 'Creating vacation request' do
   scenario 'with valid data' do
     fill_in 'Starts on', with: (Date.today + 2.days)
     fill_in 'Ends on', with: (Date.today + 4.days)
+    select('Vacation', from: 'Type').select_option
     fill_in 'Reason', with: 'I just need a vacation :P'
 
     click_button 'Submit'
@@ -24,6 +25,7 @@ RSpec.feature 'Creating vacation request' do
       it 'should not submit the request' do
         fill_in 'Starts on', with: ''
         fill_in 'Ends on', with: ''
+        select('Vacation', from: 'Type').select_option
         fill_in 'Reason', with: ''
 
         click_button 'Submit'
@@ -39,6 +41,7 @@ RSpec.feature 'Creating vacation request' do
       it 'should not submit the request' do
         fill_in 'Starts on', with: (Date.today + 4.days)
         fill_in 'Ends on', with: (Date.today + 2.days)
+        select('Vacation', from: 'Type').select_option
         fill_in 'Reason', with: 'I just need a vacation :P'
 
         click_button 'Submit'

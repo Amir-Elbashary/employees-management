@@ -7,43 +7,114 @@
 <% end %>
 
 <% content_for :bc_buttons do %>
+	<%= link_to checkin_admin_attendances_path, method: :post, data: { confirm: 'Got your coffee ?, Ready to start?' } do %>
+		<button class="btn btn-md btn-success"><b>Check-in!</b></button>
+	<% end %>
+	<%= link_to checkout_admin_attendances_path, method: :post, data: { confirm: 'Finished everything ? ready to go home ?' } do %>
+		<button class="btn btn-md btn-warning"><b>Check-out!</b></button>
+	<% end %>
 <% end %>
 
 <%= render 'shared/dashboard/breadcrumb' %>
 
 <% if current_admin || current_hr || (@settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)) %>
   <% if current_admin || current_hr || (cookies[:ft_att_ver] == current_employee.access_token) %>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Working hours spent today</h4>
+            <!-- Column -->
+            <div class="m-t-30">
+              <h5 class="m-t-30">Until now you spent:<span class="pull-right"><%= @time_spent_percentage %>%</span></h5>
+              <div class="progress ">
+                <div class="progress-bar bg-<%= @progress_color %> wow animated progress-animated" style="width: <%= @time_spent_percentage %>%; height:6px;" role="progressbar"></div>
+              </div>
+            </div>
+            <!-- Column -->
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Attendance Sheet</h4>
-        <%= link_to checkin_admin_attendances_path, method: :post, data: { confirm: 'Got your coffee ?, Ready to start?' } do %>
-          <button class="btn btn-success"><b>Check-in!</b></button>
-        <% end %>
-        <%= link_to checkout_admin_attendances_path, method: :post, data: { confirm: 'Finished everything ? ready to go home ?' } do %>
-          <button class="btn btn-warning"><b>Check-out!</b></button>
-        <% end %>
-        <div class="table-responsive m-t-40">
-          <table id="myTable" class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Checkin</th>
-                <th>Checkout</th>
-                <th>Time Spent</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @attendances.each do |attendance| %>
-                <tr>
-                  <td><%= formatted_date(attendance.checkin) %></td>
-                  <td><%= formatted_time(attendance.checkin) %></td>
-                  <td><%= formatted_time(attendance.checkout) || 'Still working...' %></td>
-                  <td><%= attendance.time_spent || 'Waiting for checkout...' %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+        <% unless current_employee %>
+          <!-- Nav tabs -->      
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#employees" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Employees</span></a> </li>    
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#admins" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">CEO & H.Rs</span></a> </li>
+          </ul>
+
+          <!-- Tab panes -->     
+          <div class="tab-content tabcontent-border">
+            <div class="tab-pane" id="admins" role="tabpanel">
+              <br/>
+              <h4 class="card-title">Attendance Sheet</h4>
+              <div class="table-responsive m-t-40">
+                <table id="admins_table" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Avatar</th>
+                      <th>Name</th>
+                      <th>Date</th>
+                      <th>Checkin</th>
+                      <th>Checkout</th>
+                      <th>Time Spent</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @attendances.where(employee: nil).each do |attendance| %>
+                      <tr>
+                        <% if attendance.admin %>
+                          <td><%= image_tag(attendance.admin.avatar.thumb.url, class: 'table-thumb') %></td>
+                          <td><%= attendance.admin.full_name %></td>
+                        <% else %>
+                          <td><%= image_tag(attendance.hr.avatar.thumb.url, class: 'table-thumb') %></td>
+                          <td><%= attendance.hr.full_name %></td>
+                        <% end %>
+                        <td><%= formatted_date(attendance.checkin) %></td>
+                        <td><%= formatted_time(attendance.checkin) %></td>
+                        <td><%= formatted_time(attendance.checkout) || 'Still working...' %></td>
+                        <td><%= attendance.time_spent || 'Waiting for checkout...' %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane active" id="employees" role="tabpanel">
+            <br/>
+          <% end %>
+						<h4 class="card-title">Attendance Sheet</h4>
+						<div class="table-responsive m-t-40">
+							<table id="employees_table" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>Avatar</th>
+										<th>Name</th>
+										<th>Date</th>
+										<th>Checkin</th>
+										<th>Checkout</th>
+										<th>Time Spent</th>
+									</tr>
+								</thead>
+								<tbody>
+									<% @attendances.where.not(employee: nil).each do |attendance| %>
+										<tr>
+											<td><%= image_tag(attendance.employee.avatar.thumb.url, class: 'table-thumb') %></td>
+											<td><%= link_to attendance.employee.full_name, admin_employee_path(attendance.employee) %></td>
+											<td><%= formatted_date(attendance.checkin) %></td>
+											<td><%= formatted_time(attendance.checkin) %></td>
+											<td><%= formatted_time(attendance.checkout) || 'Still working...' %></td>
+											<td><%= attendance.time_spent || 'Waiting for checkout...' %></td>
+										</tr>
+									<% end %>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
       </div>
     </div>
   <% else %>

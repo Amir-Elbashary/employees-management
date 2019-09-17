@@ -15,5 +15,6 @@ class Hr < ApplicationRecord
 
   has_many :hr_roles, dependent: :destroy
   has_many :roles, through: :hr_roles
+  has_many :attendances, dependent: :destroy
   has_many :vacation_requests, dependent: :destroy
 end
