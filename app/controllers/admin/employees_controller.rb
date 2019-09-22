@@ -9,7 +9,8 @@ class Admin::EmployeesController < Admin::BaseAdminController
     if @employee.save
       flash[:notice] = "#{@employee.full_name} has joined Fustany Team."
       redirect_to admin_employees_path
-      Mail::WelcomeWorker.perform_async(@employee.id)
+      # TODO
+      # Mail::WelcomeWorker.perform_async(@employee.id)
     else
       render :new
     end
