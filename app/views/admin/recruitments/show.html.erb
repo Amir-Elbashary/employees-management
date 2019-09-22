@@ -1,0 +1,247 @@
+<% content_for :bc_title do %>
+  Employees
+<% end %>
+
+<% content_for :bc_current do %>
+  <%= @employee.full_name %> Profile
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= edit_admin_employee_path(@employee) %>"><button type="button" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit Employees</button></a>
+  <a href="<%= admin_employees_path %>"><button type="button" class="btn btn-info"> All Employees</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<!-- Row -->
+<div class="row">
+  <!-- Column -->
+  <div class="col-lg-4 col-xlg-3 col-md-5">
+    <div class="card">
+      <div class="card-body">
+        <center class="m-t-30"> <%= image_tag(@employee.avatar.url, class: 'img-circle', width: '150') %>
+          <h4 class="card-title m-t-10"><%= @employee.full_name %></h4>
+          <h6 class="card-subtitle"><%= @employee.job_description %></h6>
+          <div class="row text-center justify-content-md-center">
+            <div class="col-8">
+              <a href="javascript:void(0)" class="link"><i class="icon-people"></i> <font class="font-medium">Started working: <%= @employee.date_of_employment&.strftime('%d-%m-%Y') %></font></a>
+            </div>
+          </div>
+          <div class="row text-center justify-content-md-center">
+            <div class="col-10">
+              <a href="javascript:void(0)" class="link"><i class="icon-picture"></i> <font class="font-medium">Vacation Balance: <%= pluralize(@employee.vacation_balance, 'day') %> remaining</font></a>
+            </div>
+          </div>
+        </center>
+      </div>
+      <div>
+        <hr>
+      </div>
+      <div class="card-body">
+        <small class="text-muted">Business Email</small>
+        <h6><%= @employee.business_email %></h6>
+
+        <small class="text-muted p-t-30 db">Personal Email</small>
+        <h6><%= @employee.personal_email %></h6>
+
+        <small class="text-muted p-t-30 db">Phone</small>
+        <h6><%= @employee.mobile_numbers %></h6>
+
+        <small class="text-muted p-t-30 db">Address</small>
+        <h6><%= @employee.address %></h6>
+      </div>
+    </div>
+  </div>
+  <!-- Column -->
+
+  <!-- Column -->
+  <div class="col-lg-8 col-xlg-9 col-md-7">
+    <div class="card">
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs profile-tab" role="tablist">
+        <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">Profile</a> </li>
+        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#home" role="tab">Documents</a> </li>
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane active" id="profile" role="tabpanel">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3 col-xs-6 b-r"> <strong>Full Name</strong>
+                <br>
+                <p class="text-muted"><%= @employee.full_name %></p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r"> <strong>Job Description</strong>
+                <br>
+                <p class="text-muted"><%= @employee.job_description %></p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r"> <strong>Email</strong>
+                <br>
+                <p class="text-muted"><%= @employee.business_email %></p>
+              </div>
+              <div class="col-md-3 col-xs-6"> <strong>Mobile</strong>
+                <br>
+                <p class="text-muted"><%= @employee.mobile_numbers %></p>
+              </div>
+              </div>
+              <hr>
+              <h5>Personal Information:</h5>
+              <br/>
+              <div class="row">
+                <div class="col-md-3 col-xs-6"> <strong>Birthdate</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.birthdate&.strftime('%d-%m-%Y') %></p>
+                </div>
+                <div class="col-md-3 col-xs-6"> <strong>Gender</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.gender.capitalize %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Nationality</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.nationality %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Social ID</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.social_id %></p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-3 col-xs-6"> <strong>Military Status</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.military_status.capitalize %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Marital Status</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.marital_status.capitalize %></p>
+                </div>
+              </div>
+              <hr>
+
+              <h5>Qualifications:</h5>
+              <br/>
+              <div class="row">
+                <div class="col-md-3 col-xs-6"> <strong>Qualification</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.qualification %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Graduation Year</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.graduation_year %></p>
+                </div>
+              </div>
+              <hr>
+
+              <h5>Job Information:</h5>
+              <br/>
+              <div class="row">
+                <div class="col-md-3 col-xs-6"> <strong>Date of Employment</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.date_of_employment&.strftime('%d-%m-%Y') %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Work Type</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.work_type.humanize %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Vacation Balance</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.vacation_balance %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Salary</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.salary %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Bank Account</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.bank_account %></p>
+                </div>
+              </div>
+              <hr>
+
+              <h5>Social Insurance:</h5>
+              <br>
+              <div class="row">
+                <div class="col-md-3 col-xs-6"> <strong>Date of Social Insurance joining</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.date_of_social_insurance_joining&.strftime('%d-%m-%Y') %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Social Insurance Number</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.social_insurance_number %></p>
+                </div>
+              </div>
+              <hr>
+
+              <h5>Contact Information:</h5>
+              <br/>
+              <div class="row">
+                <div class="col-md-3 col-xs-6"> <strong>Personal Email</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.personal_email %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Address</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.address %></p>
+                </div>
+
+                <div class="col-md-3 col-xs-6"> <strong>Landline Numbers</strong>
+                  <br>
+                  <p class="text-muted"><%= @employee.landline_numbers %></p>
+                </div>
+              </div>
+              <hr>
+
+              <p class="m-t-30"></p>
+
+              <h4 class="font-medium m-t-30">Skill Set (Coming Soon)</h4>
+              <hr>
+              <h5 class="m-t-30">Wordpress <span class="pull-right">80%</span></h5>
+              <div class="progress">
+                  <div class="progress-bar bg-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%; height:6px;"> <span class="sr-only">50% Complete</span> </div>
+              </div>
+              <h5 class="m-t-30">HTML 5 <span class="pull-right">90%</span></h5>
+              <div class="progress">
+                  <div class="progress-bar bg-info" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:90%; height:6px;"> <span class="sr-only">50% Complete</span> </div>
+              </div>
+              <h5 class="m-t-30">jQuery <span class="pull-right">50%</span></h5>
+              <div class="progress">
+                  <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%; height:6px;"> <span class="sr-only">50% Complete</span> </div>
+              </div>
+              <h5 class="m-t-30">Photoshop <span class="pull-right">70%</span></h5>
+              <div class="progress">
+                  <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%; height:6px;"> <span class="sr-only">50% Complete</span> </div>
+              </div>
+          </div>
+        </div>
+        <!--second tab-->
+        <div class="tab-pane" id="home" role="tabpanel">
+          <div class="card-body">
+            <% @employee.documents.each do |doc| %>
+              <div class="row">
+                <div class="col-md-4">
+                  <h4 class="m-t-10"><%= doc.name %></h4>
+                </div>
+                <div class="col-md-8">
+                  <%= button_to 'Download', doc.file.url, download: true, method: :get, class: 'btn btn-primary' %>
+                </div>
+              </div>
+              <hr>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Column -->
+</div>
+<!-- Row -->

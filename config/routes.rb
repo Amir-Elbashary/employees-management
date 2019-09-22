@@ -38,6 +38,8 @@ Rails.application.routes.draw do
     resources :sections
     resources :rooms
     resources :room_messages
+    resources :recruitments
+
     resources :attendances do
       collection do
         post :checkin
@@ -51,6 +53,7 @@ Rails.application.routes.draw do
         post :revoke
       end
     end
+
     resources :vacation_requests do
       collection do
         get :pending
@@ -65,11 +68,13 @@ Rails.application.routes.draw do
         post :refuse
       end
     end
+
     resources :employees do
       member do
         post :resend_mail
         post :toggle_level
       end
     end
+
   end
 end

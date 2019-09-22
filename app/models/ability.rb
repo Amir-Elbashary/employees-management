@@ -1,6 +1,6 @@
 class Ability
   include CanCan::Ability
-  AUTHORIZABLE_MODELS = [Employee, VacationRequest, Attendance]
+  AUTHORIZABLE_MODELS = [Employee, VacationRequest, Attendance, Recruitment]
   END_USERS_MODELS = [Employee]
   END_USERS_AUTHORIZED_MODELS = [VacationRequest, RoomMessage]
 

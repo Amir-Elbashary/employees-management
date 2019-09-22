@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_16_131409) do
+ActiveRecord::Schema.define(version: 2019_09_22_131242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,6 +175,20 @@ ActiveRecord::Schema.define(version: 2019_09_16_131409) do
   create_table "permissions", force: :cascade do |t|
     t.string "target_model_name"
     t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "recruitments", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.string "mobile_number"
+    t.string "landline_number"
+    t.string "position"
+    t.text "feedback"
+    t.integer "decision", default: 0
+    t.string "cv"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

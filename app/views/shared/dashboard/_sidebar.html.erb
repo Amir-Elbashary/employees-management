@@ -47,6 +47,15 @@
         </ul>
       </li>
     <% end %>
+
+    <% if can? :read, Recruitment %>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Recruitment </span></a>
+        <ul aria-expanded="false" class="collapse">
+          <li><%= link_to 'All Recruitments', admin_recruitments_path %></li>
+          <li><%= link_to 'New Recruitment', new_admin_recruitment_path %></li>
+        </ul>
+      </li>
+    <% end %>
     <!-- ============================================================== -->
     <!-- H.R only items end -->
     <!-- ============================================================== -->

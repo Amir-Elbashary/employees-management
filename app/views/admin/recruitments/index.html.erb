@@ -1,0 +1,49 @@
+<% content_for :bc_title do %>
+  Recruitments
+<% end %>
+
+<% content_for :bc_current do %>
+  All Recruitments
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= new_admin_recruitment_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> New Recruitment</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<div class="card">
+	<div class="card-body">
+    <h4 class="card-title">Recruitments</h4>
+    <div class="table-responsive m-t-40">
+      <table id="myTable" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Position</th>
+            <th>Decision</th>
+						<th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recruitments.each do |rec| %>
+            <tr>
+              <td><%= link_to rec.full_name, admin_recruitment_path(rec) %></td>
+              <td><%= rec.email %></td>
+              <td><%= rec.mobile_number %></td>
+              <td><%= rec.position %></td>
+              <td><%= rec.decision %></td>
+              <td>
+                <a href="<%#= resend_mail_admin_employee_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Resend Welcome Mail" data-confirm="Resend welcome mail?"> <i class="fa fa-envelope text-inverse m-r-10"></i> </a>
+                <a href="<%= edit_admin_recruitment_path(rec) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a href="<%= admin_recruitment_path(rec) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
