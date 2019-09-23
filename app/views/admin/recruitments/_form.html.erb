@@ -1,0 +1,125 @@
+<% content_for :bc_title do %>
+  Recruitments
+<% end %>
+
+<% content_for :bc_current do %>
+  Edit Recruitment
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_recruitments_path %>"><button type="button" class="btn btn-info"> All Recruitments</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @recruitment %>
+
+<div class="row">
+	<div class="col-6">
+		<div class="card">
+      <div class="card-header bg-info">
+        <% if @recruitment.new_record? %>
+          <h4 class="m-b-0 text-white">Add new recruitment</h4>
+        <% else %>
+          <h4 class="m-b-0 text-white">Edit recruitment</h4>
+        <% end %>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for [:admin, @recruitment], html: { help: :block } do |f| %>
+          <h3>Recruitment information:</h3>
+          <br/>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :first_name, 'First Name' %>
+                <%= f.text_field :first_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :last_name, 'Last Name' %>
+                <%= f.text_field :last_name, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :email, 'Email' %>
+                <%= f.text_field :email, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :mobile_number, 'Mobile Number' %>
+                <%= f.text_field :mobile_number, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :landline_number, 'Landline Number' %>
+                <%= f.text_field :landline_number, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :position, 'Position applying for' %>
+                <%= f.text_field :position, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :feedback, 'Feedback' %>
+                <%= f.text_area :feedback, placeholder: 'Enter feedback..', rows: 15, class: 'textarea_editor form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :decision, 'Decision' %>
+                <%= f.select :decision, Recruitment.decisions.map { |k, v| [k.humanize.capitalize, k] }, { selected: @recruitment.decision }, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :avatar, 'Avatar' %>
+                  <%= f.file_field :cv, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

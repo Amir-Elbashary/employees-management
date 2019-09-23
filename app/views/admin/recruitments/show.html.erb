@@ -1,0 +1,82 @@
+<% content_for :bc_title do %>
+  Recruitments
+<% end %>
+
+<% content_for :bc_current do %>
+  <%= @recruitment.full_name %> Information
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= edit_admin_recruitment_path(@recruitment) %>"><button type="button" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit Recruitment</button></a>
+  <a href="<%= admin_recruitments_path %>"><button type="button" class="btn btn-info"> All Recruitments</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<!-- Row -->
+<div class="row">
+	<!-- column -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Striped Table</h4>
+        <h6 class="card-subtitle">Add<code>.table-striped</code>for borders on all sides of the table and cells.</h6>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Full Name</td>
+                <td><%= @recruitment.full_name %></td>
+              </tr>
+
+              <tr>
+                <td>Email</td>
+                <td><%= @recruitment.email %></td>
+              </tr>
+
+              <tr>
+                <td>Mobile Number</td>
+                <td><%= @recruitment.mobile_number %></td>
+              </tr>
+
+              <tr>
+                <td>Landline Number</td>
+                <td><%= @recruitment.landline_number %></td>
+              </tr>
+
+              <tr>
+                <td>Position</td>
+                <td><%= @recruitment.position %></td>
+              </tr>
+
+              <tr>
+                <td>Feedback</td>
+                <td><%= @recruitment.feedback&.html_safe %></td>
+              </tr>
+
+              <tr>
+                <td>Decision</td>
+                <td><%= @recruitment.decision.humanize %></td>
+              </tr>
+
+              <% if @recruitment.cv.present? %>
+                <tr>
+                  <td>C.V</td>
+                  <td>
+                    <%= button_to 'Download C.V', @recruitment.cv.url, download: true, method: :get, class: 'btn btn-primary' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
