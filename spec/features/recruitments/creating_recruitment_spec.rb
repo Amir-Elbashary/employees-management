@@ -1,50 +1,53 @@
 require 'rails_helper'
+include AdminHelpers
 
-RSpec.feature 'Creating H.R by admin' do
+RSpec.feature 'Creating recruitment by H.R' do
   before do
-    @admin = create(:admin)
-    login_as(@admin, scope: :admin)
-    visit new_admin_hr_path
+    @hr = create(:hr)
+    login_as(@hr, scope: :hr)
+    assign_permission(@hr, :read, Recruitment)
+    assign_permission(@hr, :create, Recruitment)
+    visit new_admin_recruitment_path
   end
 
   scenario 'with valid data' do
-    fill_in 'First Name', with: 'Human'
-    fill_in 'Last Name', with: 'Resources'
-    fill_in 'Email', with: 'hr@test.com'
-    fill_in 'Password', with: 'hrhrhrhr'
-    fill_in 'Password Confirmation', with: 'hrhrhrhr'
-    attach_file('Avatar', File.absolute_path('./spec/support/test_image.jpg'))
+    fill_in 'First Name', with: 'New'
+    fill_in 'Last Name', with: 'Rec'
+    fill_in 'Email', with: 'rec@test.com'
+    fill_in 'Mobile Number', with: '011'
+
     click_button 'Submit'
     
-    expect(page).to have_content("#{Hr.first.full_name} has joined Fustany Team.")
-    expect(page).to have_content(Hr.first.full_name)
+    expect(page).to have_content("#{Recruitment.first.full_name} has been added to our recruitments list.")
+    expect(page).to have_content(Recruitment.first.full_name)
   end
 
   scenario 'with invalid data' do
     fill_in 'First Name', with: ''
     fill_in 'Last Name', with: ''
     fill_in 'Email', with: ''
-    fill_in 'Password', with: ''
+    fill_in 'Mobile Number', with: ''
+
     click_button 'Submit'
     
     expect(page).to have_content('First name can\'t be blank')
     expect(page).to have_content('Last name can\'t be blank')
     expect(page).to have_content('Email can\'t be blank')
-    expect(page).to have_content('Password can\'t be blank')
-    expect(Hr.count).to eq(0)
+    expect(page).to have_content('Mobile number can\'t be blank')
+    expect(Recruitment.count).to eq(0)
   end
 
   scenario 'with duplicated data' do
-    @hr = create(:hr)
+    @recruitment = create(:recruitment)
 
-    fill_in 'First Name', with: @hr.first_name
-    fill_in 'Last Name', with: @hr.last_name
-    fill_in 'Email', with: @hr.email
-    fill_in 'Password', with: @hr.password
-    fill_in 'Password Confirmation', with: @hr.password
+    fill_in 'First Name', with: @recruitment.first_name
+    fill_in 'Last Name', with: @recruitment.last_name
+    fill_in 'Email', with: @recruitment.email
+    fill_in 'Mobile Number', with: @recruitment.mobile_number
+
     click_button 'Submit'
     
     expect(page).to have_content('Email has already been taken')
-    expect(Hr.count).to eq(1)
+    expect(Recruitment.count).to eq(1)
   end
 end

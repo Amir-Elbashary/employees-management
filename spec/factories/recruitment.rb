@@ -3,5 +3,6 @@ FactoryBot.define do
     first_name { Faker::Name.unique.name }
     last_name { Faker::Name.unique.name }
     email { Faker::Internet.unique.email }
+    mobile_number { Faker::PhoneNumber.phone_number }
   end
 end

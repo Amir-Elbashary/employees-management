@@ -1,43 +1,49 @@
 require 'rails_helper'
+include AdminHelpers
 
-RSpec.feature 'Editing subject' do
+RSpec.feature 'Editing recruitment' do
   before do
-    @admin = create(:admin)
-    login_as(@admin, scope: :admin)
     @hr = create(:hr)
-    visit edit_admin_hr_path(@hr)
+    login_as(@hr, scope: :hr)
+    assign_permission(@hr, :read, Recruitment)
+    assign_permission(@hr, :update, Recruitment)
+    @recruitment = create(:recruitment)
+    visit edit_admin_recruitment_path(@recruitment)
   end
 
   scenario 'with valid data' do
-    fill_in 'First Name', with: 'Super'
-    fill_in 'Last Name', with: 'Visor'
-    fill_in 'Email', with: 'supervisor@test.com'
-    fill_in 'Password', with: 'supersuper'
-    fill_in 'Password Confirmation', with: 'supersuper'
-    attach_file('Avatar', File.absolute_path('./spec/support/test_image.jpg'))
+    fill_in 'First Name', with: 'New'
+    fill_in 'Last Name', with: 'Rec'
+    fill_in 'Email', with: 'rec@test.com'
+    fill_in 'Mobile Number', with: '011'
     
     click_button 'Submit'
     
-    expect(page).to have_content('H.R has been successfully updated.')
+    expect(page).to have_content('Recruitment has been successfully updated.')
   end
 
   scenario 'with invalid data' do
     fill_in 'First Name', with: ''
     fill_in 'Last Name', with: ''
     fill_in 'Email', with: ''
+    fill_in 'Mobile Number', with: ''
+
     click_button 'Submit'
     
     expect(page).to have_content('First name can\'t be blank')
     expect(page).to have_content('Last name can\'t be blank')
     expect(page).to have_content('Email can\'t be blank')
+    expect(page).to have_content('Mobile number can\'t be blank')
   end
 
   scenario 'with duplicated data' do
-    @hr = create(:hr)
+    @recruitment = create(:recruitment)
 
-    fill_in 'First Name', with: @hr.first_name
-    fill_in 'Last Name', with: @hr.last_name
-    fill_in 'Email', with: @hr.email
+    fill_in 'First Name', with: @recruitment.first_name
+    fill_in 'Last Name', with: @recruitment.last_name
+    fill_in 'Email', with: @recruitment.email
+    fill_in 'Mobile Number', with: @recruitment.mobile_number
+
     click_button 'Submit'
     
     expect(page).to have_content('Email has already been taken')

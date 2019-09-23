@@ -14,6 +14,11 @@ RSpec.describe Recruitment, type: :model do
       should validate_presence_of(:email)
       should validate_uniqueness_of(:email).case_insensitive
     end
+
+    it 'should has unique mobile number' do
+      should validate_presence_of(:mobile_number)
+      should validate_uniqueness_of(:mobile_number).case_insensitive
+    end
   end
 
   describe 'Has Associations' do
