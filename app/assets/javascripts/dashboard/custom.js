@@ -2,6 +2,10 @@ $(function() {
   $(".select2").select2();
 });
 
+$(function() {
+  $('.textarea_editor').wysihtml5();   
+});
+
 // $(function() {
 //   $('.sortable').railsSortable({
 //     axis: false,

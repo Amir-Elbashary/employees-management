@@ -18,6 +18,8 @@
 //= require bootstrap-tagsinput/dist/bootstrap-tagsinput.js
 //= require Magnific-Popup-master/dist/jquery.magnific-popup.min.js
 //= require Magnific-Popup-master/dist/jquery.magnific-popup-init.js
+//= require html5-editor/wysihtml5-0.3.0.js
+//= require html5-editor/bootstrap-wysihtml5.js
 //
 //= require dashboard/waves.js
 //= require dashboard/sidebarmenu.js
