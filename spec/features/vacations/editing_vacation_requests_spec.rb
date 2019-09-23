@@ -62,7 +62,7 @@ RSpec.feature 'Editing vacation requests' do
 
         click_button 'Submit'
         
-        expect(page).to have_content('End date can not be before start date.')
+        expect(page).to have_content('End date can not be before or equals to start date.')
       end
     end
   end

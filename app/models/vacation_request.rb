@@ -1,6 +1,6 @@
 class VacationRequest < ApplicationRecord
   enum status: %i[pending confirmed refused escalated approved declined]
-  enum kind: %i[vacation work_from_home sick_leave]
+  enum kind: %i[vacation work_from_home sick_leave mission]
 
   validates :starts_on, :ends_on, :reason, presence: true
 

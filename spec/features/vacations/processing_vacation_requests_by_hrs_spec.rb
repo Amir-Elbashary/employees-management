@@ -122,6 +122,23 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
         expect(page).to have_content('Approved')
       end
     end
+
+    context 'when request type is mission' do
+      it 'should be approved and not detucted from vacation balance' do
+        assign_permission(@hr, :approve, VacationRequest)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, starts_at: Time.now, ends_at: (Time.now + 2.hours), employee: @employee, kind: 3, status: 1)
+
+        visit pending_admin_vacation_requests_path
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Confirmed')
+
+        find('.approve-link').click
+
+        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Approved')
+      end
+    end
   end
 
   scenario 'can decline the request' do

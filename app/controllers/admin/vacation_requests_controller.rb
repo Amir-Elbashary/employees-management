@@ -6,6 +6,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   before_action :set_pending_requests, only: :pending
   before_action :ensure_same_employee, only: :edit
   before_action :validate_dates, only: %i[create update]
+  before_action :validate_times, only: %i[create update]
   before_action :set_settings, only: :approve
 
   def new; end
@@ -75,6 +76,11 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
       @vacation_request.approved!
     end
 
+    if @vacation_request.mission?
+      flash[:notice] = 'Mission request approved.'
+      @vacation_request.approved!
+    end
+
     if @vacation_request.work_from_home?
       request_duration = (@vacation_request.ends_on - @vacation_request.starts_on).to_i
       work_from_home_requests = employee.vacation_requests.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month).approved.work_from_home
@@ -109,8 +115,9 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def vacation_request_params
     params.require(:vacation_request).permit(:employee_id, :hr_id, :supervisor_id,
-                                             :starts_on, :ends_on, :reason, :kind,
-                                             :supervisor_feedback, :hr_feedback, :escalation_reason)
+                                             :starts_on, :ends_on, :starts_at, :ends_at,
+                                             :reason, :kind, :supervisor_feedback, :hr_feedback,
+                                             :escalation_reason)
   end
 
   def set_vacation_requests
@@ -126,9 +133,18 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   end
 
   def validate_dates
+    return if params[:vacation_request][:kind] == 'mission'
     return unless params[:vacation_request][:starts_on].present? || params[:vacation_request][:ends_on].present?
     return if params[:vacation_request][:starts_on] < params[:vacation_request][:ends_on]
-    flash[:danger] = 'End date can not be before start date.'
+    flash[:danger] = 'End date can not be before or equals to start date.'
+    redirect_to new_admin_vacation_request_path
+  end
+
+  def validate_times
+    return unless params[:vacation_request][:kind] == 'mission'
+    return unless params[:vacation_request][:starts_at].present? || params[:vacation_request][:ends_at].present?
+    return if params[:vacation_request][:starts_at] < params[:vacation_request][:ends_at]
+    flash[:danger] = 'End time can not be before or equals start time.'
     redirect_to new_admin_vacation_request_path
   end
 
