@@ -30,19 +30,31 @@
           <%= f.hidden_field :employee_id, value: current_employee.id %>
 
           <div class="row">
-            <div class="col-md-12">          
+            <div class="col-md-6">          
               <div class="form-group">        
                 <%= f.label :starts_on, 'Starts on' %>
                 <%= f.date_field :starts_on, required: true, class: "form-control" %>
               </div>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">          
+            <div class="col-md-6">          
               <div class="form-group">        
                 <%= f.label :ends_on, 'Ends on' %>
                 <%= f.date_field :ends_on, required: true, class: "form-control" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">          
+              <div class="form-group">        
+                <%= f.label :starts_at, 'Starts at' %> (Optional)
+                <%= f.time_field :starts_at, class: "form-control" %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">        
+                <%= f.label :ends_at, 'Ends at' %> (Optional)
+                <%= f.time_field :ends_at, class: "form-control" %>
               </div>
             </div>
           </div>
