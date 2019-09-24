@@ -1,5 +1,6 @@
 class Admin::TimelinesController < Admin::BaseAdminController
   load_and_authorize_resource
+  before_action :require_same_user, only: :destroy
 
   def create
     if @timeline.save
@@ -13,7 +14,7 @@ class Admin::TimelinesController < Admin::BaseAdminController
 
   def destroy
     return unless @timeline.destroy
-    flash[:notice] = 'Your post was deleted'
+    flash[:notice] = 'Your post was deleted.'
     redirect_to admin_path
   end
 
@@ -33,5 +34,11 @@ class Admin::TimelinesController < Admin::BaseAdminController
     else
       timeline.status!
     end
+  end
+
+  def require_same_user
+    return if @timeline.publisher == current_active_user
+    flash[:danger] = 'You may only delete you own posts'
+    redirect_to admin_path
   end
 end

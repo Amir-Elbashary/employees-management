@@ -1,7 +1,7 @@
 <div class="tab-pane active" id="home" role="tabpanel">
   <div class="card-body">
     <div>
-      <button class="btn btn-info" data-toggle="modal" data-target="#status_modal">Share Something</button>
+      <button class="btn btn-info" data-toggle="modal" data-target="#status_modal">Share something</button>
       <!--
       <button class="btn btn-success" data-toggle="modal" data-target="#quote_modal">Any favourite quotes?</button>
       -->
@@ -9,16 +9,28 @@
     <br/>
     <div class="profiletimeline">
       <% timelines.each do |timeline| %>
-        <% if timeline.news? %>
-          <%= render 'admin/main/timelines/news', timeline: timeline %>
-        <% elsif timeline.status? %>
-        <%= render 'admin/main/timelines/status', timeline: timeline %>
-        <% elsif timeline.show_off? %>
-          <%= render 'admin/main/timelines/show_off', timeline: timeline %>
-        <%# elsif timeline.quote? %>
-          <%#= render 'admin/main/timelines/quote', timeline: timeline %>
-        <% end %>
-        <hr>
+        <div class="sl-item">
+          <% if current_admin || current_hr || (timeline.publisher == current_active_user) %>
+            <%= link_to admin_timeline_path(timeline), method: :delete, class: 'delete-link', data: { confirm: 'Are you sure?' } do %>
+              <button class="close text-danger">×</button>
+            <% end %>
+          <% end %>
+
+          <div class="sl-left">
+            <%= image_tag(timeline.publisher.avatar.url, class: 'img-circle') %>
+          </div>
+
+          <% if timeline.news? %>
+            <%= render 'admin/main/timelines/news', timeline: timeline %>
+          <% elsif timeline.status? %>
+          <%= render 'admin/main/timelines/status', timeline: timeline %>
+          <% elsif timeline.show_off? %>
+            <%= render 'admin/main/timelines/show_off', timeline: timeline %>
+          <%# elsif timeline.quote? %>
+            <%#= render 'admin/main/timelines/quote', timeline: timeline %>
+          <% end %>
+          <hr>
+        </div>
       <% end %>
     </div>
   </div>
@@ -47,6 +59,7 @@
           <div class="modal-body">
             <div class="row form-group">
               <div class="col-md-12">
+                <%= f.label :content, 'Make your post pretty' %>
                 <%= f.text_area :content, required: true, rows: 20, autofocus: true, placeholder: 'What would you like to share?', class: 'textarea_editor form-control' %>
               </div>
             </div>
