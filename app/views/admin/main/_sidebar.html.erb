@@ -1,0 +1,36 @@
+<div class="col-lg-4 col-xlg-3 col-md-5">
+  <div class="card">
+    <div class="card-body">
+      <center class="m-t-30"> <%= image_tag(current_employee.avatar.url, class: 'img-circle', width: '150') %>
+        <h4 class="card-title m-t-10"><%= current_employee.full_name %></h4>
+        <h6 class="card-subtitle"><%= current_employee.job_description %></h6>
+        <div class="row text-center justify-content-md-center">
+          <div class="col-8">
+            <a href="javascript:void(0)" class="link"><i class="icon-people"></i> <font class="font-medium">Started working: <%= current_employee.date_of_employment&.strftime('%d-%m-%Y') %></font></a>
+          </div>
+        </div>
+        <div class="row text-center justify-content-md-center">
+          <div class="col-10">
+            <a href="javascript:void(0)" class="link"><i class="icon-picture"></i> <font class="font-medium">Vacation Balance: <%= pluralize(current_employee.vacation_balance, 'day') %> remaining</font></a>
+          </div>
+        </div>
+      </center>
+    </div>
+    <div>
+      <hr>
+    </div>
+    <div class="card-body">
+      <small class="text-muted">Business Email</small>
+      <h6><%= current_employee.business_email %></h6>
+
+      <small class="text-muted p-t-30 db">Personal Email</small>
+      <h6><%= current_employee.personal_email %></h6>
+
+      <small class="text-muted p-t-30 db">Phone</small>
+      <h6><%= current_employee.mobile_numbers %></h6>
+
+      <small class="text-muted p-t-30 db">Address</small>
+      <h6><%= current_employee.address %></h6>
+    </div>
+  </div>
+</div>
