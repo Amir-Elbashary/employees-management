@@ -10,7 +10,7 @@
     <div class="profiletimeline">
       <% timelines.each do |timeline| %>
         <div class="sl-item">
-          <% if current_admin || current_hr || (timeline.publisher == current_active_user) %>
+          <% if current_admin || current_hr || ((timeline.publisher == current_active_user) && timeline.manual?) %>
             <%= link_to admin_timeline_path(timeline), method: :delete, class: 'delete-link', data: { confirm: 'Are you sure?' } do %>
               <button class="close text-danger">×</button>
             <% end %>

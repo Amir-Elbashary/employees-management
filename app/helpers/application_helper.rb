@@ -51,4 +51,19 @@ module ApplicationHelper
 
     format.html_safe
   end
+
+  def he_she(person)
+    return 'he' if person.male?
+    'she' if person.female?
+  end
+
+  def his_her(person)
+    return 'his' if person.male?
+    'her' if person.female?
+  end
+
+  def him_her(person)
+    return 'him' if person.male?
+    'her' if person.female?
+  end
 end

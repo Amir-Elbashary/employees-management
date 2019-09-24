@@ -1,6 +1,7 @@
 class Timeline < ApplicationRecord
   mount_uploaders :images, ImageUploader
   enum kind: %i[news status show_off quote]
+  enum creation: %i[manual auto]
 
   validates :content, presence: true
 
