@@ -3,7 +3,11 @@
     <a href="#" class="link"><%= timeline.publisher.full_name %></a> <span class="sl-date"><%= time_ago_in_words(timeline.created_at) %> ago</span>
     <div class="m-t-20 row">
       <div class="col-md-3 col-xs-12">
-        <%= image_tag(timeline.images.first.url, class: 'img-responsive radius') %>
+        <% if timeline.images.empty? %>
+          <img src="images/fallback/small_400_default.png" class="img-responsive radius">
+        <% else %>
+          <%= image_tag(timeline.images.first.url, class: 'img-responsive radius') %>
+        <% end %>
       </div>
       <div class="col-md-9 col-xs-12">
         <p><%= timeline.content.html_safe %></p>
