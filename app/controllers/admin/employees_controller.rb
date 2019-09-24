@@ -9,7 +9,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
     if @employee.save
       flash[:notice] = "#{@employee.full_name} has joined Fustany Team."
       redirect_to admin_employees_path
-      # TODO
+      # TODO To be enabled again
       # Mail::WelcomeWorker.perform_async(@employee.id)
     else
       render :new
@@ -23,15 +23,25 @@ class Admin::EmployeesController < Admin::BaseAdminController
   def update
     if @employee.update(employee_params)
       flash[:notice] = 'Employee has been successfully updated.'
-      if params[:employee][:avatar].present?
-        render :crop ## Render the view for cropping
-      else
-        redirect_to admin_employees_path
-      end
+      redirect_to admin_employees_path
     else
       render :edit
     end
   end
+
+  # With Cropper
+  # def update
+  #   if @employee.update(employee_params)
+  #     flash[:notice] = 'Employee has been successfully updated.'
+  #     if params[:employee][:avatar].present?
+  #       render :crop ## Render the view for cropping
+  #     else
+  #       redirect_to admin_employees_path
+  #     end
+  #   else
+  #     render :edit
+  #   end
+  # end
 
   def show; end
 

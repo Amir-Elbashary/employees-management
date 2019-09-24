@@ -7,7 +7,7 @@ class Employee < ApplicationRecord
   enum level: %i[employee supervisor]
   enum access_token_status: %i[waiting_for_token token_verified]
   mount_uploader :avatar, AvatarUploader
-  crop_uploaded :avatar
+  # crop_uploaded :avatar
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

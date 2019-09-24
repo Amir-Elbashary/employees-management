@@ -1,13 +1,14 @@
 <div class="sl-item">
+  <%= link_to admin_timeline_path(timeline), method: :delete, data: { confirm: 'Are you sure?' } do %>
+    <button class="close text-danger">×</button>
+  <% end %>
   <div class="sl-left">
-    <%= image_tag(current_employee.avatar.url, class: 'img-circle') %>
+    <%= image_tag(timeline.publisher.avatar.url, class: 'img-circle') %>
   </div>
   <div class="sl-right">
     <div>
-      <a href="#" class="link">John Doe</a> <span class="sl-date">5 minutes ago</span>
-      <blockquote class="m-t-10">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-      </blockquote>
+      <a href="#" class="link"><%= timeline.publisher.full_name %></a> <span class="sl-date"><%= time_ago_in_words(timeline.created_at) %> ago</span>
+      <blockquote class="m-t-10"><%= time.content.html_safe %></blockquote>
     </div>
   </div>
 </div>

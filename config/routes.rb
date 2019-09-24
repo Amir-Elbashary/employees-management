@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     resources :rooms
     resources :room_messages
     resources :recruitments
+    resources :timelines
 
     resources :attendances do
       collection do
