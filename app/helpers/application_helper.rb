@@ -66,4 +66,17 @@ module ApplicationHelper
     return 'him' if person.male?
     'her' if person.female?
   end
+
+  def welcome_messages
+    ['Show us what you\'ve got today!',
+     'Your limitation... it’s only your imagination.',
+     'Dream it. Wish it. Do it.',
+     'Success doesn’t just find you. You have to go out and get it.',
+     'The harder you work for something, the greater you’ll feel when you achieve it.',
+     'Don’t stop when you’re tired. Stop when you’re done.',
+     'Wake up with determination. Go to bed with satisfaction.',
+     'Do something today that your future self will thank you for.',
+     'Don’t wait for opportunity. Create it.',
+     'Dream it. Believe it. Build it.']
+  end
 end

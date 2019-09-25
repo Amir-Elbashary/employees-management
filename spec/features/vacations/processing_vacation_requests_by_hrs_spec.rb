@@ -39,6 +39,9 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         expect(Employee.employee.first.vacation_balance).to eq(18)
         expect(page).to have_content('Approved')
+
+        visit admin_path
+        expect(page).to have_content('is going to have a vacation :)')
       end
     end
 
@@ -56,6 +59,9 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         expect(Employee.employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Approved')
+
+        visit admin_path
+        expect(page).to have_content('will be working from home!')
       end
 
       it 'should not be approved or counted as work from home if work from home limit is not reached and requested days are longer than the allowed limit of days' do
@@ -120,6 +126,9 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         expect(Employee.employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Approved')
+
+        visit admin_path
+        expect(page).to have_content('is not feeling well, The little flowers are rising and blooming')
       end
     end
 
