@@ -9,8 +9,7 @@ RSpec.feature 'Creating timeline post' do
 
   scenario 'should appear on home page' do
     expect(Timeline.count).to eq(0)
-    expect(page).to have_button('Share something')
-    click_button('Share something')
+    find('.modal-toggler').click
 
     fill_in 'Make your post pretty', with: 'Post content'
 
