@@ -10,7 +10,6 @@ class Admin::TimelinesController < Admin::BaseAdminController
       flash[:danger] = @timeline.errors.full_messages.join(', ')
     end
 
-    TimelineChannel.broadcast_to('public', @timeline)
     redirect_to admin_path
   end
 
