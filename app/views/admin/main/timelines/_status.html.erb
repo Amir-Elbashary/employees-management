@@ -3,7 +3,6 @@
     <a href="#" class="link"><%= timeline.owner.full_name %></a> <span class="sl-date"><%= time_ago_in_words(timeline.created_at) %> ago</span>
     <p class="m-t-10"><%= timeline.content.html_safe %></p>
   </div>
-  <div class="like-comm m-t-20">
-    <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a>
-  </div>
+
+  <%= render 'admin/main/timelines/comments' %>
 </div>

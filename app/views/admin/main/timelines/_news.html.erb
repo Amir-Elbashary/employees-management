@@ -9,8 +9,7 @@
         <p><%= timeline.content.html_safe %></p>
       </div>
     </div>
-    <div class="like-comm m-t-20">
-      <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a>
-    </div>
+
+    <%= render 'admin/main/timelines/comments' %>
   </div>
 </div>

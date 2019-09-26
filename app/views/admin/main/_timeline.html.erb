@@ -1,12 +1,5 @@
 <div class="tab-pane active" id="home" role="tabpanel">
   <div class="card-body">
-    <div>
-      <button class="btn btn-info" data-toggle="modal" data-target="#status_modal">Share something</button>
-      <!--
-      <button class="btn btn-success" data-toggle="modal" data-target="#quote_modal">Any favourite quotes?</button>
-      -->
-    </div>
-    <br/>
     <div class="profiletimeline">
       <div data-channel-subscribe="timeline">
       </div>
@@ -28,8 +21,6 @@
           <%= render 'admin/main/timelines/status', timeline: timeline %>
           <% elsif timeline.show_off? %>
             <%= render 'admin/main/timelines/show_off', timeline: timeline %>
-          <%# elsif timeline.quote? %>
-            <%#= render 'admin/main/timelines/quote', timeline: timeline %>
           <% end %>
           <hr>
         </div>
@@ -39,11 +30,11 @@
 </div>
 
 <!-- status modal content -->
-<div id="status_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog">
+<div id="status_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Share something with your team mates!</h4>
+        <h4 class="modal-title">Share something with your team mates! &nbsp; <span class="custom-hover" data-html="true" data-container="body" title="<strong>How will your post look like?<strong>" data-toggle="popover" data-placement="top" data-content="<p><strong>Text only:</strong><br>Creating post with text only will appear as text only status.</p> <p><strong>Uploading 1 photo:</strong><br>if you uploaded 1 photo, then it will be displayed as a news or as photo with description.</p> <p><strong>Uploading multiple photos:</strong><br> if you uploaded multiple photos, then it will be a gallery post with some photos and text to describe them.</p><p><strong>Choice is yours!</strong></p>"><a><i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Click me please!"></i></span></h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
@@ -61,8 +52,8 @@
           <div class="modal-body">
             <div class="row form-group">
               <div class="col-md-12">
-                <%= f.label :content, 'Make your post pretty' %>
-                <%= f.text_area :content, required: true, rows: 20, autofocus: true, placeholder: 'What would you like to share?', class: 'textarea_editor form-control' %>
+                <strong><%= f.label :content, 'Make your post pretty' %></strong>
+                <%= f.text_area :content, required: true, rows: 18, autofocus: true, placeholder: 'What would you like to share?', class: 'textarea_editor form-control' %>
               </div>
             </div>
             <div class="row form-group">
@@ -82,37 +73,6 @@
   </div>
 </div>
 <!-- end status modal -->
-
-<!-- quote modal content -->
-<!--
-<div id="quote_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Any quotes on mind to motivate you team ?</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      </div>
-      <div class="modal-body">
-        <%#= form_for [:admin, @timeline], method: :post do |f| %>
-          <%#= f.hidden_field :kind, value: 'quote' %>
-          <div class="modal-body">
-            <div class="row form-group">
-              <div class="col-md-12">
-                <%#= f.text_field :content, required: true, autofocus: true, placeholder: 'Share a motivating quote...', class: 'form-control' %>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <%#= f.submit "Share", class: 'btn btn-info' %>
-          </div>
-        <%# end %>
-      </div>
-    </div>
-  </div>
-</div>
--->
-<!-- end quote modal -->
 
 <!-- Status div template -->
 <div class="d-none" data-role="status-template">
