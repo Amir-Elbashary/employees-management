@@ -81,6 +81,20 @@
           <%= render partial: "shared/toast_flash_messages", flash: flash %>
 
           <div id="ac-notifications">
+            <!-- Notification template -->
+            <div class="d-none" data-role="notification-template">
+              <div class="alert alert-info alert-dismissable animated slideInDown">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span data-role="notification-content"></span>
+              </div>
+            </div>
+            <!-- End Notification template -->
+
+            <!-- Notification Area -->
+            <div data-channel-subscribe="notification">
+            </div>
+            <!-- End Notification Area -->
+
             <%= render 'shared/dashboard/attendance_notification' %>
           </div>
 

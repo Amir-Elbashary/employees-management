@@ -11,6 +11,11 @@
   background-color: #EF5280;
 }
 
+.btn-pink {
+  background-color: #EF5280;
+  color: #ffffff;
+}
+
 .smooth-scroll {
  scroll-behavior: smooth;
 }

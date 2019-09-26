@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :notifications
     resources :roles
     resources :hrs
     resources :sections
