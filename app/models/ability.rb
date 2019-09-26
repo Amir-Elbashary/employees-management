@@ -1,6 +1,7 @@
 class Ability
   include CanCan::Ability
-  AUTHORIZABLE_MODELS = [Employee, VacationRequest, Attendance, Recruitment]
+  AUTHORIZABLE_MODELS = [Employee, VacationRequest, Attendance, Recruitment,
+                         Timeline]
   END_USERS_MODELS = [Employee]
   END_USERS_AUTHORIZED_MODELS = [VacationRequest, RoomMessage]
 
@@ -20,8 +21,9 @@ class Ability
     when Employee
       # Employees have access to specific models only
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
-      can :change_password, Admin
       cannot :manage, Employee
+      can :manage, Timeline
+      can :change_password, Admin
       can :read, [Room, Attendance]
       can :create, Attendance
       can :checkin, Attendance

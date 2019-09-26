@@ -1,17 +1,13 @@
-<% if current_admin || current_hr %>
-  <h1>Welcome to Fustany</h1>
+<%= render 'admin/main/employee_main' %>
 
-  <script>                       
-    $.toast({                    
-      heading: 'Fustany', 
-      text: 'Fustany Administration',
-      position: 'top-right',     
-      loaderBg: '#f33c49',       
-      icon: 'info',
-      hideAfter: 6000,           
-      stack: 6
-    });
-  </script>
-<% else %>
-  <%= render 'admin/main/employee_main' %>
-<% end %>
+<script>                       
+  $.toast({                    
+    heading: 'Fustany', 
+    text: '<%= welcome_messages.sample %>',
+    position: 'top-right',     
+    loaderBg: '#f33c49',       
+    icon: 'info',
+    hideAfter: 6000,           
+    stack: 6
+  });
+</script>

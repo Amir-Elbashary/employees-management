@@ -41,31 +41,39 @@
                 <!-- Comment -->
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="icon-Bell"></i>
-                      <div id="hearbit-notifications">
-                        <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                      </div>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
-                        <ul>
-                            <li>
-                                <div class="drop-title">Notifications</div>
-                            </li>
-                            <li>
-                                <div class="message-center">
-                                    <!-- Message -->
-                                    <a href="#">
-                                        <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
-                                        <div class="mail-contnet">
-                                            <h5>Welcome to Fustany</h5> <span class="mail-desc">We're growing strong!</span> <span class="time">8:00 AM</span> </div>
-                                    </a>
-                                </div>
-                            </li>
-                            <li>
-                                <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
-                            </li>
-                        </ul>
+                  <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="icon-Bell"></i>
+                    <div id="hearbit-notifications">
+                      <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
                     </div>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
+                    <ul>
+                      <li>
+                        <div class="drop-title">Notifications</div>
+                      </li>
+                      <li>
+                        <div class="message-center">
+                          <% @notifications.each do |notification| %>
+                            <!-- Message -->
+                            <a href="#">
+                              <div class="btn btn-pink btn-circle"><i class="fa fa-bell"></i></div>
+                              <div class="mail-contnet">
+                                <h5>Fustany Team</h5> <span class="mail-desc"><%= notification.content %></span> <span class="time"><%= formatted_time(notification.created_at) %></span>
+                              </div>
+                            </a>
+                          <% end %>
+                        </div>
+                      </li>
+                      <li>
+                        <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications (Coming soon)</strong> <i class="fa fa-angle-right"></i> </a>
+                      </li>
+                      <% unless current_employee %>
+                        <li>
+                          <a class="nav-link text-center" href="javascript:void(0);" data-toggle="modal" data-target="#notification_modal"> <strong>Send Notification</strong> <i class="fa fa-bell"></i> </a>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </div>
                 </li>
                 <!-- ============================================================== -->
                 <!-- End Comment -->
@@ -112,7 +120,7 @@
     </nav>
 </header>
 
-<!-- sample modal content -->
+<!-- change password modal content -->
 <div id="change_password" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -149,3 +157,34 @@
   </div>
 </div>
 <!-- /.modal -->
+
+<!-- status modal content -->
+<div id="notification_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Send notification to all Fustany Team! &nbsp; <span class="custom-hover" data-html="true" data-container="body" title="<strong>Please be carefull!<strong>" data-toggle="popover" data-placement="top" data-content="<strong>Notifications that are sent to team members are irreversable, Please double check before sending.</strong>"><a><i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Click me please!"></i></span></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+        <%= form_for [:admin, @notification], method: :post, remote: true do |f| %>
+
+          <div class="modal-body">
+            <div class="row form-group">
+              <div class="col-md-12">
+                <strong><%= f.label :content, 'Send notification to Fustany Team' %></strong>
+                <%= f.text_area :content, required: true, rows: 4, autofocus: true, placeholder: 'Notify you member with...', class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <%= f.submit "Send", class: 'custom-modal-btn btn btn-info', onclick: 'closeModal("notification_modal");' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end status modal -->

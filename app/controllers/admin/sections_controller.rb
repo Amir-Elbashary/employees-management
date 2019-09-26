@@ -31,8 +31,19 @@ class Admin::SectionsController < Admin::BaseAdminController
   end
 
   def destroy
-    return unless @section.destroy
-    flash[:notice] = 'Section was removed.'
+    employees = []
+
+    Employee.all.each do |employee|
+      employees << employee.full_name if employee.section.ancestors.include?(@section)
+    end
+
+    if employees.empty?
+      @section.destroy
+      flash[:notice] = 'Section was removed.'
+    else
+      flash[:danger] = "You can't delete section while it has employees assigned to it, move them first, employees are (#{employees.join(', ')})"
+    end
+
     redirect_to admin_sections_path
   end
 
