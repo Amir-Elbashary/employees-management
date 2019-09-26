@@ -8,16 +8,18 @@
     </div>
     <br/>
     <div class="profiletimeline">
+      <div data-channel-subscribe="timeline">
+      </div>
       <% timelines.each do |timeline| %>
         <div class="sl-item">
-          <% if current_admin || current_hr || ((timeline.publisher == current_active_user) && timeline.manual?) %>
+          <% if current_admin || current_hr || ((timeline.owner == current_active_user) && timeline.manual?) %>
             <%= link_to admin_timeline_path(timeline), method: :delete, class: 'delete-link', data: { confirm: 'Are you sure?' } do %>
               <button class="close text-danger">×</button>
             <% end %>
           <% end %>
 
           <div class="sl-left">
-            <%= image_tag(timeline.publisher.avatar.url, class: 'img-circle') %>
+            <%= image_tag(timeline.owner.avatar.url, class: 'img-circle') %>
           </div>
 
           <% if timeline.news? %>
@@ -111,3 +113,87 @@
 </div>
 -->
 <!-- end quote modal -->
+
+<!-- Status div template -->
+<div class="d-none" data-role="status-template">
+  <div class="sl-item animated slideInDown">
+    <a href="" data-method="delete" rel="nofollow" class="template-delete-link" data-confirm="Are you sure?" data-role="status-close-btn">
+      <button class="close text-danger">×</button>
+    </a>
+
+    <div class="sl-left">
+      <img src="" class="img-circle" data-role="status-owner-avatar">
+    </div>
+
+    <div class="sl-right">
+      <div>
+        <a href="#" class="link" data-role="status-owner-name">FULL NAME</a> <span class="sl-date" data-role="status-created-since"></span>
+        <p class="m-t-10" data-role="status-content"></p>
+      </div>
+      <div class="like-comm m-t-20">
+        <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>
+<!-- end status div template -->
+
+<!-- news div template -->
+<div class="d-none" data-role="news-template">
+  <div class="sl-item animated slideInDown">
+    <a href="" data-method="delete" rel="nofollow" class="template-delete-link" data-confirm="Are you sure?" data-role="news-close-btn">
+      <button class="close text-danger">×</button>
+    </a>
+
+    <div class="sl-left">
+      <img src="" class="img-circle" data-role="news-owner-avatar">
+    </div>
+
+    <div class="sl-right">
+      <div>
+        <a href="#" class="link" data-role="news-owner-name"></a> <span class="sl-date" data-role="news-created-since"></span>
+        <div class="m-t-20 row">
+          <div class="col-md-3 col-xs-12">
+            <img src="" class="img-responsive radius" data-role="news-image">
+          </div>
+          <div class="col-md-9 col-xs-12">
+            <p data-role="news-content"></p>
+          </div>
+        </div>
+        <div class="like-comm m-t-20">
+          <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>
+<!-- end news div template -->
+
+<!-- show-off div template -->
+<div class="d-none" data-role="show-off-template">
+  <div class="sl-item animated slideInDown">
+    <a href="" data-method="delete" rel="nofollow" class="template-delete-link" data-confirm="Are you sure?" data-role="show-off-close-btn">
+      <button class="close text-danger">×</button>
+    </a>
+
+    <div class="sl-left">
+      <img src="" class="img-circle" data-role="show-off-owner-avatar">
+    </div>
+
+    <div class="sl-right">
+      <div>
+        <a href="#" class="link" data-role="show-off-owner-name"></a> <span class="sl-date" data-role="show-off-created-since"></span>
+        <p data-role="show-off-content"></p>
+        <div class="row" data-role="show-off-images">
+        </div>
+        <div class="like-comm">
+          <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>
+<!-- end show-off div template -->

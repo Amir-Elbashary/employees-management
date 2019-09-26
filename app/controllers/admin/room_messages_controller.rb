@@ -7,7 +7,7 @@ class Admin::RoomMessagesController < Admin::BaseAdminController
     @room_message.room = @room
 
     @room_message.save
-    RoomChannel.broadcast_to @room, @room_message
+    RoomChannel.broadcast_to(@room, @room_message)
   end
 
   private
