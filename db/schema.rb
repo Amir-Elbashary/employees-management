@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_23_113144) do
+ActiveRecord::Schema.define(version: 2019_09_26_115644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -172,6 +172,12 @@ ActiveRecord::Schema.define(version: 2019_09_23_113144) do
     t.index ["reset_password_token"], name: "index_hrs_on_reset_password_token", unique: true
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "permissions", force: :cascade do |t|
     t.string "target_model_name"
     t.string "action"
@@ -237,6 +243,21 @@ ActiveRecord::Schema.define(version: 2019_09_23_113144) do
     t.integer "work_from_home", default: 0
   end
 
+  create_table "timelines", force: :cascade do |t|
+    t.bigint "admin_id"
+    t.bigint "hr_id"
+    t.bigint "employee_id"
+    t.text "content"
+    t.string "images", default: [], array: true
+    t.integer "kind", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "creation", default: 0
+    t.index ["admin_id"], name: "index_timelines_on_admin_id"
+    t.index ["employee_id"], name: "index_timelines_on_employee_id"
+    t.index ["hr_id"], name: "index_timelines_on_hr_id"
+  end
+
   create_table "vacation_requests", force: :cascade do |t|
     t.bigint "employee_id"
     t.bigint "hr_id"
@@ -270,6 +291,9 @@ ActiveRecord::Schema.define(version: 2019_09_23_113144) do
   add_foreign_key "role_permissions", "roles"
   add_foreign_key "room_messages", "employees"
   add_foreign_key "room_messages", "rooms"
+  add_foreign_key "timelines", "admins"
+  add_foreign_key "timelines", "employees"
+  add_foreign_key "timelines", "hrs"
   add_foreign_key "vacation_requests", "employees"
   add_foreign_key "vacation_requests", "hrs"
 end

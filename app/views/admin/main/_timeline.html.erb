@@ -1,0 +1,159 @@
+<div class="tab-pane active" id="home" role="tabpanel">
+  <div class="card-body">
+    <div class="profiletimeline">
+      <div data-channel-subscribe="timeline">
+      </div>
+      <% timelines.each do |timeline| %>
+        <div class="sl-item">
+          <% if current_admin || current_hr || ((timeline.owner == current_active_user) && timeline.manual?) %>
+            <%= link_to admin_timeline_path(timeline), method: :delete, class: 'delete-link', data: { confirm: 'Are you sure?' } do %>
+              <button class="close text-danger">×</button>
+            <% end %>
+          <% end %>
+
+          <div class="sl-left">
+            <%= image_tag(timeline.owner.avatar.url, class: 'img-circle') %>
+          </div>
+
+          <% if timeline.news? %>
+            <%= render 'admin/main/timelines/news', timeline: timeline %>
+          <% elsif timeline.status? %>
+          <%= render 'admin/main/timelines/status', timeline: timeline %>
+          <% elsif timeline.show_off? %>
+            <%= render 'admin/main/timelines/show_off', timeline: timeline %>
+          <% end %>
+          <hr>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- status modal content -->
+<div id="status_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Share something with your team mates! &nbsp; <span class="custom-hover" data-html="true" data-container="body" title="<strong>How will your post look like?<strong>" data-toggle="popover" data-placement="top" data-content="<p><strong>Text only:</strong><br>Creating post with text only will appear as text only status.</p> <p><strong>Uploading 1 photo:</strong><br>if you uploaded 1 photo, then it will be displayed as a news or as photo with description.</p> <p><strong>Uploading multiple photos:</strong><br> if you uploaded multiple photos, then it will be a gallery post with some photos and text to describe them.</p><p><strong>Choice is yours!</strong></p>"><a><i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Click me please!"></i></span></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+        <%= form_for [:admin, @timeline], method: :post do |f| %>
+          <% if current_admin %>
+            <%= f.hidden_field :admin_id, value: current_admin.id %>
+          <% elsif current_hr %>
+            <%= f.hidden_field :hr_id, value: current_hr.id %>
+          <% elsif current_employee %>
+            <%= f.hidden_field :employee_id, value: current_employee.id %>
+          <% end %>
+
+          <%= f.hidden_field :kind, value: 'status' %>
+
+          <div class="modal-body">
+            <div class="row form-group">
+              <div class="col-md-12">
+                <strong><%= f.label :content, 'Make your post pretty' %></strong>
+                <%= f.text_area :content, required: true, rows: 18, autofocus: true, placeholder: 'What would you like to share?', class: 'textarea_editor form-control' %>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-md-12">
+                <%= f.label :images, 'Upload Image (optional)' %>
+                <%= f.file_field :images, multiple: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <%= f.submit "Share", class: 'btn btn-info' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end status modal -->
+
+<!-- Status div template -->
+<div class="d-none" data-role="status-template">
+  <div class="sl-item animated slideInDown">
+    <a href="" data-method="delete" rel="nofollow" class="template-delete-link" data-confirm="Are you sure?" data-role="status-close-btn">
+      <button class="close text-danger">×</button>
+    </a>
+
+    <div class="sl-left">
+      <img src="" class="img-circle" data-role="status-owner-avatar">
+    </div>
+
+    <div class="sl-right">
+      <div>
+        <a href="#" class="link" data-role="status-owner-name">FULL NAME</a> <span class="sl-date" data-role="status-created-since"></span>
+        <p class="m-t-10" data-role="status-content"></p>
+      </div>
+      <div class="like-comm m-t-20">
+        <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>
+<!-- end status div template -->
+
+<!-- news div template -->
+<div class="d-none" data-role="news-template">
+  <div class="sl-item animated slideInDown">
+    <a href="" data-method="delete" rel="nofollow" class="template-delete-link" data-confirm="Are you sure?" data-role="news-close-btn">
+      <button class="close text-danger">×</button>
+    </a>
+
+    <div class="sl-left">
+      <img src="" class="img-circle" data-role="news-owner-avatar">
+    </div>
+
+    <div class="sl-right">
+      <div>
+        <a href="#" class="link" data-role="news-owner-name"></a> <span class="sl-date" data-role="news-created-since"></span>
+        <div class="m-t-20 row">
+          <div class="col-md-3 col-xs-12">
+            <img src="" class="img-responsive radius" data-role="news-image">
+          </div>
+          <div class="col-md-9 col-xs-12">
+            <p data-role="news-content"></p>
+          </div>
+        </div>
+        <div class="like-comm m-t-20">
+          <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>
+<!-- end news div template -->
+
+<!-- show-off div template -->
+<div class="d-none" data-role="show-off-template">
+  <div class="sl-item animated slideInDown">
+    <a href="" data-method="delete" rel="nofollow" class="template-delete-link" data-confirm="Are you sure?" data-role="show-off-close-btn">
+      <button class="close text-danger">×</button>
+    </a>
+
+    <div class="sl-left">
+      <img src="" class="img-circle" data-role="show-off-owner-avatar">
+    </div>
+
+    <div class="sl-right">
+      <div>
+        <a href="#" class="link" data-role="show-off-owner-name"></a> <span class="sl-date" data-role="show-off-created-since"></span>
+        <p data-role="show-off-content"></p>
+        <div class="row" data-role="show-off-images">
+        </div>
+        <div class="like-comm">
+          <a href="javascript:void(0)" class="link m-r-10">2 comment</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love</a>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>
+<!-- end show-off div template -->

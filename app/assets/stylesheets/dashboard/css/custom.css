@@ -1,3 +1,21 @@
+.custom-hover {
+  color: #EF5280;
+  font-size: 20px;
+}
+
+.custom-hover:hover {
+  color: #B13A5B;
+}
+
+.bg-pink {
+  background-color: #EF5280;
+}
+
+.btn-pink {
+  background-color: #EF5280;
+  color: #ffffff;
+}
+
 .smooth-scroll {
  scroll-behavior: smooth;
 }

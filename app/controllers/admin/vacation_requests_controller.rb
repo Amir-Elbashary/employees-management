@@ -68,12 +68,24 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
       if employee.update(vacation_balance: employee.vacation_balance.to_i - vacation_duration)
         flash[:notice] = 'Vacation request Approved.'
         @vacation_request.approved!
+
+        content = "<p><strong>#{@vacation_request.employee.full_name} is going to have a vacation :)</strong></p>
+        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is going to be on a refreshing vacation, We are wishing #{him_her(@vacation_request.employee)} happy time and we will be missing #{him_her(@vacation_request.employee)}</p>
+        <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
+
+        create_timeline_post(content)
       end
     end
 
     if @vacation_request.sick_leave?
       flash[:notice] = 'Sick leave request approved.'
       @vacation_request.approved!
+
+      content = "<p><strong>#{@vacation_request.employee.full_name} is not feeling well :(</strong></p>
+      <p><strong>&nbsp;&nbsp;</strong>We're sorry to hear that #{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is not feeling well, The little flowers are rising and blooming; it&rsquo;s the world&rsquo;s way of saying, &ldquo;get well soon.&rdquo;</p>
+      <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
+
+      create_timeline_post(content)
     end
 
     if @vacation_request.mission?
@@ -100,6 +112,12 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
       elsif (days_taken + request_duration) <= work_from_home_days
         flash[:notice] = 'Work from home request approved.'
         @vacation_request.approved!
+
+        content = "<p><strong>#{@vacation_request.employee.full_name} will be working from home!</strong></p>
+        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be working from home from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, You can reach #{him_her(@vacation_request.employee)} on Slack!, we will be missing #{him_her(@vacation_request.employee)}</p>
+        <p><strong>Best regards,</strong><br><strong>Fustany Team</strong></p>"
+
+        create_timeline_post(content)
       end
     end
 
@@ -132,6 +150,10 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
                          end
   end
 
+  def set_settings
+    @settings = Setting.first
+  end
+
   def validate_dates
     return if params[:vacation_request][:kind] == 'mission'
     return unless params[:vacation_request][:starts_on].present? || params[:vacation_request][:ends_on].present?
@@ -160,7 +182,11 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     redirect_to admin_vacation_requests_path
   end
 
-  def set_settings
-    @settings = Setting.first
+  def create_timeline_post(content)
+    Timeline.create(employee: @vacation_request.employee,
+                    images: [@vacation_request.employee.avatar],
+                    kind: 'news',
+                    creation: 'auto',
+                    content: content)
   end
 end

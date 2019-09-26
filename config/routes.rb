@@ -33,12 +33,14 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :notifications
     resources :roles
     resources :hrs
     resources :sections
     resources :rooms
     resources :room_messages
     resources :recruitments
+    resources :timelines
 
     resources :attendances do
       collection do

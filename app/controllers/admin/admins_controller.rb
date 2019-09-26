@@ -1,6 +1,7 @@
 class Admin::AdminsController < Admin::BaseAdminController
   load_and_authorize_resource except: %i[dashboard edit update toggle_state]
   skip_authorization_check only: %i[dashboard edit update toggle_state]
+  before_action :set_timelines, only: :dashboard
 
   def dashboard
     render 'admin/dashboard'
@@ -12,16 +13,28 @@ class Admin::AdminsController < Admin::BaseAdminController
     current_active_role = current_admin || current_hr
 
     if current_active_role.update(admin_params)
-      if params[:admin] && params[:admin][:avatar].present? || params[:hr] && params[:hr][:avatar].present?
-        render :crop ## Render the view for cropping
-      else
-        flash[:notice] = 'Your info has been successfully updated.'
-        redirect_to admin_path
-      end
+      flash[:notice] = 'your info has been successfully updated.'
+      redirect_to admin_path
     else
       render 'edit'
     end
   end
+
+  # With Cropper
+  # def update
+  #   current_active_role = current_admin || current_hr
+
+  #   if current_active_role.update(admin_params)
+  #     if params[:admin] && params[:admin][:avatar].present? || params[:hr] && params[:hr][:avatar].present?
+  #       render :crop ## render the view for cropping
+  #     else
+  #       flash[:notice] = 'your info has been successfully updated.'
+  #       redirect_to admin_path
+  #     end
+  #   else
+  #     render 'edit'
+  #   end
+  # end
 
   def change_password
     if current_active_user.update_with_password(password_params)
@@ -32,25 +45,15 @@ class Admin::AdminsController < Admin::BaseAdminController
     redirect_to admin_path
   end
 
-  # def toggle_state
-  #   unless can? :toggle, params[:model].constantize
-  #     flash[:notice] = 'You are not authorized to perform this action'
-  #     return redirect_back(fallback_location: request.referer)
-  #   end
-
-  #   object = params[:model].constantize.find(params[:id])
-
-  #   if object.active?
-  #     object.inactive!
-  #   else
-  #     object.active!
-  #   end
-  # end
-
   private
 
   def password_params
     params.permit(:current_password, :password, :password_confirmation)
+  end
+
+  def set_timelines
+    @timeline = Timeline.new
+    @timelines = Timeline.limit(10)
   end
 
   def admin_params

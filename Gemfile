@@ -40,9 +40,10 @@ gem 'rest-client'
 # gem 'will_paginate', '~> 3.1', '>= 3.1.7'
 
 # =============== Images Related Gems ===============
-gem 'carrierwave'
-gem 'carrierwave-base64'
-gem 'carrierwave-crop'
+# gem 'carrierwave'
+gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
+# gem 'carrierwave-base64'
+# gem 'carrierwave-crop'
 gem 'mini_magick', '~> 4.9', '>= 4.9.3'
 
 # =============== Development & Test ================
