@@ -17,7 +17,7 @@
 
 <%= render 'shared/dashboard/breadcrumb' %>
 
-<% if current_admin || current_hr || (@settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)) %>
+<% if current_admin || current_hr || (@settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)) || @approved_requests.any? %>
   <% if current_admin || current_hr || (cookies[:ft_att_ver] == current_employee.access_token) %>
     <div class="row">
       <div class="col-md-4">

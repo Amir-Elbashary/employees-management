@@ -77,6 +77,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   private
 
   def require_authorized_network
+    return if @approved_requests&.any?
     return unless current_employee
     return if @settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)
     flash[:danger] = 'Unauthorized network detected, Please connect to an authorized network!'
