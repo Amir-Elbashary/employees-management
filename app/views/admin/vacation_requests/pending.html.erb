@@ -38,8 +38,8 @@
             <tr>
               <td><%= image_tag(request.employee.avatar.thumb.url, class: 'table-thumb') %></td>
               <td><%= request.employee.full_name %></td>
-              <td><%= request.starts_on.strftime('%d-%m-%Y') %></td>
-              <td><%= request.ends_on.strftime('%d-%m-%Y') %></td>
+              <td><%= request.starts_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.starts_at) if request.mission? %> </td>
+              <td><%= request.ends_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.ends_at) if request.mission? %> </td>
               <% if current_hr %>
                 <td><%= request.employee.vacation_balance %></td>
               <% end %>
