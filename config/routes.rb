@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 
     resources :attendances do
       collection do
+        post :append
         post :checkin
         post :checkout
         post :checkin_reminder

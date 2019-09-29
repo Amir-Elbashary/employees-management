@@ -35,6 +35,46 @@
           </div>
         </div>
       </div>
+      <% unless current_employee %>
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Append Employee</h4>
+              <!-- Column -->
+              <%= form_tag append_admin_attendances_path do %>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <%= label_tag :employee, 'Employee' %>
+                      <%= select_tag :employee, options_from_collection_for_select(@employees, "id", 'full_name'), class: 'form-control select2' %>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">          
+                    <div class="form-group">        
+                      <%= label_tag :checktime, 'Date and Time' %>
+                      <%= datetime_field_tag :checktime, Time.zone.now, required: true, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <%= label_tag :check_type, 'Action' %>
+                      <%= select_tag :check_type, options_for_select(['Check-in','Check-out']), class: 'form-control select2' %>
+                    </div>
+                  </div>
+                </div>
+                <%= submit_tag 'Append', class: 'btn btn-info' %>
+              <% end %>
+              <!-- Column -->
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
 
     <div class="card">

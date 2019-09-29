@@ -34,11 +34,11 @@ class Admin::AttendancesController < Admin::BaseAdminController
       flash[:notice] = "You have already checked-in today, #{@messages[:checkin].sample}"
     else
       if current_admin
-        Attendance.create(admin: current_admin, checkin: DateTime.now)
+        Attendance.create(admin: current_admin, checkin: Time.zone.now)
       elsif current_hr
-        Attendance.create(hr: current_hr, checkin: DateTime.now)
+        Attendance.create(hr: current_hr, checkin: Time.zone.now)
       elsif current_employee
-        Attendance.create(employee: current_employee, checkin: DateTime.now)
+        Attendance.create(employee: current_employee, checkin: Time.zone.now)
       end
       flash[:notice] = "Thank you #{current_active_user.first_name}, Wishing you good and productive day."
     end
@@ -50,7 +50,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
     if @current_attendance&.checkout
       flash[:notice] = "You have already checked-out today, #{@messages[:checkout].sample}"
     else
-      if @current_attendance&.update(checkout: DateTime.now)
+      if @current_attendance&.update(checkout: Time.zone.now)
         checkin = @current_attendance.checkin
         checkout = @current_attendance.checkout
         time_spent = ((checkout - checkin) / 60 / 60).round(2)
@@ -74,6 +74,33 @@ class Admin::AttendancesController < Admin::BaseAdminController
     redirect_to request.referer 
   end
 
+  def append
+    employee = Employee.find(params[:employee])
+    checktime = params[:checktime].to_datetime - 2.hours
+    check_type = params[:check_type]
+    attendance = employee.attendances&.where(created_at: checktime.at_beginning_of_day..checktime.at_end_of_day)&.first
+
+    if check_type == 'Check-in'
+      if attendance
+        flash[:danger] = 'Employee already checked-in'
+      else
+        flash[:notice] = 'Check-in appended'
+        Attendance.create(employee: employee, checkin: checktime)
+      end
+    elsif check_type == 'Check-out'
+      if attendance.checkout
+        flash[:danger] = 'Employee already checked-out'
+      else
+        flash[:notice] = 'Check-out appended'
+        checkin = attendance.checkin.to_datetime
+        time_spent = ((checktime.to_f - checkin.to_f) / 60 / 60).round(2)
+        attendance.update(checkout: checktime, time_spent: time_spent)
+      end
+    end
+
+    redirect_to admin_attendances_path
+  end
+
   private
 
   def require_authorized_network
@@ -92,6 +119,8 @@ class Admin::AttendancesController < Admin::BaseAdminController
   end
 
   def set_attendances
+    @employees = Employee.all unless current_employee
+    @attendance = Attendance.new
     @attendances = if current_employee
                      current_employee.attendances
                    elsif current_admin || current_hr
