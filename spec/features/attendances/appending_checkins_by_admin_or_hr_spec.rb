@@ -94,9 +94,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         expect(page).to have_content('Attendance Sheet')
         expect(Employee.first.attendances.first.checkin).not_to eq(nil)
         expect(page).not_to have_content('Still working...')
-        # Datetime object needs to be fixed
-        # in order to calculate as 4
-        expect(page).to have_content('2.0')
+        expect(page).to have_content('4.0')
         expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       end
     end
@@ -124,6 +122,32 @@ RSpec.feature 'appending checkins by admin or H.R' do
         expect(Employee.first.attendances.first.checkin).not_to eq(nil)
         expect(page).to have_content('4.0')
         expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+      end
+    end
+
+    context 'while employee has no check-in during that day' do
+      it 'should return employee has not checked in that day' do
+        checkin_time = Time.zone.now
+        login_as(@admin, scope: :admin)
+        visit admin_attendances_path
+        
+        select(@employee.full_name, from: 'Employee').select_option
+        select('Check-out', from: 'Action').select_option
+        fill_in 'Date and Time', with: checkin_time + 4.hours
+
+        click_button('Append')
+
+        expect(page).to have_content('Employee has not checked-in during selected day')
+
+        visit admin_employees_path
+        find('.grant-link').click
+        logout(@admin)
+        login_as(@employee, scope: :employee)
+        visit admin_attendances_path
+        visit admin_attendances_path
+
+        expect(page).to have_content('Attendance Sheet')
+        expect(Employee.first.attendances.count).to eq(0)
       end
     end
   end
@@ -208,9 +232,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         expect(page).to have_content('Attendance Sheet')
         expect(Employee.first.attendances.first.checkin).not_to eq(nil)
         expect(page).not_to have_content('Still working...')
-        # Datetime object needs to be fixed
-        # in order to calculate as 4
-        expect(page).to have_content('2.0')
+        expect(page).to have_content('4.0')
         expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       end
     end
