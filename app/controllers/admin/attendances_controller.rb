@@ -76,7 +76,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def append
     employee = Employee.find(params[:employee])
-    checktime = params[:checktime].to_datetime - 2.hours
+    checktime = params[:checktime].to_datetime
     check_type = params[:check_type]
     attendance = employee.attendances&.where(created_at: checktime.at_beginning_of_day..checktime.at_end_of_day)&.first
 
@@ -88,13 +88,17 @@ class Admin::AttendancesController < Admin::BaseAdminController
         Attendance.create(employee: employee, checkin: checktime)
       end
     elsif check_type == 'Check-out'
-      if attendance.checkout
-        flash[:danger] = 'Employee already checked-out'
+      if attendance
+        if attendance.checkout
+          flash[:danger] = 'Employee already checked-out'
+        else
+          flash[:notice] = 'Check-out appended'
+          checkin = attendance.checkin.to_datetime
+          time_spent = ((checktime.to_f - checkin.to_f) / 60 / 60).round(2)
+          attendance.update(checkout: checktime, time_spent: time_spent)
+        end
       else
-        flash[:notice] = 'Check-out appended'
-        checkin = attendance.checkin.to_datetime
-        time_spent = ((checktime.to_f - checkin.to_f) / 60 / 60).round(2)
-        attendance.update(checkout: checktime, time_spent: time_spent)
+        flash[:danger] = 'Employee has not checked-in during selected day' 
       end
     end
 
