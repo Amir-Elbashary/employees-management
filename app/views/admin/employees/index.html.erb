@@ -32,7 +32,7 @@
           <% @employees.each do |employee| %>
             <tr>
               <td><%= image_tag(employee.avatar.thumb.url, class: 'table-thumb') %></td>
-              <td><%= link_to employee.full_name, admin_employee_path(employee) %></td>
+              <td><%= link_to employee.full_name, admin_employee_path(employee), title: employee.formal_name %></td>
               <td><%= employee.email %></td>
               <td><%= employee.birthdate&.strftime('%d/%m/%Y') %></td>
 							<td align="center">

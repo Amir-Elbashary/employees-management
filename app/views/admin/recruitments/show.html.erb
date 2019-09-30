@@ -7,8 +7,8 @@
 <% end %>
 
 <% content_for :bc_buttons do %>
-  <a href="<%= edit_admin_recruitment_path(@recruitment) %>"><button type="button" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit Recruitment</button></a>
-  <a href="<%= admin_recruitments_path %>"><button type="button" class="btn btn-info"> All Recruitments</button></a>
+  <a href="<%= edit_admin_recruitment_path(@recruitment) %>"><button type="button" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit Candidate</button></a>
+  <a href="<%= admin_recruitments_path %>"><button type="button" class="btn btn-info"> All Candidates</button></a>
 <% end %>
 
 <%= render 'shared/dashboard/breadcrumb' %>
@@ -19,8 +19,7 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Striped Table</h4>
-        <h6 class="card-subtitle">Add<code>.table-striped</code>for borders on all sides of the table and cells.</h6>
+        <h4 class="card-title"><%= @recruitment.full_name %></h4>
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>
