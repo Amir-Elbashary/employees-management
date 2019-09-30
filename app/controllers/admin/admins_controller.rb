@@ -60,7 +60,7 @@ class Admin::AdminsController < Admin::BaseAdminController
     if current_admin
       if params[:admin][:password].present?
         params.require(:admin).permit(:password, :password_confirmation,
-                                      :first_name, :last_name, :nationality, :marital_status,
+                                      :first_name, :middle_name, :last_name, :nationality, :marital_status,
                                       :military_status, :gender, :birthdate, :mobile_numbers,
                                       :landline_numbers, :address, :social_id, :personal_email,
                                       :business_email, :qualification, :graduation_year,
@@ -69,7 +69,7 @@ class Admin::AdminsController < Admin::BaseAdminController
                                       :social_insurance_number, :avatar,
                                       :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
       else
-        params.require(:admin).permit(:first_name, :last_name, :nationality, :marital_status,
+        params.require(:admin).permit(:first_name, :middle_name, :last_name, :nationality, :marital_status,
                                       :military_status, :gender, :birthdate, :mobile_numbers,
                                       :landline_numbers, :address, :social_id, :personal_email,
                                       :business_email, :qualification, :graduation_year,
@@ -81,7 +81,7 @@ class Admin::AdminsController < Admin::BaseAdminController
     elsif current_hr
       if params[:hr][:password].present?
         params.require(:hr).permit(:password, :password_confirmation,
-                                   :first_name, :last_name, :nationality, :marital_status,
+                                   :first_name, :middle_name, :last_name, :nationality, :marital_status,
                                    :military_status, :gender, :birthdate, :mobile_numbers,
                                    :landline_numbers, :address, :social_id, :personal_email,
                                    :business_email, :qualification, :graduation_year,
@@ -90,7 +90,7 @@ class Admin::AdminsController < Admin::BaseAdminController
                                    :social_insurance_number, :avatar,
                                    :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
       else
-        params.require(:hr).permit(:first_name, :last_name, :nationality, :marital_status,
+        params.require(:hr).permit(:first_name, :middle_name, :last_name, :nationality, :marital_status,
                                    :military_status, :gender, :birthdate, :mobile_numbers,
                                    :landline_numbers, :address, :social_id, :personal_email,
                                    :business_email, :qualification, :graduation_year,
