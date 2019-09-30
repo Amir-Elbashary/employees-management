@@ -70,7 +70,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
   private
 
   def employee_params
-    params.require(:employee).permit(:email, :password, :password_confirmation, :first_name, :last_name,
+    params.require(:employee).permit(:email, :password, :password_confirmation, :first_name, :middle_name, :last_name,
                                      :gender, :birthdate, :address, :social_id, :personal_email, :business_email,
                                      :mobile_numbers, :landline_numbers, :qualification, :graduation_year, :section_id,
                                      :date_of_employment, :job_description, :work_type,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_26_115644) do
+ActiveRecord::Schema.define(version: 2019_09_30_091032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_115644) do
     t.string "nationality"
     t.integer "vacation_balance"
     t.string "avatar"
+    t.string "middle_name"
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
@@ -119,6 +120,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_115644) do
     t.string "bank_account"
     t.string "access_token"
     t.integer "access_token_status", default: 0
+    t.string "middle_name"
     t.index ["email"], name: "index_employees_on_email", unique: true
     t.index ["level"], name: "index_employees_on_level"
     t.index ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true
@@ -168,6 +170,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_115644) do
     t.string "nationality"
     t.integer "vacation_balance"
     t.string "avatar"
+    t.string "middle_name"
     t.index ["email"], name: "index_hrs_on_email", unique: true
     t.index ["reset_password_token"], name: "index_hrs_on_reset_password_token", unique: true
   end
