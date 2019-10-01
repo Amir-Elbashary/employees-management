@@ -2,8 +2,8 @@ class Admin::AttendancesController < Admin::BaseAdminController
   load_and_authorize_resource
   skip_load_resource only: %i[index grant revoke]
   before_action :set_settings
-  before_action :require_authorized_network, except: %i[index grant revoke]
-  before_action :require_authorized_device, except: %i[index grant revoke]
+  before_action :require_authorized_network, only: %i[checkin checkout]
+  before_action :require_authorized_device, only: %i[checkin checkout]
   before_action :set_attendances, only: :index
   before_action :set_employee, only: %i[grant revoke]
   before_action :set_messages, only: %i[checkin checkout]
@@ -77,15 +77,16 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def append
     employee = Employee.find(params[:employee])
     checktime = params[:checktime].to_datetime
+    checktime_utc = DateTime.new(checktime.year,checktime.month,checktime.day,checktime.hour,checktime.minute,checktime.second, 'EET').utc
     check_type = params[:check_type]
-    attendance = employee.attendances&.where(created_at: checktime.at_beginning_of_day..checktime.at_end_of_day)&.first
+    attendance = employee.attendances&.where(created_at: checktime_utc.at_beginning_of_day..checktime_utc.at_end_of_day)&.first
 
     if check_type == 'Check-in'
       if attendance
         flash[:danger] = 'Employee already checked-in'
       else
         flash[:notice] = 'Check-in appended'
-        Attendance.create(employee: employee, checkin: checktime)
+        Attendance.create(employee: employee, checkin: checktime_utc)
       end
     elsif check_type == 'Check-out'
       if attendance
@@ -94,8 +95,8 @@ class Admin::AttendancesController < Admin::BaseAdminController
         else
           flash[:notice] = 'Check-out appended'
           checkin = attendance.checkin.to_datetime
-          time_spent = ((checktime.to_f - checkin.to_f) / 60 / 60).round(2)
-          attendance.update(checkout: checktime, time_spent: time_spent)
+          time_spent = ((checktime_utc.to_f - checkin.to_f) / 60 / 60).round(2)
+          attendance.update(checkout: checktime_utc, time_spent: time_spent)
         end
       else
         flash[:danger] = 'Employee has not checked-in during selected day' 
