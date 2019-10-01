@@ -2,8 +2,8 @@ class Admin::AttendancesController < Admin::BaseAdminController
   load_and_authorize_resource
   skip_load_resource only: %i[index grant revoke]
   before_action :set_settings
-  before_action :require_authorized_network, except: %i[index grant revoke]
-  before_action :require_authorized_device, except: %i[index grant revoke]
+  before_action :require_authorized_network, only: %i[checkin checkout]
+  before_action :require_authorized_device, only: %i[checkin checkout]
   before_action :set_attendances, only: :index
   before_action :set_employee, only: %i[grant revoke]
   before_action :set_messages, only: %i[checkin checkout]
@@ -77,6 +77,14 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def append
     employee = Employee.find(params[:employee])
     checktime = params[:checktime].to_datetime
+    puts '---------------'
+    puts DateTime.new(checktime.year,checktime.month,checktime.day,checktime.hour,checktime.minute,checktime.second, 'EET')
+    puts '---------------'
+    puts DateTime.new(checktime.year,checktime.month,checktime.day,checktime.hour,checktime.minute,checktime.second, 'EET').utc
+    puts '---------------'
+    puts checktime.class.name
+    puts '---------------'
+    i
     check_type = params[:check_type]
     attendance = employee.attendances&.where(created_at: checktime.at_beginning_of_day..checktime.at_end_of_day)&.first
 
