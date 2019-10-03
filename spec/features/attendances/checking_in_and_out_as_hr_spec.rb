@@ -3,7 +3,6 @@ include AdminHelpers
 
 RSpec.feature 'Checking in/out by admin' do
   before do
-    @settings = create(:setting)
     @hr = create(:hr)
     assign_permission(@hr, :read, Attendance)
     assign_permission(@hr, :checkin, Attendance)
@@ -16,14 +15,14 @@ RSpec.feature 'Checking in/out by admin' do
     context 'accessing from unauthorized network' do
       it 'should be able to checkin' do
         expect(page).to have_content('Attendance Sheet')
-        expect(page).not_to have_content('Network authentication failed!')
+        expect(page).not_to have_content('Unauthorized network detected!')
       end
     end
 
     context 'accessing from authorized network' do
       it 'should render attendance table' do
         expect(page).to have_content('Attendance Sheet')
-        expect(page).not_to have_content('Network authentication failed!')
+        expect(page).not_to have_content('Unauthorized network detected!')
       end
     end
   end
@@ -32,14 +31,14 @@ RSpec.feature 'Checking in/out by admin' do
     context 'accessing from unauthorized device' do
       it 'should be able to checkin' do
         expect(page).to have_content('Attendance Sheet')
-        expect(page).not_to have_content('Device authentication required!')
+        expect(page).not_to have_content('Unauthorized device detected!')
       end
     end
 
     context 'accessing from authorized device' do
       it 'should render attendance table' do
         expect(page).to have_content('Attendance Sheet')
-        expect(page).not_to have_content('Device authentication required!')
+        expect(page).not_to have_content('Unauthorized device detected!')
       end
     end
   end

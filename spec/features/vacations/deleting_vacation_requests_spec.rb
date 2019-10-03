@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'Deleting vacation request' do
   before do
+    initialize_app_settings
     @employee = create(:employee)
     login_as(@employee, scope: :employee)
     @vacation_request = create(:vacation_request, employee: @employee)
