@@ -3,7 +3,7 @@ include AdminHelpers
 
 RSpec.feature 'Processing pending vacation requests as H.R' do
   before do
-    @settings = create(:setting, work_from_home: 2)
+    initialize_app_settings
     @hr = create(:hr)
     @employee = create(:employee, vacation_balance: 20)
     assign_permission(@hr, :pending, VacationRequest)

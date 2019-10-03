@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'Listing your own vacation requests as an employee' do
   before do
+    initialize_app_settings
     @employee = create(:employee)
     login_as(@employee, scope: :employee)
     @vacation_request1 = create(:vacation_request, employee: @employee)

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'Refreshing permissions' do
   before do
-    @settings = create(:setting)
+    initialize_app_settings
   end
 
   context 'while logged in as H.R' do

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'Deleting timeline post' do
   before do
+    initialize_app_settings
     @employee = create(:employee)
     login_as(@employee, scope: :employee)
   end
