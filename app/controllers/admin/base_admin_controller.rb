@@ -39,6 +39,7 @@ class Admin::BaseAdminController < ApplicationController
   end
 
   def set_entities
+    @settings = Setting.first
     @notification = Notification.new
     @notifications = Notification.limit(8)
     @main_room = Room.find_by(name: 'Fustany Team')

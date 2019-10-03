@@ -12,8 +12,8 @@ RSpec.feature 'Checking in/out by employees' do
         @settings = create(:setting)
         visit admin_attendances_path
 
-        expect(page).not_to have_content('Attendance Sheet')
-        expect(page).to have_content('Network authentication failed!')
+        expect(page).to have_content('Attendance Sheet')
+        expect(page).to have_content('Unauthorized network detected!')
       end
     end
 
@@ -23,8 +23,8 @@ RSpec.feature 'Checking in/out by employees' do
         @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 1)
         visit admin_attendances_path
 
-        expect(page).not_to have_content('Attendance Sheet')
-        expect(page).to have_content('Network authentication failed!')
+        expect(page).to have_content('Attendance Sheet')
+        expect(page).to have_content('Unauthorized network detected!')
       end
 
       it 'should render attendances table if request is approved by H.R' do
@@ -33,7 +33,7 @@ RSpec.feature 'Checking in/out by employees' do
         visit admin_attendances_path
 
         expect(page).to have_content('Attendance Sheet')
-        expect(page).not_to have_content('Network authentication failed!')
+        expect(page).not_to have_content('Unauthorized network detected!')
       end
     end
 
@@ -43,7 +43,7 @@ RSpec.feature 'Checking in/out by employees' do
         visit admin_attendances_path
 
         expect(page).to have_content('Attendance Sheet')
-        expect(page).not_to have_content('Network authentication failed!')
+        expect(page).not_to have_content('Unauthorized network detected!')
       end
     end
   end
@@ -55,8 +55,8 @@ RSpec.feature 'Checking in/out by employees' do
         visit admin_attendances_path
         visit admin_attendances_path
 
-        expect(page).not_to have_content('Attendance Sheet')
-        expect(page).to have_content('Device authentication required!')
+        expect(page).to have_content('Attendance Sheet')
+        expect(page).to have_content('Unauthorized device detected!')
       end
     end
 
@@ -74,7 +74,7 @@ RSpec.feature 'Checking in/out by employees' do
         visit admin_attendances_path
 
         expect(page).to have_content('Attendance Sheet')
-        expect(page).not_to have_content('Device authentication required!')
+        expect(page).not_to have_content('Unauthorized device detected!')
       end
     end
   end
@@ -158,7 +158,7 @@ RSpec.feature 'Checking in/out by employees' do
       expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
     end
 
-    it 'should bypass network authenticating and check the employee out for today' do
+    it 'should bypass network authenticating and check the employee out for today if work from home request is approved' do
       @employee.update(access_token: 'secret-token')
       @settings = create(:setting)
       @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
@@ -204,7 +204,7 @@ RSpec.feature 'Checking in/out by employees' do
       expect(Employee.first.attendances.first.updated_at).to eq(checkout_time)
     end
 
-    it 'should return checked out message already after bypassing network authentication' do
+    it 'should return checked out message already after bypassing network authentication if work from home request is approved' do
       @employee.update(access_token: 'secret-token')
       @settings = create(:setting)
       @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)

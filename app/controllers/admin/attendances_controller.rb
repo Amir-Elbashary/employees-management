@@ -1,7 +1,6 @@
 class Admin::AttendancesController < Admin::BaseAdminController
   load_and_authorize_resource
   skip_load_resource only: %i[index grant revoke]
-  before_action :set_settings
   before_action :require_authorized_network, only: %i[checkin checkout]
   before_action :require_authorized_device, only: %i[checkin checkout]
   before_action :set_attendances, only: :index
@@ -135,10 +134,6 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def set_employee
     @employee = Employee.find(params[:id])
-  end
-
-  def set_settings
-    @settings = Setting.first
   end
 
   def set_messages

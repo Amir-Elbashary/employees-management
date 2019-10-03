@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'Loggin in as employee' do
   before do
+    initialize_app_settings
     @employee = create(:employee)
     visit '/employees/sign_in'
 

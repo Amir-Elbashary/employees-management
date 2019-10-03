@@ -3,6 +3,7 @@ include AdminHelpers
 
 RSpec.feature 'Listing pending vacation requests as an H.R or supervisor' do
   before do
+    initialize_app_settings
     @hr = create(:hr)
     @supervisor = create(:employee, level: 1)
     @employee = create(:employee, supervisor: @supervisor)
