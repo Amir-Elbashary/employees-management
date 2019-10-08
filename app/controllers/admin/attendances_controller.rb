@@ -76,9 +76,9 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def append
     employee = Employee.find(params[:employee])
     checktime = params[:checktime].to_datetime
-    checktime_utc = DateTime.new(checktime.year,checktime.month,checktime.day,checktime.hour,checktime.minute,checktime.second, 'EET').utc
+    checktime_utc = DateTime.new(checktime.year, checktime.month, checktime.day, checktime.hour, checktime.minute, checktime.second, 'EET').utc
     check_type = params[:check_type]
-    attendance = employee.attendances&.where(created_at: checktime_utc.at_beginning_of_day..checktime_utc.at_end_of_day)&.first
+    attendance = employee.attendances&.where(checkin: checktime_utc.at_beginning_of_day..checktime_utc.at_end_of_day)&.first
 
     if check_type == 'Check-in'
       if attendance
