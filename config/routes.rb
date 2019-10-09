@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     resources :roles
     resources :hrs
     resources :sections
+    resources :holidays
     resources :rooms
     resources :room_messages
     resources :recruitments

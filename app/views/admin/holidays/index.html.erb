@@ -1,0 +1,47 @@
+<% content_for :bc_title do %>
+  Holidays
+<% end %>
+
+<% content_for :bc_current do %>
+  All Holidays
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= new_admin_holiday_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> New Holiday</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<div class="card">
+	<div class="card-body">
+    <h4 class="card-title">Holidays</h4>
+    <div class="table-responsive m-t-40">
+      <table id="myTable" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>What's going on</th>
+            <th>Duration</th>
+            <th>Starts on</th>
+            <th>Ends on</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @holidays.each do |holiday| %>
+            <tr>
+              <td><%= holiday.name %></td>
+              <td><%= truncate(holiday.content, length: 18) %></td>
+              <td><%= holiday.duration %></td>
+              <td><%= holiday.starts_on %></td>
+              <td><%= holiday.ends_on %></td>
+              <td>
+                <a href="<%= admin_holiday_path(holiday) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
