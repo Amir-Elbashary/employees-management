@@ -107,27 +107,43 @@ class Admin::AttendancesController < Admin::BaseAdminController
   end
 
   def reports
+    # Current month date range
     date_from = params[:from]&.to_datetime&.at_beginning_of_day
     date_to = params[:to]&.to_datetime&.at_end_of_day
-    @current_month = date_from&.strftime('%b')
-    l_date_from = date_from - 1.month if date_from
-    l_date_to = date_to - 1.month if date_to
-    @last_month = l_date_from&.strftime('%b')
-    if date_to && date_from
+    @current_month_sym = date_from&.strftime('%b')
+
+    if date_from && date_to
       if date_to < date_from
         flash[:danger] = 'End date cannot be before start date'
         return redirect_to reports_admin_attendances_path
+      else
+        date_range = date_from..date_to
       end
     end
-    date_range = date_from..date_to if date_from && date_to
-    l_date_range = l_date_from..l_date_to if l_date_from && l_date_to
+
+    # Last month (ex) date range
+    ex_date_from = date_from - 1.month if date_from
+    ex_date_to = date_to - 1.month if date_to
+    @last_month_sym = ex_date_from&.strftime('%b')
+    ex_date_range = ex_date_from..ex_date_to if ex_date_from && ex_date_to
+
     @work_days = date_range.map { |d| d unless ['Fri', 'Sat'].include?(d.strftime('%a'))}.uniq - [nil] if date_range
 
     @employee = Employee.find_by(id: params[:employee]) if params[:employee]
-    @attendances = @employee.attendances.where(checkin: date_range) if @employee
-    @l_attendances = @employee.attendances.where(checkin: l_date_range) if @employee
+    if @employee
+      @attendances = @employee.attendances.where(checkin: date_range)
+      @ex_attendances = @employee.attendances.where(checkin: ex_date_range)
+      @vacation_requests = @employee.vacation_requests.where(starts_on: date_range).approved
+    end
 
-    @vacation_requests = @employee.vacation_requests.where(starts_on: date_range).approved if @employee
+    # Variables needed for views calculations
+    @total_work_days = @work_days.size
+    @total_work_hours = @work_days.size * 8
+    @actual_work_days = @attendances.size
+    @actual_work_hours = @attendances.pluck(:time_spent).inject(:+).round(2)
+    @work_from_home_days = @vacation_requests.work_from_home.size
+    @vacation_days = @vacation_requests.vacation.size
+    @sick_leave_days = @vacation_requests.sick_leave.size
   end
 
   private

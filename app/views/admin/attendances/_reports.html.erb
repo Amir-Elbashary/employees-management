@@ -1,29 +1,29 @@
 <% if @attendances.any? %>
   <div class="card">
     <div class="card-header bg-info">
-      <h4 class="m-b-0 text-white">Report</h4>
+      <h4 class="m-b-0 text-white"><%= @employee.full_name %>'s Report from <%= formatted_date(params[:from].to_datetime) %> to <%= formatted_date(params[:to].to_datetime) %></h4>
     </div>
     <div class="card-body">
       <div class="row" align="center">
         <div class="col-md-6">
-          <h4>Total work days: <%= @work_days.size %> <span class="text-muted">- X Days officialy off</span></h4>
-          <h4>Total work hours: <%= @work_days.size * 8 %> <span class="text-muted">- X Hours officialy off</span></h4>
+          <h4>Total work days: <%= @total_work_days %> <span class="text-muted">- X Days officialy off</span></h4>
+          <h4>Total work hours: <%= @total_work_hours %> <span class="text-muted">- X Hours officialy off</span></h4>
         </div>
         <div class="col-md-6">
-          <h4>Actual work days: <%= @attendances.size %></h4>
-          <h4>Actualy work hours: <%= @attendances.pluck(:time_spent).inject(:+).round(2) %></h4>
+          <h4>Actual work days: <%= @actual_work_days %></h4>
+          <h4>Actual work hours: <%= @actual_work_hours %></h4>
         </div>
       </div>
       <hr>
       <div class="row" align="center">
         <div class="col-md-4">
-          <h4>Work from home: <%= @vacation_requests.work_from_home.count %></h4>
+          <h4>Work from home: <%= @work_from_home_days %></h4>
         </div>
         <div class="col-md-4">
-          <h4>Vacations: <%= @vacation_requests.vacation.count %></h4>
+          <h4>Vacations: <%= @vacation_days %></h4>
         </div>
         <div class="col-md-4">
-          <h4>Sick leave: <%= @vacation_requests.sick_leave.count %></h4>
+          <h4>Sick leave: <%= @sick_leave_days %></h4>
         </div>
       </div>
     </div>
@@ -36,10 +36,10 @@
           <h4 class="card-title">Attendance behavior compared with last month</h4>
           <ul class="list-inline text-right">
             <li>
-              <h5><i class="fa fa-circle m-r-5 text-success"></i><%= @current_month %></h5>
+              <h5><i class="fa fa-circle m-r-5 text-success"></i><%= @current_month_sym %></h5>
             </li>
             <li>
-              <h5><i class="fa fa-circle m-r-5 text-info"></i><%= @last_month %></h5>
+              <h5><i class="fa fa-circle m-r-5 text-info"></i><%= @last_month_sym %></h5>
             </li>
           </ul>
           <div id="morris-area-chart"></div>
@@ -52,7 +52,7 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Donute Chart</h4>
+          <h4 class="card-title">Work days chart</h4>
           <div id="morris-donut-chart"></div>
         </div>
       </div>
@@ -61,9 +61,9 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Readonly</h4>
+          <h4 class="card-title">Work hours percentage</h4>
           <div class="text-center">
-            <input data-plugin="knob" data-width="348" data-height="348" data-linecap=round data-fgColor="#01c0c8" value="90" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".2" />
+            <input data-plugin="knob" data-width="348" data-height="348" data-linecap=round data-fgColor="#01c0c8" value="<%= (@actual_work_hours / @total_work_hours * 100).round(2) %>" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".2" />
           </div>
         </div>
       </div>
@@ -139,48 +139,49 @@
 <script>
   // Morris donut chart
   Morris.Donut({
-      element: 'morris-donut-chart',
-      data: [{
-          label: "Actual Work Days",
-          value: <%= @attendances.size %>,
+    element: 'morris-donut-chart',
+    data: [{
+        label: "Actual Work Days",
+        value: <%= @attendances.size %>,
 
-      }, {
-          label: "Vacations",
-          value: <%= @vacation_requests.vacation.size %>
-      }, {
-          label: "Sick Leave",
-          value: <%= @vacation_requests.sick_leave.size %>
-      }],
-      resize: true,
-      colors:['#009efb', '#55ce63', '#2f3d4a']
+    }, {
+        label: "Vacations",
+        value: <%= @vacation_requests.vacation.size %>
+    }, {
+        label: "Sick Leave",
+        value: <%= @vacation_requests.sick_leave.size %>
+    }],
+    resize: true,
+    colors:['#009efb', '#55ce63', '#2f3d4a']
   });
-$(function() {
-        $('[data-plugin="knob"]').knob();
-    });
-Morris.Area({
-        element: 'morris-area-chart',
-        data: [
-          <% @attendances.each do |w| %>
-              <% day = w.checkin.day %>
-              <% time_spent = w.time_spent %>
-              <% l_checkin = w.checkin - 1.month %>
-              <% l_time_spent = @l_attendances.where(checkin: l_checkin.at_beginning_of_day..l_checkin.at_end_of_day).first %>
-              <%= "{day: #{day}, #{w.checkin.strftime('%b').downcase}: #{time_spent}, #{l_checkin.strftime('%b').downcase}: #{l_time_spent&.time_spent || 0}}," %>
-          <% end %>
-        ],
-        xkey: 'day',
-        parseTime: false,
-        ykeys: ['<%= @last_month&.downcase %>', '<%= @current_month&.downcase %>'],
-        labels: ['<%= @last_month&.capitalize %>', '<%= @current_month&.capitalize %>'],
-        pointSize: 3,
-        fillOpacity: 0,
-        pointStrokeColors:['#009efb', '#55ce63'],
-        behaveLikeLine: true,
-        gridLineColor: '#e0e0e0',
-        lineWidth: 3,
-        hideHover: 'auto',
-        lineColors: ['#009efb', '#55ce63'],
-        resize: true
-        
-    });
+
+  $(function() {
+    $('[data-plugin="knob"]').knob();
+  });
+
+  Morris.Area({
+    element: 'morris-area-chart',
+    data: [
+      <% @attendances.each do |attendance| %>
+          <% day = attendance.checkin.day %>
+          <% time_spent = attendance.time_spent %>
+          <% ex_checkin_date = attendance.checkin - 1.month %>
+          <% ex_checkin = @ex_attendances.where(checkin: ex_checkin_date.at_beginning_of_day..ex_checkin_date.at_end_of_day).first %>
+          <%= "{day: #{day}, #{attendance.checkin.strftime('%b').downcase}: #{time_spent}, #{ex_checkin_date.strftime('%b').downcase}: #{ex_checkin&.time_spent || 0}}," %>
+      <% end %>
+    ],
+    xkey: 'day',
+    parseTime: false,
+    ykeys: ['<%= @last_month_sym&.downcase %>', '<%= @current_month_sym&.downcase %>'],
+    labels: ['<%= @last_month_sym&.capitalize %>', '<%= @current_month_sym&.capitalize %>'],
+    pointSize: 3,
+    fillOpacity: 0,
+    pointStrokeColors:['#009efb', '#55ce63'],
+    behaveLikeLine: true,
+    gridLineColor: '#e0e0e0',
+    lineWidth: 3,
+    hideHover: 'auto',
+    lineColors: ['#009efb', '#55ce63'],
+    resize: true
+  });
 </script>
