@@ -4,6 +4,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   before_action :require_authorized_network, only: %i[checkin checkout]
   before_action :require_authorized_device, only: %i[checkin checkout]
   before_action :set_attendances, only: :index
+  before_action :set_employees, only: :reports
   before_action :set_employee, only: %i[grant revoke]
   before_action :set_messages, only: %i[checkin checkout]
 
@@ -105,6 +106,30 @@ class Admin::AttendancesController < Admin::BaseAdminController
     redirect_to admin_attendances_path
   end
 
+  def reports
+    date_from = params[:from]&.to_datetime&.at_beginning_of_day
+    date_to = params[:to]&.to_datetime&.at_end_of_day
+    @current_month = date_from&.strftime('%b')
+    l_date_from = date_from - 1.month if date_from
+    l_date_to = date_to - 1.month if date_to
+    @last_month = l_date_from&.strftime('%b')
+    if date_to && date_from
+      if date_to < date_from
+        flash[:danger] = 'End date cannot be before start date'
+        return redirect_to reports_admin_attendances_path
+      end
+    end
+    date_range = date_from..date_to if date_from && date_to
+    l_date_range = l_date_from..l_date_to if l_date_from && l_date_to
+    @work_days = date_range.map { |d| d unless ['Fri', 'Sat'].include?(d.strftime('%a'))}.uniq - [nil] if date_range
+
+    @employee = Employee.find_by(id: params[:employee]) if params[:employee]
+    @attendances = @employee.attendances.where(checkin: date_range) if @employee
+    @l_attendances = @employee.attendances.where(checkin: l_date_range) if @employee
+
+    @vacation_requests = @employee.vacation_requests.where(starts_on: date_range).approved if @employee
+  end
+
   private
 
   def require_authorized_network
@@ -134,6 +159,10 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def set_employee
     @employee = Employee.find(params[:id])
+  end
+
+  def set_employees
+    @employees = Employee.all
   end
 
   def set_messages

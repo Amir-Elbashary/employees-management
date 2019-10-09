@@ -18,6 +18,9 @@ class Ability
           can permission.action.to_sym, model
         end
       end
+
+      can :checkin_reminder, Attendance
+      can :checkout_reminder, Attendance
     when Employee
       # Employees have access to specific models only
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)

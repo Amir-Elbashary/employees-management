@@ -44,6 +44,8 @@ Rails.application.routes.draw do
 
     resources :attendances do
       collection do
+        get :reports
+
         post :append
         post :checkin
         post :checkout
