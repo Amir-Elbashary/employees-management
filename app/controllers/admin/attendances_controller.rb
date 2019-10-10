@@ -129,7 +129,10 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
     @work_days = date_range.map { |d| d unless ['Fri', 'Sat'].include?(d.strftime('%a'))}.uniq - [nil] if date_range
 
+    @holidays = Holiday.where(starts_on: date_from..date_to)&.pluck(:duration)&.inject(:+) || 0
+
     @employee = Employee.find_by(id: params[:employee]) if params[:employee]
+
     if @employee
       @attendances = @employee.attendances.where(checkin: date_range)
       @ex_attendances = @employee.attendances.where(checkin: ex_date_range)
@@ -137,13 +140,23 @@ class Admin::AttendancesController < Admin::BaseAdminController
     end
 
     # Variables needed for views calculations
-    @total_work_days = @work_days.size
-    @total_work_hours = @work_days.size * 8
-    @actual_work_days = @attendances.size
-    @actual_work_hours = @attendances.pluck(:time_spent).inject(:+).round(2)
-    @work_from_home_days = @vacation_requests.work_from_home.size
-    @vacation_days = @vacation_requests.vacation.size
-    @sick_leave_days = @vacation_requests.sick_leave.size
+    if @work_days
+      @total_work_days = @work_days.size - @holidays
+      @total_work_hours = (@work_days.size * 8) - (@holidays * 8)
+    end
+    if @attendances.any?
+      @actual_work_days = @attendances.size
+      @actual_work_hours = @attendances.pluck(:time_spent)&.inject(:+)&.round(2)
+    else
+      if params[:from].present? && params[:to].present?
+        flash[:danger] = 'This employee has no attendances during the selected dates'
+      end
+    end
+    if @vacation_requests
+      @work_from_home_days = @vacation_requests.work_from_home.size
+      @vacation_days = @vacation_requests.vacation.size
+      @sick_leave_days = @vacation_requests.sick_leave.size
+    end
   end
 
   private

@@ -6,8 +6,8 @@
     <div class="card-body">
       <div class="row" align="center">
         <div class="col-md-6">
-          <h4>Total work days: <%= @total_work_days %> <span class="text-muted">- X Days officialy off</span></h4>
-          <h4>Total work hours: <%= @total_work_hours %> <span class="text-muted">- X Hours officialy off</span></h4>
+          <h4>Total work days: <%= @total_work_days %> <span class="text-muted">+ <%= @holidays %> Days officialy off</span></h4>
+          <h4>Total work hours: <%= @total_work_hours %> <span class="text-muted">+ <%= @holidays * 8 %> Hours officialy off</span></h4>
         </div>
         <div class="col-md-6">
           <h4>Actual work days: <%= @actual_work_days %></h4>
@@ -116,13 +116,13 @@
               <div class="col-md-6">          
                 <div class="form-group">        
                   <%= label_tag :from, 'From' %>
-                  <%= date_field_tag :from, Time.zone.now, required: true, class: "form-control" %>
+                  <%= date_field_tag :from, params[:from], required: true, class: "form-control" %>
                 </div>
               </div>
               <div class="col-md-6">          
                 <div class="form-group">        
                   <%= label_tag :to, 'To' %>
-                  <%= date_field_tag :to, Time.zone.now, required: true, class: "form-control" %>
+                  <%= date_field_tag :to, params[:to], required: true, class: "form-control" %>
                 </div>
               </div>
             </div>

@@ -24,6 +24,9 @@ RSpec.feature 'Creating holiday' do
     expect(Holiday.count).to eq(1)
     expect(page).to have_content(Holiday.first.name)
     expect(Holiday.first.ends_on).to eq(Holiday.first.starts_on + 4.days)
+
+    visit admin_path
+    expect(page).to have_content(Holiday.first.content)
   end
 
   scenario 'with duplicated data' do

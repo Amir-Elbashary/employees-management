@@ -9,6 +9,8 @@ class Admin::HolidaysController < Admin::BaseAdminController
     else
       render 'new'
     end
+
+    create_timeline_post(@holiday.content)
   end
 
   def index; end
@@ -24,5 +26,21 @@ class Admin::HolidaysController < Admin::BaseAdminController
   def holiday_params
     params.require(:holiday).permit(:name, :content, :year, :month,
                                     :duration, :starts_on)
+  end
+
+  def create_timeline_post(content)
+    if current_admin
+      Timeline.create(admin: current_admin,
+                      images: [],
+                      kind: 'news',
+                      creation: 'manual',
+                      content: content)
+    elsif current_hr
+      Timeline.create(hr: current_hr,
+                      images: [],
+                      kind: 'news',
+                      creation: 'manual',
+                      content: content)
+    end
   end
 end
