@@ -26,6 +26,7 @@
             <th>Full Name</th>
             <th>From</th>
             <th>To</th>
+            <th>Type</th>
             <% if current_hr %>
               <th>Vacation Balance</th>
             <% end %>
@@ -40,6 +41,7 @@
               <td><%= request.employee.full_name %></td>
               <td><%= request.starts_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.starts_at) if request.mission? %> </td>
               <td><%= request.ends_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.ends_at) if request.mission? %> </td>
+              <td><%= request.kind.humanize %></td>
               <% if current_hr %>
                 <td><%= request.employee.vacation_balance %></td>
               <% end %>
