@@ -1,0 +1,36 @@
+<% content_for :bc_title do %>
+  Attendance
+<% end %>
+
+<% content_for :bc_current do %>
+  <% if @employee %>
+    <%= @employee.full_name %>'s Report
+  <% else %>
+    Attendance Reports
+  <% end %>
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <% if @employee %>
+    <a href="<%= reports_admin_attendances_path %>"><button type="button" class="btn btn-info"><i class="fa fa-list"></i> Employees List</button></a>
+  <% else %>
+    <a href="<%= admin_attendances_path %>"><button type="button" class="btn btn-info"><i class="fa fa-list"></i> Attendance Log</button></a>
+  <% end %>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<% if @employee %>
+  <%= render 'reports' %>
+<% else %>
+  <%= render 'employees_table' %>
+<% end %>
+
+<script>
+  $('#dataExport').DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'                            
+    ] 
+  });
+</script>

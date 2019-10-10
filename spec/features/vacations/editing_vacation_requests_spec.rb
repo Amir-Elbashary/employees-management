@@ -21,7 +21,7 @@ RSpec.feature 'Editing vacation requests' do
         click_button 'Submit'
         
         expect(page).to have_content('Request has been updated.')
-        expect(VacationRequest.first.reason).to eq('New reason')
+        expect(VacationRequest.last.reason).to eq('New reason')
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.feature 'Editing vacation requests' do
         visit edit_admin_vacation_request_path(@others_request)
       
         expect(page).to have_content('You are not allowed!')
-        expect(VacationRequest.last.reason).to eq(@others_request.reason)
+        expect(VacationRequest.first.reason).to eq(@others_request.reason)
       end
     end
   end

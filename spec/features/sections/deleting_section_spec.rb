@@ -24,7 +24,11 @@ RSpec.feature 'Deleting section' do
   context 'while it has employees assigned to it' do
     it 'should not delete this section' do
       @sub_section = create(:section, parent: @section)
-      @employee = create(:employee, section: @sub_section)
+      @employee = create(:employee,
+                         first_name: 'Fustany',
+                         middle_name: 'Active',
+                         last_name: 'Employee',
+                         section: @sub_section)
       visit admin_sections_path
 
       expect(page).to have_content(@sub_section.name)

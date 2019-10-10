@@ -39,7 +39,7 @@ function toggle_visibility(id) {
 }
 
 $(function() {
-  $('#myTable, #admins_table, #employees_table').DataTable();
+  $('#myTable, #dataExport, #admins_table, #employees_table').DataTable();
   var table = $('#example').DataTable({
     "columnDefs": [{
       "visible": false,

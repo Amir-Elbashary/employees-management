@@ -8,5 +8,5 @@ class VacationRequest < ApplicationRecord
   belongs_to :hr, optional: true
   belongs_to :supervisor, class_name: 'Employee', foreign_key: 'supervisor_id', optional: true
 
-  default_scope { order(id: :asc) }
+  default_scope { order(id: :desc) }
 end
