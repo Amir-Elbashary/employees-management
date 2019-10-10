@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">Attendance Report</h4>
+    <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6>
+    <div class="table-responsive m-t-40">
+      <table id="dataExport" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Avatar</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Birthdate</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @employees.each do |employee| %>
+            <tr>
+              <td><%= image_tag(employee.avatar.thumb.url, class: 'table-thumb') %></td>
+              <td><%= link_to employee.full_name, admin_employee_path(employee), title: employee.formal_name %></td>
+              <td><%= employee.email %></td>
+              <td><%= employee.birthdate&.strftime('%d/%m/%Y') %></td>
+              <td>
+                <%= link_to 'View Report', reports_admin_attendances_path(employee: employee.id), class: 'btn btn-sm btn-primary' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

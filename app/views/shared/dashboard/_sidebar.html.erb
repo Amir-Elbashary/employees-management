@@ -76,10 +76,20 @@
       </li>
     <% end %>
 
+    <% if can? :read, Holiday %>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-address-card"></i><span class="hide-menu">Holidays </span></a>
+        <ul aria-expanded="false" class="collapse">
+          <li><%= link_to 'All Holidays', admin_holidays_path %></li>
+          <li><%= link_to 'New Holiday', new_admin_holiday_path %></li>
+        </ul>
+      </li>
+    <% end %>
+
     <% if can? :read, Attendance %>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-500px"></i><span class="hide-menu">Attendance </span></a>
         <ul aria-expanded="false" class="collapse">
           <li><%= link_to 'Attendance Log', admin_attendances_path %></li>
+          <li><%= link_to 'Attendance Reports', reports_admin_attendances_path %></li>
         </ul>
       </li>
     <% end %>

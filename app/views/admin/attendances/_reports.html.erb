@@ -1,0 +1,187 @@
+<% if @attendances.any? %>
+  <div class="card">
+    <div class="card-header bg-info">
+      <h4 class="m-b-0 text-white"><%= @employee.full_name %>'s Report from <%= formatted_date(params[:from].to_datetime) %> to <%= formatted_date(params[:to].to_datetime) %></h4>
+    </div>
+    <div class="card-body">
+      <div class="row" align="center">
+        <div class="col-md-6">
+          <h4>Total work days: <%= @total_work_days %> <span class="text-muted">+ <%= @holidays %> Days officialy off</span></h4>
+          <h4>Total work hours: <%= @total_work_hours %> <span class="text-muted">+ <%= @holidays * 8 %> Hours officialy off</span></h4>
+        </div>
+        <div class="col-md-6">
+          <h4>Actual work days: <%= @actual_work_days %></h4>
+          <h4>Actual work hours: <%= @actual_work_hours %></h4>
+        </div>
+      </div>
+      <hr>
+      <div class="row" align="center">
+        <div class="col-md-4">
+          <h4>Work from home: <%= @work_from_home_days %></h4>
+        </div>
+        <div class="col-md-4">
+          <h4>Vacations: <%= @vacation_days %></h4>
+        </div>
+        <div class="col-md-4">
+          <h4>Sick leave: <%= @sick_leave_days %></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Attendance behavior compared with last month</h4>
+          <ul class="list-inline text-right">
+            <li>
+              <h5><i class="fa fa-circle m-r-5 text-success"></i><%= @current_month_sym %></h5>
+            </li>
+            <li>
+              <h5><i class="fa fa-circle m-r-5 text-info"></i><%= @last_month_sym %></h5>
+            </li>
+          </ul>
+          <div id="morris-area-chart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Work days chart</h4>
+          <div id="morris-donut-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Work hours percentage</h4>
+          <div class="text-center">
+            <input data-plugin="knob" data-width="348" data-height="348" data-linecap=round data-fgColor="#01c0c8" value="<%= (@actual_work_hours / @total_work_hours * 100).round(2) %>" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".2" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Attendance Sheet</h4>
+      <h6 class="card-subtitle">Export data to Copy, CSV, Excel, PDF & Print</h6>
+      <div class="table-responsive m-t-40">
+        <table id="dataExport" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Avatar</th>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Checkin</th>
+              <th>Checkout</th>
+              <th>Time Spent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @attendances.each do |attendance| %>
+              <tr>
+                <td><%= image_tag(attendance.employee.avatar.thumb.url, class: 'table-thumb') %></td>
+                <td><%= attendance.employee.full_name %></td>
+                <td><%= formatted_date(attendance.checkin) %></td>
+                <td><%= formatted_time(attendance.checkin) %></td>
+                <td><%= formatted_time(attendance.checkout) || 'Still working...' %></td>
+                <td><%= attendance.time_spent || 'Waiting for checkout...' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Please select date range</h4>
+          <!-- Column -->
+          <%= form_tag reports_admin_attendances_path, method: :get do %>
+            <%= hidden_field_tag :employee, '', value: params[:employee] %>
+
+            <div class="row">
+              <div class="col-md-6">          
+                <div class="form-group">        
+                  <%= label_tag :from, 'From' %>
+                  <%= date_field_tag :from, params[:from], required: true, class: "form-control" %>
+                </div>
+              </div>
+              <div class="col-md-6">          
+                <div class="form-group">        
+                  <%= label_tag :to, 'To' %>
+                  <%= date_field_tag :to, params[:to], required: true, class: "form-control" %>
+                </div>
+              </div>
+            </div>
+
+            <%= submit_tag 'View Report', class: 'btn btn-info' %>
+          <% end %>
+          <!-- Column -->
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  // Morris donut chart
+  Morris.Donut({
+    element: 'morris-donut-chart',
+    data: [{
+        label: "Actual Work Days",
+        value: <%= @attendances.size %>,
+
+    }, {
+        label: "Vacations",
+        value: <%= @vacation_requests.vacation.size %>
+    }, {
+        label: "Sick Leave",
+        value: <%= @vacation_requests.sick_leave.size %>
+    }],
+    resize: true,
+    colors:['#009efb', '#55ce63', '#2f3d4a']
+  });
+
+  $(function() {
+    $('[data-plugin="knob"]').knob();
+  });
+
+  Morris.Area({
+    element: 'morris-area-chart',
+    data: [
+      <% @attendances.each do |attendance| %>
+          <% day = attendance.checkin.day %>
+          <% time_spent = attendance.time_spent %>
+          <% ex_checkin_date = attendance.checkin - 1.month %>
+          <% ex_checkin = @ex_attendances.where(checkin: ex_checkin_date.at_beginning_of_day..ex_checkin_date.at_end_of_day).first %>
+          <%= "{day: #{day}, #{attendance.checkin.strftime('%b').downcase}: #{time_spent}, #{ex_checkin_date.strftime('%b').downcase}: #{ex_checkin&.time_spent || 0}}," %>
+      <% end %>
+    ],
+    xkey: 'day',
+    parseTime: false,
+    ykeys: ['<%= @last_month_sym&.downcase %>', '<%= @current_month_sym&.downcase %>'],
+    labels: ['<%= @last_month_sym&.capitalize %>', '<%= @current_month_sym&.capitalize %>'],
+    pointSize: 3,
+    fillOpacity: 0,
+    pointStrokeColors:['#009efb', '#55ce63'],
+    behaveLikeLine: true,
+    gridLineColor: '#e0e0e0',
+    lineWidth: 3,
+    hideHover: 'auto',
+    lineColors: ['#009efb', '#55ce63'],
+    resize: true
+  });
+</script>

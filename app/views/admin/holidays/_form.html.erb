@@ -1,0 +1,86 @@
+<% content_for :bc_title do %>
+  Holidays
+<% end %>
+
+<% content_for :bc_current do %>
+  <%= @holiday.new_record? ? 'New' : 'Edit' %> Holiday
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_holidays_path %>"><button type="button" class="btn btn-info"> All Holidays</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @holiday %>
+
+<div class="row">
+	<div class="col-8">
+		<div class="card">
+      <div class="card-header bg-info">
+        <% if @holiday.new_record? %>
+          <h4 class="m-b-0 text-white">Add new holiday</h4>
+        <% else %>
+          <h4 class="m-b-0 text-white">Edit holiday</h4>
+        <% end %>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for [:admin, @holiday], html: { help: :block } do |f| %>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :name, 'Name' %>
+                <%= f.text_field :name, required: true, class: 'form-control' %>
+                <small>Name should be describtive and unique</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :content, 'Content' %>
+                <%= f.text_area :content, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <%= f.label :year, 'Year' %>
+                <%= f.number_field :year, required: true, class: 'form-control' %>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <%= f.label :month, 'Month' %>
+                <%= f.number_field :month, required: true, class: 'form-control' %>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <%= f.label :duration, 'Duration' %>
+                <%= f.number_field :duration, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :starts_on, 'Starts on' %>
+                <%= f.date_field :starts_on, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.submit 'Submit and Announce', class: 'btn btn-lg btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
