@@ -117,15 +117,19 @@
                 <!-- Profile -->
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown u-pro">
-                  <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<%= current_active_user.avatar.thumb.url %>" alt="user" class="" /> <span class="hidden-md-down"><%= current_active_user.full_name %> &nbsp;<i class="fa fa-angle-down"></i></span> </a>
+                  <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<%= current_active_user.profile_pic.thumb.url %>" alt="user" class="" /> <span class="hidden-md-down"><%= current_active_user.full_name %> &nbsp;<i class="fa fa-angle-down"></i></span> </a>
                     <div class="dropdown-menu dropdown-menu-right animated flipInY">
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">
-                                  <div class="u-img"><img src="<%= current_active_user.avatar.small_200.url %>" alt="user"></div>
+                                  <div class="u-img"><img data-toggle="modal" data-target="#change_profile_pic" src="<%= current_active_user.profile_pic.small_200.url %>" alt="user"></div>
                                     <div class="u-text">
                                       <h4><%= current_active_user.full_name %></h4>
-                                      <p class="text-muted"><%#= current_active_user.email %></p><a href="pages-profile.html" class="btn btn-rounded btn-info btn-sm">View Profile</a></div>
+                                      <p class="text-muted"><%= current_active_user.job_description %></p>
+                                      <!--
+                                      <a href="pages-profile.html" class="btn btn-rounded btn-info btn-sm">View Profile</a>
+                                      -->
+                                    </div>
                                 </div>
                             </li>
                             <li role="separator" class="divider"></li>
@@ -193,7 +197,36 @@
 </div>
 <!-- /.modal -->
 
-<!-- status modal content -->
+<!-- change profile picture modal content -->
+<div id="change_profile_pic" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Update your profile picture</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+          <%= form_tag admin_change_profile_pic_path, multipart: true, method: :post do %>
+            <div class="modal-body">
+              <div class="row form-group">
+                <div class="col-md-12">
+                  <%= label_tag 'Upload your favourite photo' %>
+                  <%= file_field_tag :avatar, required: true, autofocus: true, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <%= submit_tag "Update", class: 'btn btn-info' %>
+            </div>
+          <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.modal -->
+
+<!-- notifications modal content -->
 <div id="notification_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -222,4 +255,4 @@
     </div>
   </div>
 </div>
-<!-- end status modal -->
+<!-- end notification modal -->

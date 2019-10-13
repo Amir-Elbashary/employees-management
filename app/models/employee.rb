@@ -6,6 +6,7 @@ class Employee < ApplicationRecord
   enum military_status: %i[completed exemption postponed currently_serving does_not_apply]
   enum level: %i[employee supervisor]
   enum access_token_status: %i[waiting_for_token token_verified]
+  mount_uploader :photo, AvatarUploader
   mount_uploader :avatar, AvatarUploader
   # crop_uploaded :avatar
 

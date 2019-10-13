@@ -9,4 +9,8 @@ module UserHelpers
     return full_name if middle_name.nil?
     first_name + ' ' + middle_name + ' ' + last_name
   end
+
+  def profile_pic
+    avatar ? avatar : photo
+  end
 end

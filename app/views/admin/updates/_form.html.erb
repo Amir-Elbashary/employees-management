@@ -1,0 +1,71 @@
+<% content_for :bc_title do %>
+  Updates
+<% end %>
+
+<% content_for :bc_current do %>
+  Edit Update Info
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_updates_path %>"><button type="button" class="btn btn-info"> All Updates</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @update %>
+
+<div class="row">
+	<div class="col-6">
+		<div class="card">
+      <div class="card-header bg-info">
+        <% if @update.new_record? %>
+          <h4 class="m-b-0 text-white">Announce new update</h4>
+        <% else %>
+          <h4 class="m-b-0 text-white">Edit update</h4>
+        <% end %>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for [:admin, @update], html: { help: :block } do |f| %>
+          <h3>Update information:</h3>
+          <br/>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :version, 'Version' %>
+                <%= f.text_field :version, required: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :changelog, 'Changelog' %>
+                <%= f.text_area :changelog, placeholder: 'Enter changelog..', rows: 15, class: 'textarea_editor form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :images, 'Update Previews' %>
+                <%= f.file_field :images, multiple: true, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

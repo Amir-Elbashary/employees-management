@@ -184,7 +184,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def create_timeline_post(content)
     Timeline.create(employee: @vacation_request.employee,
-                    images: [@vacation_request.employee.avatar],
+                    images: [@vacation_request.employee.profile_pic],
                     kind: 'news',
                     creation: 'auto',
                     content: content)

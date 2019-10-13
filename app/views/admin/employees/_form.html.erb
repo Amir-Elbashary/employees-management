@@ -340,11 +340,11 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                <%= f.label :avatar, 'Avatar' %>
-                <% if @employee.avatar.present? %>
-                  <%= f.file_field :avatar, required: false, class: 'form-control' %>
+                <%= f.label :photo, 'Photo' %>
+                <% if @employee.photo.present? %>
+                  <%= f.file_field :photo, required: false, class: 'form-control' %>
                 <% else %>
-                  <%= f.file_field :avatar, required: true, class: 'form-control' %>
+                  <%= f.file_field :photo, required: true, class: 'form-control' %>
                 <% end %>
               </div>
             </div>

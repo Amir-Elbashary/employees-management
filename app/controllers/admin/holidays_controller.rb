@@ -10,7 +10,7 @@ class Admin::HolidaysController < Admin::BaseAdminController
       render 'new'
     end
 
-    create_timeline_post(@holiday.content)
+    create_timeline_post(@holiday.content) if params[:holiday][:announce]
   end
 
   def index; end
