@@ -26,8 +26,8 @@
               <%= form_tag admin_updates_tracker_path, multipart: true, method: :post do %>
                 <%= hidden_field_tag :current_version, @current_version %>
                 
-                <%= submit_tag 'Ok, I got it!', class: 'btn btn-info' %>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Not now!</button>
+                <%= submit_tag 'Got it!', class: 'btn btn-info' %>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Show later!</button>
               <% end %>
             </div>
           </div>
