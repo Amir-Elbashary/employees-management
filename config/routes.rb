@@ -23,8 +23,10 @@ Rails.application.routes.draw do
 
     get :profile, to: 'admins#edit'
     post :profile, to: 'admins#update'
+    post :updates_tracker, to: 'admins#updates_tracker'
     post :change_password, to: 'admins#change_password'
     post :change_profile_pic, to: 'admins#change_profile_pic'
+
 
     resources :settings, only: %i[index update] do
       collection do
@@ -34,6 +36,7 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :updates, except: :show
     resources :notifications
     resources :roles
     resources :hrs

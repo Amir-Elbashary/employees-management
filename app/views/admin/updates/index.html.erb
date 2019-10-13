@@ -1,0 +1,47 @@
+<% content_for :bc_title do %>
+  Updates
+<% end %>
+
+<% content_for :bc_current do %>
+  All Updates
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= new_admin_update_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> Announce Update</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<div class="card">
+	<div class="card-body">
+    <h4 class="card-title">Updates</h4>
+    <div class="table-responsive m-t-40">
+      <table id="myTable" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Version</th>
+            <th>Changelog</th>
+            <th>Images Count</th>
+						<th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @updates.each do |update| %>
+            <tr>
+              <td><%= update.id %></td>
+              <td><%= update.version %></td>
+              <td><%= truncate(update.changelog.html_safe, length: 20) %></td>
+              <td><%= update.images.count %></td>
+              <td>
+                <a href="" data-toggle="tooltip" data-original-title="Send Notifier Mail (Coming Soon)" data-confirm="Resend update notifying mail?"> <i class="fa fa-envelope text-inverse m-r-10"></i> </a>
+                <a href="<%= edit_admin_update_path(update) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                <a href="<%= admin_update_path(update) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

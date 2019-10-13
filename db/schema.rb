@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_13_091208) do
+ActiveRecord::Schema.define(version: 2019_10_13_130811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 2019_10_13_091208) do
     t.integer "vacation_balance"
     t.string "avatar"
     t.string "middle_name"
+    t.float "last_update", default: 0.0
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
@@ -122,6 +123,7 @@ ActiveRecord::Schema.define(version: 2019_10_13_091208) do
     t.integer "access_token_status", default: 0
     t.string "middle_name"
     t.string "photo"
+    t.float "last_update", default: 0.0
     t.index ["email"], name: "index_employees_on_email", unique: true
     t.index ["level"], name: "index_employees_on_level"
     t.index ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true
@@ -184,6 +186,7 @@ ActiveRecord::Schema.define(version: 2019_10_13_091208) do
     t.integer "vacation_balance"
     t.string "avatar"
     t.string "middle_name"
+    t.float "last_update", default: 0.0
     t.index ["email"], name: "index_hrs_on_email", unique: true
     t.index ["reset_password_token"], name: "index_hrs_on_reset_password_token", unique: true
   end
@@ -272,6 +275,14 @@ ActiveRecord::Schema.define(version: 2019_10_13_091208) do
     t.index ["admin_id"], name: "index_timelines_on_admin_id"
     t.index ["employee_id"], name: "index_timelines_on_employee_id"
     t.index ["hr_id"], name: "index_timelines_on_hr_id"
+  end
+
+  create_table "updates", force: :cascade do |t|
+    t.float "version"
+    t.text "changelog"
+    t.string "images", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "vacation_requests", force: :cascade do |t|

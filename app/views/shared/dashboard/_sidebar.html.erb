@@ -1,6 +1,22 @@
 <nav class="sidebar-nav">
   <ul id="sidebarnav">
     <!-- ============================================================== -->
+    <!-- Developers only items -->
+    <!-- ============================================================== -->
+    <% if ENV['DEVELOPERS']&.include?(current_active_user.email) %>
+      <li class="nav-small-cap">--- Developers</li>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-gears"></i><span class="hide-menu">Updates </span></a>
+        <ul aria-expanded="false" class="collapse">
+          <li><%= link_to 'All Updates', admin_updates_path %></li>
+          <li><%= link_to 'Announce Update', new_admin_update_path %></li>
+        </ul>
+      </li>
+    <% end %>
+    <!-- ============================================================== -->
+    <!-- Developers only items end -->
+    <!-- ============================================================== -->
+
+    <!-- ============================================================== -->
     <!-- Admin only items -->
     <!-- ============================================================== -->
     <% if current_admin %>
