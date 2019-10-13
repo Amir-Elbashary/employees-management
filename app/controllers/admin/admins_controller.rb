@@ -45,6 +45,15 @@ class Admin::AdminsController < Admin::BaseAdminController
     redirect_to admin_path
   end
 
+  def change_profile_pic
+    if current_active_user.update(avatar: params[:avatar])
+      flash[:notice] = 'Profile picture has been updated'
+    else
+      flash[:danger] = current_active_user.errors.full_messages.join(', ')
+    end
+    redirect_to admin_path
+  end
+
   private
 
   def password_params

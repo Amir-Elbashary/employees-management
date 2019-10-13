@@ -89,7 +89,7 @@
           <tbody>
             <% @attendances.each do |attendance| %>
               <tr>
-                <td><%= image_tag(attendance.employee.avatar.thumb.url, class: 'table-thumb') %></td>
+                <td><%= image_tag(attendance.employee.profile_pic.thumb.url, class: 'table-thumb') %></td>
                 <td><%= attendance.employee.full_name %></td>
                 <td><%= formatted_date(attendance.checkin) %></td>
                 <td><%= formatted_time(attendance.checkin) %></td>

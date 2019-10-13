@@ -27,6 +27,7 @@ class Ability
       cannot :manage, Employee
       can :manage, Timeline
       can :change_password, Admin
+      can :change_profile_pic, Admin
       can :read, [Room, Attendance]
       can :create, Attendance
       can :checkin, Attendance

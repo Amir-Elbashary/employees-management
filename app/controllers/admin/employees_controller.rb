@@ -75,7 +75,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
                                      :mobile_numbers, :landline_numbers, :qualification, :graduation_year, :section_id,
                                      :date_of_employment, :job_description, :work_type,
                                      :date_of_social_insurance_joining, :social_insurance_number, :military_status,
-                                     :marital_status, :nationality, :vacation_balance,
+                                     :marital_status, :nationality, :vacation_balance, :photo,
                                      :avatar, :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h,
                                      :supervisor_id, :salary, :bank_account,
                                      documents_attributes: %i[id name file _destroy])
