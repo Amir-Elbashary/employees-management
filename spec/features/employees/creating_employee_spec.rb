@@ -16,7 +16,7 @@ RSpec.feature 'Creating employee by H.R' do
     fill_in 'Email', with: 'employee@test.com'
     fill_in 'Password', with: 'employeeemployee'
     fill_in 'Password Confirmation', with: 'employeeemployee'
-    attach_file('Avatar', File.absolute_path('./spec/support/test_image.jpg'))
+    attach_file('Photo', File.absolute_path('./spec/support/test_image.jpg'))
     click_button 'Submit'
     
     expect(page).to have_content("#{Employee.first.full_name} has joined Fustany Team.")

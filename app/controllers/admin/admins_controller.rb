@@ -2,6 +2,7 @@ class Admin::AdminsController < Admin::BaseAdminController
   load_and_authorize_resource except: %i[dashboard edit update toggle_state]
   skip_authorization_check only: %i[dashboard edit update toggle_state]
   before_action :set_timelines, only: :dashboard
+  before_action :set_update, only: :dashboard
 
   def dashboard
     render 'admin/dashboard'
@@ -45,6 +46,20 @@ class Admin::AdminsController < Admin::BaseAdminController
     redirect_to admin_path
   end
 
+  def change_profile_pic
+    if current_active_user.update(avatar: params[:avatar])
+      flash[:notice] = 'Profile picture has been updated'
+    else
+      flash[:danger] = current_active_user.errors.full_messages.join(', ')
+    end
+    redirect_to admin_path
+  end
+
+  def updates_tracker
+    return unless current_active_user.update(last_update: params[:current_version])
+    redirect_to admin_path
+  end
+
   private
 
   def password_params
@@ -54,6 +69,12 @@ class Admin::AdminsController < Admin::BaseAdminController
   def set_timelines
     @timeline = Timeline.new
     @timelines = Timeline.limit(10)
+  end
+
+  def set_update
+    @last_update = Update.last
+    @current_version = @last_update&.version
+    @user_last_update = current_active_user.last_update
   end
 
   def admin_params

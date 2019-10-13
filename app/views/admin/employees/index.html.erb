@@ -31,7 +31,7 @@
         <tbody>
           <% @employees.each do |employee| %>
             <tr>
-              <td><%= image_tag(employee.avatar.thumb.url, class: 'table-thumb') %></td>
+              <td><%= image_tag(employee.profile_pic.thumb.url, class: 'table-thumb') %></td>
               <td><%= link_to employee.full_name, admin_employee_path(employee), title: employee.formal_name %></td>
               <td><%= employee.email %></td>
               <td><%= employee.birthdate&.strftime('%d/%m/%Y') %></td>
@@ -54,9 +54,10 @@
                 <a href="<%= revoke_admin_attendance_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Revoke" data-confirm="Are you sure ?"> <i class="fa fa-times text-danger m-r-10"></i> </a>
               </td>
               <td>
-                <a href="<%= resend_mail_admin_employee_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Resend Welcome Mail" data-confirm="Resend welcome mail?"> <i class="fa fa-envelope text-inverse m-r-10"></i> </a>
+                <a href="<%= reports_admin_attendances_path(employee: employee) %>" data-toggle="tooltip" data-original-title="Attendance Report" class="report-link"> <i class="fa fa-file text-inverse m-r-10"></i> </a>
                 <a href="<%= edit_admin_employee_path(employee) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
-                <a href="<%= admin_employee_path(employee) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
+                <a href="<%= admin_employee_path(employee) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close m-r-10 text-danger"></i> </a>
+                <a href="<%= resend_mail_admin_employee_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Resend Welcome Mail" data-confirm="Resend welcome mail?"> <i class="fa fa-envelope text-inverse m-r-10"></i> </a>
               </td>
             </tr>
           <% end %>

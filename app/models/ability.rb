@@ -24,9 +24,12 @@ class Ability
     when Employee
       # Employees have access to specific models only
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
+      can :manage, Update if ENV['DEVELOPERS'].include?(user.email)
+      can :updates_tracker, Admin
       cannot :manage, Employee
       can :manage, Timeline
       can :change_password, Admin
+      can :change_profile_pic, Admin
       can :read, [Room, Attendance]
       can :create, Attendance
       can :checkin, Attendance

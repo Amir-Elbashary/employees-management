@@ -30,6 +30,7 @@
 //= require raphael/raphael-min.js
 //= require morrisjs/morris.js
 //= require knob/jquery.knob.js
+//= require lightslider/js/lightslider.min.js
 //
 //= require dashboard/waves.js
 //= require dashboard/sidebarmenu.js

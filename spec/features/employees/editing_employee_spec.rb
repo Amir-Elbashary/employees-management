@@ -14,7 +14,7 @@ RSpec.feature 'Editing employee' do
   scenario 'with valid data' do
     fill_in 'First Name', with: 'New'
     fill_in 'Last Name', with: 'Name'
-    attach_file('Avatar', File.absolute_path('./spec/support/test_image.jpg'))
+    attach_file('Photo', File.absolute_path('./spec/support/test_image.jpg'))
     
     click_button 'Submit'
     
