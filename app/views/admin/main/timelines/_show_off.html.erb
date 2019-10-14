@@ -1,6 +1,6 @@
 <div class="sl-right">
   <div>
-    <a href="#" class="link"><%= timeline.owner.full_name %></a> <span class="sl-date"><%= time_ago_in_words(timeline.created_at) %> ago</span>
+    <a href="#" class="link"><%= timeline.owner.name %></a> <span class="sl-date"><%= time_ago_in_words(timeline.created_at) %> ago</span>
     <p><%= timeline.content.html_safe %></p>
     <div class="row">
       <% timeline.images.map do |image| %>

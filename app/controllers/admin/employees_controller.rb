@@ -7,6 +7,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
 
   def create
     if @employee.save
+      @employee.update(display_name: @employee.full_name)
       flash[:notice] = "#{@employee.full_name} has joined Fustany Team."
       redirect_to admin_employees_path
       # TODO To be enabled again
@@ -22,6 +23,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
 
   def update
     if @employee.update(employee_params)
+      @employee.update(display_name: @employee.full_name) if @employee.display_name.nil?
       flash[:notice] = 'Employee has been successfully updated.'
       redirect_to admin_employees_path
     else
@@ -67,6 +69,18 @@ class Admin::EmployeesController < Admin::BaseAdminController
     redirect_to admin_employees_path
   end
 
+  def profile; end
+
+  def update_profile
+    if @employee.update(employee_params)
+      flash[:notice] = 'Profile has been updated'
+    else
+      flash[:danger] = @employee.errors.full_messages.join(', ')
+    end
+
+    redirect_to admin_path
+  end
+
   private
 
   def employee_params
@@ -77,7 +91,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
                                      :date_of_social_insurance_joining, :social_insurance_number, :military_status,
                                      :marital_status, :nationality, :vacation_balance, :photo,
                                      :avatar, :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h,
-                                     :supervisor_id, :salary, :bank_account,
+                                     :supervisor_id, :salary, :bank_account, :display_name,
                                      documents_attributes: %i[id name file _destroy])
   end
 

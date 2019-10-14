@@ -1,0 +1,42 @@
+<%= render 'shared/error_messages', object: current_employee %>
+
+<div class="row">
+	<div class="col-9">
+		<div class="card">
+      <div class="card-header bg-info">
+        <h4 class="m-b-0 text-white">Edit profile</h4>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for current_employee, url: update_profile_admin_employee_path(current_employee), method: :patch, html: { help: :block } do |f| %>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :display_name, 'Display name' %>
+                <%= f.text_field :display_name, required: true, class: 'form-control' %>
+                <small>This name will displayed all over the app, except for official documents and requests.</small>
+              </div>
+            </div>
+          </div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+                <%= f.label :avatar, 'Avatar' %>
+                <%= f.file_field :avatar, class: 'form-control' %>
+							</div>
+						</div>
+					</div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
