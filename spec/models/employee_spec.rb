@@ -17,6 +17,10 @@ RSpec.describe Employee, type: :model do
     it 'should has a last name' do
       should validate_presence_of(:last_name)
     end
+
+    it 'should has a unique display name' do
+      should validate_uniqueness_of(:display_name).case_insensitive.on(:update_profile)
+    end
   end
 
   describe 'Has Associations' do

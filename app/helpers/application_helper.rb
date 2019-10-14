@@ -37,6 +37,15 @@ module ApplicationHelper
     time.strftime('%I:%M %p') unless time.nil?
   end
 
+  def update_profile_url(resource)
+    case resource
+    when Admin, Hr
+      admin_profile_path
+    when Employee
+      profile_admin_employee_path(resource)
+    end
+  end
+
   def tree_formatting(spaces, dashes)
     tree_spaces = '|' + ('&nbsp;' * 6)
     tree_dashes = '|' + ('-' * 4)

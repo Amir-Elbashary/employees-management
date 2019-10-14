@@ -15,6 +15,7 @@ class Employee < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   validates :first_name, :last_name, presence: true
+  validates :display_name, uniqueness: { case_sensitive: false }, on: :update_profile
 
   has_many :employees, class_name: 'Employee', foreign_key: 'supervisor_id'
   has_many :documents, dependent: :destroy

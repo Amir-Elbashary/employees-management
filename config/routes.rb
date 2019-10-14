@@ -25,8 +25,6 @@ Rails.application.routes.draw do
     post :profile, to: 'admins#update'
     post :updates_tracker, to: 'admins#updates_tracker'
     post :change_password, to: 'admins#change_password'
-    post :change_profile_pic, to: 'admins#change_profile_pic'
-
 
     resources :settings, only: %i[index update] do
       collection do
@@ -36,7 +34,12 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :updates, except: :show
+    resources :updates, except: :show do
+      collection do
+        post :reset_ip
+      end
+    end
+
     resources :notifications
     resources :roles
     resources :hrs
@@ -81,6 +84,8 @@ Rails.application.routes.draw do
 
     resources :employees do
       member do
+        get :profile
+        patch :update_profile
         post :resend_mail
         post :toggle_level
       end
