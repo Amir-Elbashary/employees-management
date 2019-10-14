@@ -65,6 +65,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.4.4)
       msgpack (~> 1.0)
+    browser (2.6.1)
     builder (3.2.3)
     byebug (11.0.1)
     cancancan (2.3.0)
@@ -343,6 +344,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_tree (~> 2.9)
   bootsnap (>= 1.1.0)
+  browser
   byebug
   cancancan (~> 2.3)
   capistrano (~> 3.7, >= 3.7.1)

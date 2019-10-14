@@ -10,8 +10,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
       @employee.update(display_name: @employee.full_name)
       flash[:notice] = "#{@employee.full_name} has joined Fustany Team."
       redirect_to admin_employees_path
-      # TODO To be enabled again
-      # Mail::WelcomeWorker.perform_async(@employee.id)
+      Mail::WelcomeWorker.perform_async(@employee.id)
     else
       render :new
     end
