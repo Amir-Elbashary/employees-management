@@ -27,6 +27,8 @@ class Ability
       can :manage, Update if ENV['DEVELOPERS'].include?(user.email)
       can :updates_tracker, Admin
       cannot :manage, Employee
+      can :profile, Employee
+      can :update_profile, Employee
       can :manage, Timeline
       can :change_password, Admin
       can :change_profile_pic, Admin

@@ -1,5 +1,6 @@
 class Admin::UpdatesController < Admin::BaseAdminController
   load_and_authorize_resource
+  before_action :set_settings, only: :reset_ip
 
   def create
     if @update.save
@@ -31,10 +32,24 @@ class Admin::UpdatesController < Admin::BaseAdminController
     redirect_to admin_updates_path
   end
 
+  def reset_ip
+    if @settings.update(ip_addresses: [request.remote_ip])
+      flash[:notice] = 'IP Address has been successfully reset'
+    else
+      flash[:danger] = 'There was an error, Please try again later'
+    end
+
+    redirect_to admin_path
+  end
+
   private
 
   def update_params
     params.require(:update).permit(:version, :changelog, images:[])
+  end
+
+  def set_settings
+    @settings = Setting.first
   end
 
   def create_timeline_post(content)

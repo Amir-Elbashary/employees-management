@@ -58,6 +58,17 @@
           </div>
 
           <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="checkbox" name="update[announce]" id="announce" value="true">
+                <label for="announce"><strong>Announce on timeline *</strong></label>
+                <br/>
+                <small>* Please note that you need to manualy delete timeline post if you cancel the holiday</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
             <div class="col-md-12">
               <div class="form-group">
                 <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>

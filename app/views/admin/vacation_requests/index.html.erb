@@ -35,7 +35,7 @@
           <% @vacation_requests.each do |request| %>
             <tr>
               <td><%= image_tag(request.employee.profile_pic.thumb.url, class: 'table-thumb') %></td>
-              <td><%= request.employee.full_name %></td>
+              <td><%= request.employee.name %></td>
               <td><%= request.starts_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.starts_at) if request.mission? %></td>
               <td><%= request.ends_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.ends_at) if request.mission? %> </td>
               <td><%= request.kind.humanize %></td>
