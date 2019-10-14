@@ -1,5 +1,4 @@
 require 'rails_helper'
-include AdminHelpers
 
 RSpec.feature 'Deleting update' do
   before do

@@ -1,26 +1,26 @@
 require 'rails_helper'
 
-RSpec.feature 'Listing updates' do
+RSpec.feature 'Resetting authorized IP by developer' do
   before do
     initialize_app_settings
-    @update1 = create(:update)
-    @update2 = create(:update)
+    @update = create(:update)
   end
 
-  scenario 'should has list of updates if employee is developer' do
+  scenario 'should reset IP address if employee is developer' do
     @employee = create(:employee, email: 'amir.adel@fustany.com')
     login_as(@employee, scope: :employee)
     visit admin_updates_path
 
-    expect(page).to have_content(@update1.version)
-    expect(page).to have_content(@update2.version)
+    expect(page).to have_content(@update.version)
+    expect(page).to have_link('Reset IP Address')
   end
 
-  scenario 'should return unauthorized of employee is not developer' do
+  scenario 'should not reset IP address if employee is not developer' do
     @employee = create(:employee)
     login_as(@employee, scope: :employee)
     visit admin_updates_path
 
+    expect(page).not_to have_link('Reset IP Address')
     expect(page).to have_content('You are not authorized to access this page')
   end
 end

@@ -1,5 +1,4 @@
 require 'rails_helper'
-include AdminHelpers
 
 RSpec.feature 'Creating update' do
   before do

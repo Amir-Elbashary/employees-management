@@ -7,6 +7,7 @@
       <li class="nav-small-cap">--- Developers</li>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-gears"></i><span class="hide-menu">Updates </span></a>
         <ul aria-expanded="false" class="collapse">
+          <li><%= link_to 'Reset IP Address', reset_ip_admin_updates_path, method: :post, data: { confirm: 'Are you sure ?' }, class: 'reset-link' %></li>
           <li><%= link_to 'All Updates', admin_updates_path %></li>
           <li><%= link_to 'Announce Update', new_admin_update_path %></li>
         </ul>

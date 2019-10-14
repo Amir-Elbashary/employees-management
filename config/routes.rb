@@ -36,7 +36,12 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :updates, except: :show
+    resources :updates, except: :show do
+      collection do
+        post :reset_ip
+      end
+    end
+
     resources :notifications
     resources :roles
     resources :hrs
