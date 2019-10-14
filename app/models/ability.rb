@@ -21,6 +21,7 @@ class Ability
 
       can :checkin_reminder, Attendance
       can :checkout_reminder, Attendance
+      can :reset_ip, Update
     when Employee
       # Employees have access to specific models only
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
