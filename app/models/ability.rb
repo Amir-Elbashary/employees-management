@@ -1,7 +1,7 @@
 class Ability
   include CanCan::Ability
   AUTHORIZABLE_MODELS = [Employee, VacationRequest, Attendance, Recruitment,
-                         Timeline, Holiday]
+                         Timeline, Holiday, Notification]
   END_USERS_MODELS = [Employee]
   END_USERS_AUTHORIZED_MODELS = [VacationRequest, RoomMessage]
 
@@ -21,10 +21,14 @@ class Ability
 
       can :checkin_reminder, Attendance
       can :checkout_reminder, Attendance
-      can :reset_ip, Update
+      can :toggle_read_status, Notification
+      can :toggle_all_read_status, Notification
     when Employee
       # Employees have access to specific models only
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
+      can :read, Notification
+      can :toggle_read_status, Notification
+      can :toggle_all_read_status, Notification
       can :manage, Update if ENV['DEVELOPERS'].include?(user.email)
       can :updates_tracker, Admin
       cannot :manage, Employee

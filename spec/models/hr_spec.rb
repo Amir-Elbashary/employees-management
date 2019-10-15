@@ -20,6 +20,10 @@ RSpec.describe Hr, type: :model do
   end
 
   describe 'Has Associations' do
+    it 'should have many notifications' do
+      should have_many(:notifications)
+    end
+
     it 'should have many vacation requests' do
       should have_many(:vacation_requests)
     end

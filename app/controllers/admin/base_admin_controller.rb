@@ -41,7 +41,7 @@ class Admin::BaseAdminController < ApplicationController
   def set_entities
     @settings = Setting.first
     @notification = Notification.new
-    @notifications = Notification.limit(8)
+    @notifications = current_active_user.notifications.limit(8)
     @main_room = Room.find_by(name: 'Fustany Team')
     @current_attendance = current_active_user&.attendances&.where(created_at: Time.zone.now.at_beginning_of_day..Time.zone.now.at_end_of_day)&.first
     # Approved requests needs to be moved

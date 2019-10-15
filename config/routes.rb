@@ -40,7 +40,15 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :notifications
+    resources :notifications do
+      collection do
+        post :toggle_all_read_status
+      end
+
+      member do
+        post :toggle_read_status
+      end
+    end
     resources :roles
     resources :hrs
     resources :sections

@@ -41,35 +41,40 @@
                 <!-- Comment -->
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="icon-Bell"></i>
-                    <div id="hearbit-notifications">
-                      <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                    </div>
+                  <a class="nav-link dropdown-toggle waves-effect waves-dark notification-menu-btn" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="icon-Bell"></i>
+                    <% if @notifications.unread.any? %>
+                      <div id="hearbit-notifications">
+                        <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                      </div>
+                    <% end %>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
                     <ul>
                       <li>
-                        <div class="drop-title">Notifications</div>
+                        <div class="drop-title">
+                          Notifications
+                        </div>
+                        
                       </li>
                       <li>
                         <div class="message-center">
                           <% @notifications.each do |notification| %>
                             <!-- Message -->
-                            <a href="#">
+                            <a href="#" class="<%= 'notification-menu-item-bg' if notification.unread? %>">
                               <div class="btn btn-pink btn-circle"><i class="fa fa-bell"></i></div>
                               <div class="mail-contnet">
-                                <h5>Fustany Team</h5> <span class="mail-desc"><%= notification.content %></span> <span class="time"><%= formatted_time(notification.created_at) %></span>
+                                <h5></h5> <span class="mail-desc"><b><%= notification.content %></b></span> <span class="time"><%= formatted_time(notification.created_at) %></span>
                               </div>
                             </a>
                           <% end %>
                         </div>
                       </li>
                       <li>
-                        <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications (Coming soon)</strong> <i class="fa fa-angle-right"></i> </a>
+                        <a class="nav-link text-center all-notifications-link" href="<%= admin_notifications_path(user: "#{current_active_user.class.name.downcase}-#{current_active_user.id}") %>"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
                       </li>
                       <% unless current_employee %>
                         <li>
-                          <a class="nav-link text-center" href="javascript:void(0);" data-toggle="modal" data-target="#notification_modal"> <strong>Send Notification</strong> <i class="fa fa-bell"></i> </a>
+                          <a class="nav-link text-center notification-to-all" href="javascript:void(0);" data-toggle="modal" data-target="#notification_modal"> <strong>Send Notification</strong> <i class="fa fa-bell"></i> </a>
                         </li>
                       <% end %>
                     </ul>
@@ -89,7 +94,9 @@
 									<div class="dropdown-menu mailbox dropdown-menu-right animated bounceInDown" aria-labelledby="2">
 										<ul>
 											<li>
-												<div class="drop-title">You have 1 new message</div>
+                        <div class="drop-title">
+                          You have 1 new message
+                        </div>
 											</li>
 											<li>
 												<div class="message-center">
