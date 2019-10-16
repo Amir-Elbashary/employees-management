@@ -84,7 +84,7 @@ RSpec.feature 'Checking in/out by admin' do
 
       click_link 'Check-out!'
 
-      expect(page).to have_content("Goodbye.")
+      expect(page).to have_content("See you next day.")
       expect(Hr.first.attendances.first.checkout).not_to eq(nil)
       expect(Hr.first.attendances.first.time_spent).not_to eq(nil)
     end
@@ -99,7 +99,7 @@ RSpec.feature 'Checking in/out by admin' do
 
       click_link 'Check-out!'
 
-      expect(page).to have_content("Goodbye.")
+      expect(page).to have_content("See you next day.")
       expect(Hr.first.attendances.first.checkout).not_to eq(nil)
       expect(Hr.first.attendances.first.time_spent).not_to eq(nil)
 

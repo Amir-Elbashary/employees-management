@@ -55,7 +55,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
         checkout = @current_attendance.checkout
         time_spent = ((checkout - checkin) / 60 / 60).round(2)
         @current_attendance.update(time_spent: time_spent)
-        flash[:notice] = "Thanks #{current_active_user.first_name}, Goodbye."
+        flash[:notice] = "Thanks #{current_active_user.first_name}, See you next day."
       else
         flash[:danger] = 'You haven\'t check-in today yet, Let\'s start a productive day!'
       end
