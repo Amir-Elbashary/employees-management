@@ -12,5 +12,6 @@ class Admin < ApplicationRecord
 
   validates :first_name, :last_name, presence: true
 
+  has_many :notifications, as: :recipient
   has_many :attendances, dependent: :destroy
 end

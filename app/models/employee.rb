@@ -17,6 +17,7 @@ class Employee < ApplicationRecord
   validates :first_name, :last_name, presence: true
   validates :display_name, uniqueness: { case_sensitive: false }, on: :update_profile
 
+  has_many :notifications, as: :recipient
   has_many :employees, class_name: 'Employee', foreign_key: 'supervisor_id'
   has_many :documents, dependent: :destroy
   has_many :attendances, dependent: :destroy

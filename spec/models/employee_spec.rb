@@ -24,6 +24,10 @@ RSpec.describe Employee, type: :model do
   end
 
   describe 'Has Associations' do
+    it 'should have many notifications' do
+      should have_many(:notifications)
+    end
+
     it 'should have many employees' do
       should have_many(:employees)
     end

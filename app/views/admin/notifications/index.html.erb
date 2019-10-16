@@ -1,0 +1,34 @@
+<% content_for :bc_title do %>
+  Notifications
+<% end %>
+
+<% content_for :bc_current do %>
+  All Notifications
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= toggle_all_read_status_admin_notifications_path(user: "#{current_active_user.class.name.downcase}-#{current_active_user.id}") %>" data-method="post" class="mark-all-link"><button type="button" class="btn btn-info"><i class="fa fa-envelope-open"></i> Mark all as read</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<% @notifications.each do |notification| %>
+  <div class="row">
+    <div class="col-12">
+      <div class="card notification-card">
+        <div class="card-body">
+          <b><%= notification.content.html_safe %></b>
+          --- <%= time_ago_in_words(notification.created_at) %> ago
+          <a id="verify_<%= notification.id %>" class="btn btn-sm btn-success" href="<%= toggle_read_status_admin_notification_path(notification) %>" data-method="post" style="float: right; display: <%= 'none' if notification.read? %>;" onclick="toggle_status(<%= notification.id %>);">Mark as read</a>
+          <a id="unverify_<%= notification.id %>" class="btn btn-sm btn-warning" href="<%= toggle_read_status_admin_notification_path(notification) %>" data-method="post" style="float: right; display: <%= 'none' if notification.unread? %>" onclick="toggle_status(<%= notification.id %>);">Mark as unread</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+<!-- ============================================================== -->

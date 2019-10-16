@@ -8,5 +8,8 @@ RSpec.describe Notification, type: :model do
   end
 
   describe 'Has Associations' do
+    it 'should belongs to recipient' do
+      should belong_to(:recipient)
+    end
   end
 end
