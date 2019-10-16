@@ -9,7 +9,9 @@ class Admin::SettingsController < Admin::BaseAdminController
     custom_actions = { 'Admin' => %w[change_password],
                        'Employee' => %w[resend_mail toggle_level],
                        'Attendance' => %w[grant revoke checkin checkout append reports],
-                       'VacationRequest' => %w[pending approve decline] }
+                       'VacationRequest' => %w[pending approve decline],
+                       'Update' => %w[reset_ip]
+                     }
 
     added_permissions = 0
 

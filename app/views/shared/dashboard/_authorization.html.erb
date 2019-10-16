@@ -1,13 +1,17 @@
 <% unless current_admin || current_hr || (cookies[:ft_att_ver] == current_employee.access_token) %>
   <div class="alert alert-warning">
     <h3 class="text-warning"><i class="fa fa-exclamation-triangle"></i> Unauthorized device detected!</h3>
-    <b><%= current_active_user.first_name %>, You're logged in from unauthorized device!<br/> CEO and H.R will be reported with any further activities (Check-in, Check-out, and any other attendance activities) that may happen from any different device than the one registered by H.R.<br/>If you have any problems with your registered device, Please contact H.R directly.</b>
+    <!--
+    <b><%#= current_active_user.first_name %>, You're logged in from unauthorized device!<br/> CEO and H.R will be reported with any further activities (Check-in, Check-out, and any other attendance activities) that may happen from any different device than the one registered by H.R.<br/>If you have any problems with your registered device, Please contact H.R directly.</b>
+    -->
   </div>
 <% end %>
 
 <% unless current_admin || current_hr || (@settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)) || @approved_requests.any? %>
   <div class="alert alert-warning">
     <h3 class="text-warning"><i class="fa fa-exclamation-triangle"></i> Unauthorized network detected!</h3>
-    <b><%= current_active_user.first_name %>, You're logged in from unauthorized network!<br/> CEO and H.R will be reported with any further activities (Check-in, Check-out, and any other attendance activities) that may happen outside the scope of the allowed networks.</b>
+    <!--
+    <b><%#= current_active_user.first_name %>, You're logged in from unauthorized network!<br/> CEO and H.R will be reported with any further activities (Check-in, Check-out, and any other attendance activities) that may happen outside the scope of the allowed networks.</b>
+    -->
   </div>
 <% end %>

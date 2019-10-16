@@ -153,7 +153,7 @@ RSpec.feature 'Checking in/out by employees' do
 
       click_link 'Check-out!'
 
-      expect(page).to have_content("Goodbye.")
+      expect(page).to have_content("See you next day.")
       expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
     end
@@ -172,7 +172,7 @@ RSpec.feature 'Checking in/out by employees' do
 
       click_link 'Check-out!'
 
-      expect(page).to have_content("Goodbye.")
+      expect(page).to have_content("See you next day.")
       expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
     end
@@ -192,7 +192,7 @@ RSpec.feature 'Checking in/out by employees' do
 
       click_link 'Check-out!'
 
-      expect(page).to have_content("Goodbye.")
+      expect(page).to have_content("See you next day.")
       expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
 
@@ -218,7 +218,7 @@ RSpec.feature 'Checking in/out by employees' do
 
       click_link 'Check-out!'
 
-      expect(page).to have_content("Goodbye.")
+      expect(page).to have_content("See you next day.")
       expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
 

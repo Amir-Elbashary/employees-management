@@ -23,6 +23,11 @@
 						<div class="col-md-12">
 							<div class="form-group">
                 <%= f.label :avatar, 'Avatar' %>
+                <div>
+                  <% if current_employee.avatar.present? %>
+                    <%= image_tag(current_employee.avatar.small_200.url, class:'rounded') %>
+                  <% end %>
+                </div>
                 <%= f.file_field :avatar, class: 'form-control' %>
 							</div>
 						</div>
