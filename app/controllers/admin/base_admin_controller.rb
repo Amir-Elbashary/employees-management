@@ -46,7 +46,8 @@ class Admin::BaseAdminController < ApplicationController
     @current_attendance = current_active_user&.attendances&.where(created_at: Time.zone.now.at_beginning_of_day..Time.zone.now.at_end_of_day)&.first
     # Approved requests needs to be moved
     # to cookies later to improve performance
-    @approved_requests = current_employee&.vacation_requests&.work_from_home&.approved&.where("vacation_requests.starts_on = ?", Date.today)
+    # TODO known issue where it calculates extra day
+    @approved_requests = current_employee&.vacation_requests&.work_from_home&.approved&.where("? BETWEEN starts_on AND ends_on", Date.today)
 
     @time_spent_percentage = if @current_attendance
                                start_time = @current_attendance.checkin

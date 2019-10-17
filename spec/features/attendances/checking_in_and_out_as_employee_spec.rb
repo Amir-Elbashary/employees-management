@@ -117,6 +117,19 @@ RSpec.feature 'Checking in/out by employees' do
       expect(page).to have_content("Wishing you good and productive day.")
       expect(Employee.first.attendances.first.checkin).not_to eq(nil)
     end
+
+    it 'should bypass network authentication and check the employee in for today if he has approved multiple days work from home request' do
+      @employee.update(access_token: 'secret-token')
+      @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today - 1.days, ends_on: Date.today + 1.days, status: 4)
+      @settings = create(:setting)
+      page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
+      visit admin_attendances_path
+
+      click_link 'Check-in!'
+
+      expect(page).to have_content("Wishing you good and productive day.")
+      expect(Employee.first.attendances.first.checkin).not_to eq(nil)
+    end
   end
 
   context 'trying to cheking in multiple times' do
