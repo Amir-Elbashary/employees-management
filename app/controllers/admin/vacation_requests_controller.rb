@@ -70,7 +70,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
         @vacation_request.approved!
 
         content = "<p><strong>#{@vacation_request.employee.name} is going to have a vacation :)</strong></p>
-        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is going to be on a refreshing vacation, We are wishing #{him_her(@vacation_request.employee)} happy time and we will be missing #{him_her(@vacation_request.employee)}</p>
+        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is going to be on a refreshing vacation, We are wishing #{him_her(@vacation_request.employee)} happy time.</p>
         <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
 
         create_timeline_post(content)
@@ -114,7 +114,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
         @vacation_request.approved!
 
         content = "<p><strong>#{@vacation_request.employee.name} will be working from home!</strong></p>
-        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be working from home from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, You can reach #{him_her(@vacation_request.employee)} on Slack!, we will be missing #{him_her(@vacation_request.employee)}</p>
+        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be working from home from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, You can reach #{him_her(@vacation_request.employee)} on Slack!</p>
         <p><strong>Best regards,</strong><br><strong>Fustany Team</strong></p>"
 
         create_timeline_post(content)

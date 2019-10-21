@@ -1,0 +1,72 @@
+<% if browser.device.mobile? %>
+  <!-- mobile modal content -->
+  <div id="mobile_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">What's new? &nbsp; <span class="custom-hover" data-html="true" data-container="body" title="<strong>Update Changelog<strong>" data-toggle="popover" data-placement="top" data-content="<%= @last_update.changelog.html_safe %>"><a><i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Click me please!"></i></span></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <p>There are new updates available, please login via desktop browser to check them</p>
+        </div>
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" class="btn btn-default" data-dismiss="modal">OK!</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end mobile modal -->
+<% else %>
+  <!-- updates modal content -->
+  <div id="updates_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content updates">
+        <div class="modal-header">
+          <h4 class="modal-title">What's new? &nbsp; <span class="custom-hover" data-html="true" data-container="body" title="<strong>Update Changelog<strong>" data-toggle="popover" data-placement="top" data-content="<%= @last_update.changelog.html_safe %>"><a><i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Click me please!"></i></span></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body" align="center">
+          <div class="demo">
+              <ul id="lightSlider">
+                <% @last_update.images.each do |img| %>
+                  <li data-thumb="<%= img.small_200.url %>">
+                    <img src="<%= img.url %>" />
+                  </li>
+                <% end %>
+              </ul>
+          </div>
+        </div>
+        <div class="modal-footer" style="float: left;">
+          <div class="row">
+            <div class="col-md-12">
+              <%= form_tag admin_updates_tracker_path, multipart: true, method: :post do %>
+                <%= hidden_field_tag :current_version, @current_version %>
+                
+                <%= submit_tag 'Got it!', class: 'btn btn-info' %>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Show later!</button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end updates modal -->
+<% end %>
+
+<script>
+  <% if @last_update && @user_last_update && @current_version %>
+    <% if @user_last_update < @current_version %>
+      <% if browser.device.mobile? %>
+        $('#mobile_modal').modal('show');
+      <% else %>
+        $('#updates_modal').modal('show');
+      <% end %>
+    <% end %>
+  <% end %>
+</script>
