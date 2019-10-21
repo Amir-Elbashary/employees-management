@@ -2,7 +2,7 @@ class Admin::AdminsController < Admin::BaseAdminController
   load_and_authorize_resource except: %i[dashboard edit update toggle_state]
   skip_authorization_check only: %i[dashboard edit update toggle_state]
   before_action :set_timelines, only: :dashboard
-  before_action :set_update, only: :dashboard
+  # before_action :set_update, only: :dashboard
 
   def dashboard
     render 'admin/dashboard'
@@ -21,7 +21,7 @@ class Admin::AdminsController < Admin::BaseAdminController
     end
   end
 
-  # With Cropper
+  # Update with image cropper
   # def update
   #   current_active_role = current_admin || current_hr
 
@@ -71,11 +71,11 @@ class Admin::AdminsController < Admin::BaseAdminController
     @timelines = Timeline.limit(10)
   end
 
-  def set_update
-    @last_update = Update.last
-    @current_version = @last_update&.version
-    @user_last_update = current_active_user.last_update
-  end
+  # def set_update
+  #   @last_update = Update.last
+  #   @current_version = @last_update&.version
+  #   @user_last_update = current_active_user.last_update
+  # end
 
   def admin_params
     if current_admin
