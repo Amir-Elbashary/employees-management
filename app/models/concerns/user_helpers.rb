@@ -21,6 +21,6 @@ module UserHelpers
   end
 
   def profile_pic
-    avatar ? avatar : photo
+    avatar || photo
   end
 end

@@ -1,0 +1,62 @@
+<div class="card-body p-t-0">
+  <div class="card b-all shadow-none">
+    <div class="inbox-center table-responsive">
+      <table class="table table-hover no-wrap">
+        <tbody>
+          <% messages = params[:t] == 'sent' ? @sent_messages : @messages %>
+          <% if messages.any? %>
+            <% messages.each do |message| %>
+              <% if message.unread? %>
+                <tr class="unread">
+                  <!-- To be added when starred messages are implemented -->
+                  <% unless params[:t] %>
+                    <td style="width:40px" class="hidden-xs-down"><i class="fa fa-star-o"></i></td>
+                  <% end %>
+                  <% if params[:t] %>
+                    <td class="hidden-xs-down"><b><%= message.recipient.full_name %></b></td>
+                  <% else %>
+                    <td class="hidden-xs-down"><b><%= message.sender.full_name %></b></td>
+                  <% end %>
+                  <% unless params[:t] %>
+                    <td class="max-texts"> <a href="<%= admin_message_path(message) %>" class="unread-message-link" data-confirm="Recipeint will be notified that you read his message, proceed?" /><span class="label label-info m-r-10">Unread</span> <b><%= message.subject %></b> <span><%= truncate(message.content.html_safe, length: 30) %></span></td>
+                  <% else %>
+                    <td class="max-texts"> <a href="<%= admin_message_path(message) %>" class="unread-message-link" /><span class="label label-info m-r-10">Unread</span> <b><%= message.subject %></b> <span><%= truncate(message.content.html_safe, length: 30) %></span></td>
+                  <% end %>
+                  <!-- To be added when attachments are implemented -->
+                  <td class="hidden-xs-down">
+                    <% if message.files.any? %>
+                      <i class="fa fa-paperclip"></i>
+                    <% end %>
+                  </td>
+                  <td class="text-right"> <%= message.created_at.today? ? formatted_time(message.created_at) : message.created_at.strftime('%d-%m-%Y') %> </td>
+                </tr>
+              <% else %>
+                <tr>
+                  <!-- To be added when starred messages are implemented -->
+                  <% unless params[:t] %>
+                    <td class="hidden-xs-down"><i class="fa fa-star-o"></i></td>
+                  <% end %>
+                  <% if params[:t] %>
+                    <td class="hidden-xs-down"><%= message.recipient.full_name %></td>
+                  <% else %>
+                    <td class="hidden-xs-down"><%= message.sender.full_name %></td>
+                  <% end %>
+                  <td class="max-texts"><a href="<%= admin_message_path(message) %>" class="read-message-link"><span class="label label-success m-r-10">Read</span> <span><b><%= message.subject %></b></span> <%= truncate(message.content.html_safe, length: 30) %></a></td>
+                  <!-- To be added when attachments are implemented -->
+                  <td class="hidden-xs-down">
+                    <% if message.files.any? %>
+                      <i class="fa fa-paperclip"></i>
+                    <% end %>
+                  </td>
+                  <td class="text-right"> <%= message.created_at.today? ? formatted_time(message.created_at) : message.created_at.strftime('%d-%m-%Y') %> </td>
+                </tr>
+              <% end %>
+            <% end %>
+            <% else %>
+              <td class="text-left">Your mailbox is empty.</td>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

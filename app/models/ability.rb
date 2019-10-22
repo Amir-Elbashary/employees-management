@@ -1,9 +1,9 @@
 class Ability
   include CanCan::Ability
   AUTHORIZABLE_MODELS = [Employee, VacationRequest, Attendance, Recruitment,
-                         Timeline, Holiday, Notification]
+                         Timeline, Holiday, Notification, Message]
   END_USERS_MODELS = [Employee]
-  END_USERS_AUTHORIZED_MODELS = [VacationRequest, RoomMessage]
+  END_USERS_AUTHORIZED_MODELS = [VacationRequest, Message, Timeline, RoomMessage]
 
   def initialize(user)
     case user
@@ -23,6 +23,8 @@ class Ability
       can :checkout_reminder, Attendance
       can :toggle_read_status, Notification
       can :toggle_all_read_status, Notification
+      can :toggle_read_status, Message
+      can :toggle_all_read_status, Message
     when Employee
       # Employees have access to specific models only
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
@@ -34,7 +36,6 @@ class Ability
       cannot :manage, Employee
       can :profile, Employee
       can :update_profile, Employee
-      can :manage, Timeline
       can :change_password, Admin
       can :change_profile_pic, Admin
       can :read, [Room, Attendance]

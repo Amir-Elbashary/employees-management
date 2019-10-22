@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_15_125112) do
+ActiveRecord::Schema.define(version: 2019_10_21_093932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,6 +192,26 @@ ActiveRecord::Schema.define(version: 2019_10_15_125112) do
     t.string "display_name"
     t.index ["email"], name: "index_hrs_on_email", unique: true
     t.index ["reset_password_token"], name: "index_hrs_on_reset_password_token", unique: true
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.string "sender_type"
+    t.bigint "sender_id"
+    t.string "recipient_type"
+    t.bigint "recipient_id"
+    t.string "subject"
+    t.text "content"
+    t.integer "read_status", default: 0
+    t.integer "starring", default: 0
+    t.integer "trashing", default: 0
+    t.string "files", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["read_status"], name: "index_messages_on_read_status"
+    t.index ["recipient_type", "recipient_id"], name: "index_messages_on_recipient_type_and_recipient_id"
+    t.index ["sender_type", "sender_id"], name: "index_messages_on_sender_type_and_sender_id"
+    t.index ["starring"], name: "index_messages_on_starring"
+    t.index ["trashing"], name: "index_messages_on_trashing"
   end
 
   create_table "notifications", force: :cascade do |t|

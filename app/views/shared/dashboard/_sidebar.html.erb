@@ -82,6 +82,14 @@
     <!-- ============================================================== -->
     <!-- Permission required items -->
     <!-- ============================================================== -->
+    <% if can? :read, Message %>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-envelope"></i><span class="hide-menu">Mailbox </span></a>
+        <ul aria-expanded="false" class="collapse">
+          <li><%= link_to 'Inbox', admin_messages_path %></li>
+        </ul>
+      </li>
+    <% end %>
+
     <% if can? :read, Room %>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-comments"></i><span class="hide-menu">Chat </span></a>
         <ul aria-expanded="false" class="collapse">
