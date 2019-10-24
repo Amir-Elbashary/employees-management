@@ -1,0 +1,13 @@
+<div class="card-body">
+  <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
+    <% unless params[:t] %>
+      <%= link_to mark_all_as_read_admin_messages_path, method: :post, class: 'mark-all-as-read-link', data: { confirm: 'Recipients will be notified that you read their messages, proceed?' } do %>
+        <button type="button" class="btn btn-secondary font-18" title="Mark all as read"><i class="mdi mdi-inbox-arrow-down"></i></button>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= link_to admin_messages_path do %>
+    <button type="button" class="btn btn-secondary m-r-10 m-b-10" title="Refresh mailbox"><i class="mdi mdi-reload font-18"></i></button>
+  <% end %>
+</div>

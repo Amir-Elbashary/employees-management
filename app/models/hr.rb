@@ -16,6 +16,8 @@ class Hr < ApplicationRecord
   has_many :hr_roles, dependent: :destroy
   has_many :roles, through: :hr_roles
   has_many :notifications, as: :recipient
+  has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', as: :sender
+  has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', as: :recipient
   has_many :attendances, dependent: :destroy
   has_many :vacation_requests, dependent: :destroy
 end

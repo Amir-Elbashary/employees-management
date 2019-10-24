@@ -28,6 +28,14 @@ RSpec.describe Employee, type: :model do
       should have_many(:notifications)
     end
 
+    it 'should have many sent messages' do
+      should have_many(:sent_messages)
+    end
+
+    it 'should have many received messages' do
+      should have_many(:received_messages)
+    end
+
     it 'should have many employees' do
       should have_many(:employees)
     end

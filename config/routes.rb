@@ -49,6 +49,13 @@ Rails.application.routes.draw do
         post :toggle_read_status
       end
     end
+
+    resources :messages, except: %i[edit update] do
+      collection do
+        post :mark_all_as_read
+      end
+    end
+
     resources :roles
     resources :hrs
     resources :sections
