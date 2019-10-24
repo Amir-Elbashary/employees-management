@@ -180,9 +180,9 @@ class Admin::AttendancesController < Admin::BaseAdminController
     @employees = Employee.all unless current_employee
     @attendance = Attendance.new
     @attendances = if current_employee
-                     current_employee.attendances
+                     current_employee.attendances.limit(31)
                    elsif current_admin || current_hr
-                     Attendance.all
+                     Attendance.limit(31)
                    end
   end
 

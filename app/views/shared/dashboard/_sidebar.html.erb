@@ -54,7 +54,7 @@
     <!-- ============================================================== -->
     <!-- Admin only items end -->
     <!-- ============================================================== -->
-
+    <li class="nav-small-cap">--- Fustany</li>
     <!-- ============================================================== -->
     <!-- H.R only items -->
     <!-- ============================================================== -->
@@ -83,9 +83,10 @@
     <!-- Permission required items -->
     <!-- ============================================================== -->
     <% if can? :read, Message %>
-      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-envelope"></i><span class="hide-menu">Mailbox </span></a>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-envelope"></i><span class="hide-menu">Mailbox <span class="label label-rounded label-<%= @inbox.unread.any? ? 'info' : 'success' %>"><%= @inbox.unread.count %></span></span></a>
         <ul aria-expanded="false" class="collapse">
           <li><%= link_to 'Inbox', admin_messages_path %></li>
+          <li><%= link_to 'Sent', admin_messages_path(t: 'sent') %></li>
         </ul>
       </li>
     <% end %>
