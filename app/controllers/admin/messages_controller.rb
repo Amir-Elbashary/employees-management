@@ -14,20 +14,9 @@ class Admin::MessagesController < Admin::BaseAdminController
       recipient_email = recipient.strip.downcase
 
       if recipient_email == 'all'
-        Admin.find_each do |admin|
-          next if admin.email == current_active_user.email
-          create_message(admin)
-        end
-
-        Hr.find_each do |hr|
-          next if hr.email == current_active_user.email
-          create_message(hr)
-        end
-
-        Employee.find_each do |employee|
-          next if employee.email == current_active_user.email
-          create_message(employee)
-        end
+        create_messages(Admin)
+        create_messages(Hr)
+        create_messages(Employee)
       else
         admin = Admin.where(email: recipient_email).first
         hr = Hr.where(email: recipient_email).first
@@ -77,6 +66,13 @@ class Admin::MessagesController < Admin::BaseAdminController
                    content: params[:message][:content],
                    files: params[:message][:files],
                    recipient: resource)
+  end
+
+  def create_messages(model)
+    model.find_each do |resource|
+      next if resource.email == current_active_user.email
+      create_message(resource)
+    end
   end
 
   def require_same_user
