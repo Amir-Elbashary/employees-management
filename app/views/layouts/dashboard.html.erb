@@ -21,8 +21,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    params[:controller], media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag params[:controller], 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'dashboard', params[:controller], media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'dashboard', params[:controller], 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body data-current-user-id="<%= current_active_user.id %>" class="fix-header fix-sidebar card-no-border">

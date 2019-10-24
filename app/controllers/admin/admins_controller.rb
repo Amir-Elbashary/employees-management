@@ -68,7 +68,7 @@ class Admin::AdminsController < Admin::BaseAdminController
 
   def set_timelines
     @timeline = Timeline.new
-    @timelines = Timeline.limit(10)
+    @timelines = Timeline.limit(14)
   end
 
   # def set_update

@@ -1,0 +1,42 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="icon-Mail"></i>
+    <% if @inbox.unread.any? %>
+      <div class="notify"> <span class="heartbit"></span> <span class="point"></span>
+      </div>
+    <% end %>
+  </a>
+  <div class="dropdown-menu mailbox dropdown-menu-right animated bounceInDown" aria-labelledby="2">
+    <ul>
+      <li>
+        <div class="drop-title">
+          <%= pluralize(@inbox.unread.count, 'new message') %>
+        </div>
+      </li>
+      <li>
+        <div class="message-center">
+          <!-- Message -->
+          <% @inbox.each do |message| %>
+            <% if message.unread? %>
+              <a href="<%= admin_message_path(message) %>" class="notification-menu-item-bg" data-confirm="Recipient will be notified that you read his message, proceed?">
+            <% else %>
+              <a href="<%= admin_message_path(message) %>">
+            <% end %>
+              <div class="user-img">
+                <img src="<%= message.sender.profile_pic&.thumb.url %>" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span>
+              </div>
+              <div class="mail-contnet">
+                <h5><%= message.sender.name %></h5> <span class="mail-desc"><%= truncate(message.subject.html_safe, length: 28) %></span> <span class="time"><%= formatted_time(message.created_at) %></span>
+              </div>
+            </a>
+          <% end %>
+        </div>
+      </li>
+      <li>
+        <a class="nav-link text-center" href="<%= admin_messages_path %>"> <strong>Check all messages</strong> <i class="fa fa-angle-right"></i> </a>
+      </li>
+      <li>
+        <a href="<%= new_admin_message_path %>" class="nav-link text-center" href="javascript:void(0);"> <strong>Send new message</strong> <i class="fa fa-angle-right"></i> </a>
+      </li>
+    </ul>
+  </div>
+</li>

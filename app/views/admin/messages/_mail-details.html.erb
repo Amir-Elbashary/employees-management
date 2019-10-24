@@ -1,0 +1,49 @@
+<div class="card-body p-t-0">
+  <div class="card b-all shadow-none">
+    <div class="card-body">
+      <h3 class="card-title m-b-0"><%= @message.subject %></h3>
+    </div>
+    <div>
+      <hr class="m-t-0">
+    </div>
+    <div class="card-body">
+      <div class="d-flex m-b-40">
+        <div>
+          <a href="javascript:void(0)"><img src="<%= @message.sender.profile_pic.thumb.url %>" alt="user" width="40" class="img-circle" /></a>
+        </div>
+        <div class="p-l-10">
+          <h4 class="m-b-0"><%= @message.sender.full_name %></h4>
+          <small class="text-muted">From: <%= @message.sender.email %></small>
+        </div>
+      </div>
+      <%= @message.content.html_safe %>
+    </div>
+    <div>
+      <hr class="m-t-0">
+    </div>
+    <div class="card-body">
+      <% if @message.files.any? %>
+        <h4><i class="fa fa-paperclip m-r-10 m-b-10"></i> Attachments <span>(<%= @message.files.count %>)</span></h4>
+        <div class="row">
+          <% @message.files.each do |file| %>
+            <% if ['jpg', 'jpeg', 'gif', 'png'].include?(file.file.original_filename.split('.').last) %>
+              <div class="col-md-2">
+                <a href="#"> <img class="img-thumbnail img-responsive" alt="attachment" src="<%= file.url %>"> </a>
+              </div>
+            <% else %>
+              <div class="col-md-2" align="center">
+                <label><%= file.file.original_filename %></label>
+                <%= button_to 'Download', file.url, download: true, method: :get, class: 'btn btn-primary' %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <h4><i class="fa fa-paperclip m-r-10 m-b-10"></i>No Attachments</h4>
+      <% end %>
+      <div class="b-all m-t-20 p-20">
+        <p class="p-b-20">click here to <a href="#">Reply</a> or <a href="#">Forward</a></p>
+      </div>
+    </div>
+  </div>
+</div>
