@@ -23,8 +23,7 @@ class Ability
       can :checkout_reminder, Attendance
       can :toggle_read_status, Notification
       can :toggle_all_read_status, Notification
-      can :toggle_read_status, Message
-      can :toggle_all_read_status, Message
+      can :mark_all_as_read, Message
     when Employee
       # Employees have access to specific models only
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
