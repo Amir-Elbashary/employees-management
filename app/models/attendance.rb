@@ -5,5 +5,5 @@ class Attendance < ApplicationRecord
   belongs_to :hr, optional: true
   belongs_to :employee, optional: true
 
-  default_scope { order(created_at: :asc) }
+  default_scope { order(checkin: :desc) }
 end
