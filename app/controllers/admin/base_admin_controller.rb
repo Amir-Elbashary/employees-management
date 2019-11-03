@@ -50,6 +50,16 @@ class Admin::BaseAdminController < ApplicationController
     # TODO known issue where it calculates extra day
     @approved_requests = current_employee&.vacation_requests&.work_from_home&.approved&.where("? BETWEEN starts_on AND ends_on", Date.today)
 
+    @pending_requests = if current_admin
+                          VacationRequest.where(status: ['pending', 'confirmed', 'escalated'])
+                        elsif current_hr
+                          VacationRequest.where(status: ['confirmed', 'escalated'])
+                        elsif current_employee&.supervisor?
+                          VacationRequest.where(employee: current_employee.employees, status: 'pending')
+                        elsif current_employee&.employee?
+                          current_employee.vacation_requests.pending
+                        end
+
     @time_spent_percentage = if @current_attendance
                                start_time = @current_attendance.checkin
                                current_time = Time.zone.now
