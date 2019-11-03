@@ -6,8 +6,8 @@
     <div class="card-body">
       <div class="row" align="center">
         <div class="col-md-6">
-          <h4>Total work days: <%= @total_work_days %> <span class="text-muted">+ <%= @holidays %> Days officialy off</span></h4>
-          <h4>Total work hours: <%= @total_work_hours %> <span class="text-muted">+ <%= @holidays * 8 %> Hours officialy off</span></h4>
+          <h4>Total work days: <%= @total_work_days %> <span class="text-muted <%= 'd-none' if @holidays == 0 %>">+ <%= @holidays %> Days officialy off</span> <span class="text-muted <%= 'd-none' if @vacation_days == 0 %>">+ <%= @vacation_days %> Days vacations</span> <span class="text-muted <%= 'd-none' if @sick_leave_days == 0 %>">+ <%= @sick_leave_days %> days sick leave</span></h4>
+          <h4>Total work hours: <%= @total_work_hours %> <span class="text-muted <%= 'd-none' if @holidays == 0 %>">+ <%= @holidays * 8 %> Hours officialy off</span> <span class="text-muted <%= 'd-none' if @vacation_days == 0 %>">+ <%= @vacation_days * 8 %> vacations</span><span class="text-muted <%= 'd-none' if @sick_leave_days == 0 %>">+ <%= @sick_leave_days * 8 %> sick leave</span></h4>
         </div>
         <div class="col-md-6">
           <h4>Actual work days: <%= @actual_work_days %></h4>
@@ -142,14 +142,14 @@
     element: 'morris-donut-chart',
     data: [{
         label: "Actual Work Days",
-        value: <%= @attendances.size %>,
+        value: <%= @actual_work_days %>,
 
     }, {
         label: "Vacations",
-        value: <%= @vacation_requests.vacation.size %>
+        value: <%= @vacation_days %>
     }, {
         label: "Sick Leave",
-        value: <%= @vacation_requests.sick_leave.size %>
+        value: <%= @sick_leave_days %>
     }],
     resize: true,
     colors:['#009efb', '#55ce63', '#2f3d4a']
