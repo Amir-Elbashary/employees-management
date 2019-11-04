@@ -33,8 +33,8 @@ class Admin::UpdatesController < Admin::BaseAdminController
   end
 
   def reset_ip
-    if @settings.update(ip_addresses: [request.remote_ip])
-      flash[:notice] = 'IP Address has been successfully reset'
+    if @settings.update(ip_addresses: (@settings.ip_addresses << request.remote_ip).uniq)
+      flash[:notice] = 'IP Address has been successfully appended'
     else
       flash[:danger] = 'There was an error, Please try again later'
     end
