@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Timeline, type: :model do
+RSpec.describe Comment, type: :model do
   describe 'Require validations' do
     it 'should has a content' do
       should validate_presence_of(:content)
@@ -8,8 +8,8 @@ RSpec.describe Timeline, type: :model do
   end
 
   describe 'Has Associations' do
-    it 'has many comments' do
-      should have_many(:comments)
+    it 'belongs to timeline' do
+      should belong_to(:timeline)
     end
 
     it 'belongs to admin' do

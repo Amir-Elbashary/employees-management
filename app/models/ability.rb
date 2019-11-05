@@ -1,9 +1,10 @@
 class Ability
   include CanCan::Ability
   AUTHORIZABLE_MODELS = [Employee, VacationRequest, Attendance, Recruitment,
-                         Timeline, Holiday, Notification, Message]
+                         Timeline, Comment, Holiday, Notification, Message]
   END_USERS_MODELS = [Employee]
-  END_USERS_AUTHORIZED_MODELS = [VacationRequest, Message, Timeline, RoomMessage]
+  END_USERS_AUTHORIZED_MODELS = [VacationRequest, Message, Timeline, Comment,
+                                 RoomMessage]
 
   def initialize(user)
     case user

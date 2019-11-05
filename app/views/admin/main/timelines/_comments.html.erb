@@ -1,3 +1,17 @@
 <div class="like-comm m-t-20">
-  <a href="javascript:void(0)" class="link m-r-10">2 comment (Coming soon)</a> <a href="javascript:void(0)" class="link m-r-10"><i class="fa fa-heart text-danger"></i> 5 Love (Coming soon)</a>
+  <strong>
+    <a href="<%= admin_timeline_path(timeline) %>" class="link m-r-10 comments-link">
+      <i class="fa fa-comment-o text-<%= 'info' if timeline.comments.any? %>"></i> <%= pluralize(timeline.comments.size, 'Comment') %> 
+      <span class="<%= 'd-none' unless timeline.comments.any? %>">, last one by <%= timeline.comments&.last&.owner&.name %></span>
+    </a> 
+  </strong>
+
+  <strong>
+    <span class="link m-r-10 seen-link toggle-seen-link-<%= timeline.id %>" data-toggle="tooltip" data-placement="bottom" data-html="true" title="A<br>B" onclick='toggleSeen(<%= timeline.id %>);'>
+      <i class="fa fa-eye"></i> <%= pluralize(timeline.comments.size, 'Teammate') %> XX
+    </span>
+  </strong>
 </div>
+
+<script>
+</script>

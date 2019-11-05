@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_21_093932) do
+ActiveRecord::Schema.define(version: 2019_11_04_115510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,21 @@ ActiveRecord::Schema.define(version: 2019_10_21_093932) do
     t.index ["admin_id"], name: "index_attendances_on_admin_id"
     t.index ["employee_id"], name: "index_attendances_on_employee_id"
     t.index ["hr_id"], name: "index_attendances_on_hr_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "timeline_id"
+    t.bigint "admin_id"
+    t.bigint "hr_id"
+    t.bigint "employee_id"
+    t.text "content"
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["admin_id"], name: "index_comments_on_admin_id"
+    t.index ["employee_id"], name: "index_comments_on_employee_id"
+    t.index ["hr_id"], name: "index_comments_on_hr_id"
+    t.index ["timeline_id"], name: "index_comments_on_timeline_id"
   end
 
   create_table "documents", force: :cascade do |t|
@@ -338,6 +353,10 @@ ActiveRecord::Schema.define(version: 2019_10_21_093932) do
   add_foreign_key "attendances", "admins"
   add_foreign_key "attendances", "employees"
   add_foreign_key "attendances", "hrs"
+  add_foreign_key "comments", "admins"
+  add_foreign_key "comments", "employees"
+  add_foreign_key "comments", "hrs"
+  add_foreign_key "comments", "timelines"
   add_foreign_key "documents", "employees"
   add_foreign_key "employees", "sections"
   add_foreign_key "hr_roles", "hrs"

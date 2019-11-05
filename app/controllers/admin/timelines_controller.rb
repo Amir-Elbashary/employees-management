@@ -13,6 +13,8 @@ class Admin::TimelinesController < Admin::BaseAdminController
     redirect_to admin_path
   end
 
+  def show; end
+
   def destroy
     return unless @timeline.destroy
     flash[:notice] = 'Your post was deleted.'

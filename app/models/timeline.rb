@@ -7,6 +7,7 @@ class Timeline < ApplicationRecord
 
   validates :content, presence: true
 
+  has_many :comments, dependent: :destroy
   belongs_to :admin, optional: true
   belongs_to :hr, optional: true
   belongs_to :employee, optional: true

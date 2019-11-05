@@ -24,6 +24,10 @@ RSpec.describe Admin, type: :model do
       should have_many(:notifications)
     end
 
+    it 'should have many comments' do
+      should have_many(:comments)
+    end
+
     it 'should have many sent messages' do
       should have_many(:sent_messages)
     end
