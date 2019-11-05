@@ -1,19 +1,38 @@
 $(function() {
   $('#lightSlider').lightSlider({
-      gallery: true,
-      item: 1,
-      loop: false,
-      slideMargin: 0,
-      thumbItem: 9
+    gallery: true,
+    item: 1,
+    loop: false,
+    slideMargin: 0,
+    thumbItem: 9
   });
 });
 
-function toggleSeen(id) {
-  if($('.toggle-seen-link-'+id).hasClass('text-info')) {
-    $('.toggle-seen-link-'+id).removeClass('text-info');
-    $('.toggle-seen-link-'+id).html('<i class="fa fa-eye"></i> I\'m not going to react');
-  } else {
+function toggleSeen(id, react) {
     $('.toggle-seen-link-'+id).addClass('text-info');
-    $('.toggle-seen-link-'+id).html('<i class="fa fa-eye"></i> I feel xx');
+    if (react == 'like') {
+      $('.toggle-seen-link-'+id).html('<i class="fa fa-eye"></i> I like this');   
+    } else if (react == 'love') {
+      $('.toggle-seen-link-'+id).html('<i class="fa fa-eye"></i> I love this');   
+    } else if (react == 'joy') {
+      $('.toggle-seen-link-'+id).html('<i class="fa fa-eye"></i> Hahaha');   
+    } else if (react == 'wow') {
+      $('.toggle-seen-link-'+id).html('<i class="fa fa-eye"></i> This is Amazing');   
+    } else if (react == 'sad') {
+      $('.toggle-seen-link-'+id).html('<i class="fa fa-eye"></i> I\'m sorry');   
+    } else if (react == 'angry') {
+      $('.toggle-seen-link-'+id).html('<i class="fa fa-eye"></i> NOT FUNNY!');   
+    }
   }
+
+function animateEmoji() {
+  $(this).addClass('animated rubberBand');
 }
+
+$(document).ready(function(){
+  $(".animated-emoji").hover(function(){
+    $(this).animate({ height: "2.4em" });
+  }, function() {
+    $(this).animate({ height: "1.8em" });
+  });
+});

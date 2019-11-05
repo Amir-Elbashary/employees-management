@@ -7,9 +7,34 @@
   </strong>
 
   <strong>
-    <a href="<%= toggle_admin_timeline_reacts_path(timeline) %>" data-method="post" class="link m-r-10 seen-link toggle-seen-link-<%= timeline.id %> <%= 'text-info' if timeline.reacts.any? %>" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<%= timeline.reacts.collect { |r| r.reactor.name  }.map { |n| "#{n}<br>" }.join %>" onclick='toggleSeen(<%= timeline.id %>);'>
-      <i class="fa fa-eye"></i> <%= pluralize(timeline.reacts.size, 'Teammate') %> :cry:
+    <a class="link m-r-10 seen-link toggle-seen-link-<%= timeline.id %> <%= 'text-info' if timeline.reacts.any? %>" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<%= timeline.reacts.collect { |r| [r.reactor.name, r.react]  }.map { |n| "#{n[0]} #{react_translation(n[1])}<br>" }.join %>">
+      <i class="fa fa-eye"></i> <%= pluralize(timeline.reacts.size, 'Teammate') %> reacted
+    </a>
 
+    <% react = timeline.reacts.where(reactor: current_active_user).first&.react %>
+
+    <a onclick='toggleSeen(<%= timeline.id %>, "like");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'like') %>" data-method="post">
+      <%= emojify ":+1:", class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'like')}", title: 'Like' } %>
+    </a>
+
+    <a onclick='toggleSeen(<%= timeline.id %>, "love");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'love') %>" data-method="post">
+      <%= emojify ":heart:", class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'love')}", title: 'Love' } %>
+    </a>
+
+    <a onclick='toggleSeen(<%= timeline.id %>, "joy");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'joy') %>" data-method="post">
+      <%= emojify ":joy:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'joy')}", title: 'Haha' } %>
+    </a>
+
+    <a onclick='toggleSeen(<%= timeline.id %>, "wow");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'wow') %>" data-method="post">
+      <%= emojify ":open_mouth:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'wow')}", title: 'Wow' } %>
+    </a>
+
+    <a onclick='toggleSeen(<%= timeline.id %>, "sad");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'sad') %>" data-method="post">
+      <%= emojify ":cry:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'sad')}", title: 'Sad' } %>
+    </a>
+
+    <a onclick='toggleSeen(<%= timeline.id %>, "angry");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'angry') %>" data-method="post">
+      <%= emojify ":angry:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'angry')}", title: 'Angry' } %>
     </a>
   </strong>
 </div>

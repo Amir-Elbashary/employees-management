@@ -13,6 +13,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'acts_as_tree', '~> 2.9'
 gem 'nested_form'
 gem 'browser'
+gem "twemoji"
 
 # ================ Job Related Gems =================
 gem 'redis'

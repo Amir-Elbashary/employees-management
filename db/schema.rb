@@ -251,8 +251,10 @@ ActiveRecord::Schema.define(version: 2019_11_05_091502) do
     t.bigint "timeline_id"
     t.string "reactor_type"
     t.bigint "reactor_id"
+    t.integer "react", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["react"], name: "index_reacts_on_react"
     t.index ["reactor_type", "reactor_id"], name: "index_reacts_on_reactor_type_and_reactor_id"
     t.index ["timeline_id"], name: "index_reacts_on_timeline_id"
   end
