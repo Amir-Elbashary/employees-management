@@ -7,9 +7,10 @@
   </strong>
 
   <strong>
-    <span class="link m-r-10 seen-link toggle-seen-link-<%= timeline.id %>" data-toggle="tooltip" data-placement="bottom" data-html="true" title="A<br>B" onclick='toggleSeen(<%= timeline.id %>);'>
-      <i class="fa fa-eye"></i> <%= pluralize(timeline.comments.size, 'Teammate') %> XX
-    </span>
+    <a href="<%= toggle_admin_timeline_reacts_path(timeline) %>" data-method="post" class="link m-r-10 seen-link toggle-seen-link-<%= timeline.id %> <%= 'text-info' if timeline.reacts.any? %>" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<%= timeline.reacts.collect { |r| r.reactor.name  }.map { |n| "#{n}<br>" }.join %>" onclick='toggleSeen(<%= timeline.id %>);'>
+      <i class="fa fa-eye"></i> <%= pluralize(timeline.reacts.size, 'Teammate') %> :cry:
+
+    </a>
   </strong>
 </div>
 

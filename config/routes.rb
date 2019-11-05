@@ -64,6 +64,11 @@ Rails.application.routes.draw do
     resources :room_messages
     resources :recruitments
     resources :timelines do
+      resources :reacts, only: %i[index] do
+        collection do
+          post :toggle
+        end
+      end
       resources :comments
     end
 

@@ -4,7 +4,7 @@ class Ability
                          Timeline, Comment, Holiday, Notification, Message]
   END_USERS_MODELS = [Employee]
   END_USERS_AUTHORIZED_MODELS = [VacationRequest, Message, Timeline, Comment,
-                                 RoomMessage]
+                                 React, RoomMessage]
 
   def initialize(user)
     case user
@@ -20,6 +20,7 @@ class Ability
         end
       end
 
+      can :manage, React
       can :checkin_reminder, Attendance
       can :checkout_reminder, Attendance
       can :toggle_read_status, Notification

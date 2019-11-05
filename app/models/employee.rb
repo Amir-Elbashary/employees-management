@@ -19,6 +19,7 @@ class Employee < ApplicationRecord
 
   has_many :notifications, as: :recipient
   has_many :comments, dependent: :destroy
+  has_many :reacts, class_name: 'React', foreign_key: 'reactor_id', as: :reactor
   has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', as: :sender
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', as: :recipient
   has_many :employees, class_name: 'Employee', foreign_key: 'supervisor_id'

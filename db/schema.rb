@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_04_115510) do
+ActiveRecord::Schema.define(version: 2019_11_05_091502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -247,6 +247,16 @@ ActiveRecord::Schema.define(version: 2019_11_04_115510) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "reacts", force: :cascade do |t|
+    t.bigint "timeline_id"
+    t.string "reactor_type"
+    t.bigint "reactor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reactor_type", "reactor_id"], name: "index_reacts_on_reactor_type_and_reactor_id"
+    t.index ["timeline_id"], name: "index_reacts_on_timeline_id"
+  end
+
   create_table "recruitments", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -361,6 +371,7 @@ ActiveRecord::Schema.define(version: 2019_11_04_115510) do
   add_foreign_key "employees", "sections"
   add_foreign_key "hr_roles", "hrs"
   add_foreign_key "hr_roles", "roles"
+  add_foreign_key "reacts", "timelines"
   add_foreign_key "role_permissions", "permissions"
   add_foreign_key "role_permissions", "roles"
   add_foreign_key "room_messages", "employees"
