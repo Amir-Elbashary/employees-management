@@ -41,7 +41,7 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
         expect(page).to have_content('Approved')
 
         visit admin_path
-        expect(page).to have_content('is going to have a vacation :)')
+        expect(page).to have_content('is going to have a vacation')
       end
     end
 
