@@ -6,7 +6,7 @@
         <img src="<%= timeline.image %>" class="img-responsive radius">
       </div>
       <div class="col-md-9 col-xs-12">
-        <p><%= timeline.content.html_safe %></p>
+        <p><%= Twemoji.parse(timeline.content.html_safe, img_attrs: { style: 'height: 1.3em' }).html_safe %></p>
       </div>
     </div>
 

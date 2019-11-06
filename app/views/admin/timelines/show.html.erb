@@ -54,7 +54,7 @@
                           <div class="p-2"><span class="round"><img src="<%= comment.owner.profile_pic.thumb.url %>" alt="user" width="50"></span></div>
                           <div class="comment-text active w-100">
                             <h5><%= comment.owner.name %></h5>
-                            <p class="m-b-5"><%= comment.content.html_safe %></p>
+                            <p class="m-b-5"><%= Twemoji.parse(comment.content.html_safe, img_attrs: { style: 'height: 1.3em' }).html_safe %></p>
                             <div class="comment-footer ">
                               <span class="text-muted pull-right"><%= time_ago_in_words(comment.created_at) %> ago</span>
                               <!--
@@ -82,7 +82,6 @@
 							<!-- ============================================================== -->
               <div class="row">
                 <div class="col-md-6">
-                  <% @comment = Comment.new %>
                   <%= form_for [:admin, :timeline, @comment], url: admin_timeline_comments_path(@timeline) do |f| %>
                     <%= f.hidden_field :timeline_id, value: @timeline.id %>
 
@@ -94,8 +93,14 @@
                       <%= f.hidden_field :employee_id, value: current_active_user.id %>
                     <% end %>
 
-                    <%= f.text_area :content, required: true, rows: 4, placeholder: 'Write comment...', class: 'form-control' %>
-                    <%= f.submit 'Post', class: 'btn btn-info' %>
+                    <div class="row">
+                      <div class="col-md-11">
+                        <%= f.text_area :content, required: true, rows: 2, placeholder: 'Write comment...', class: 'form-control' %>
+                      </div>
+                      <div class="col-md-1">
+                        <button type="submit" class="btn btn-circle btn-pink comment-submit-btn"><i class="fa fa-paper-plane-o"></i></button>
+                      </div>
+                    </div>
                   <% end %>
                 </div>
               </div>

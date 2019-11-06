@@ -1,43 +1,88 @@
-<div class="like-comm m-t-20">
-  <strong>
-    <a href="<%= admin_timeline_path(timeline) %>" class="link m-r-10 comments-link">
-      <i class="fa fa-comment-o text-<%= 'info' if timeline.comments.any? %>"></i> <%= pluralize(timeline.comments.size, 'Comment') %> 
-      <span class="<%= 'd-none' unless timeline.comments.any? %>">, last one by <%= timeline.comments&.last&.owner&.name %></span>
-    </a> 
-  </strong>
+<div class="row">
+  <div class="col-md-12">
+    <div class="like-comm m-t-20">
+      <strong>
+        <a href="<%= admin_timeline_path(timeline) %>" class="link m-r-10 comments-link">
+          <i class="fa fa-comment-o text-<%= 'info' if timeline.comments.any? %>"></i> <%= pluralize(timeline.comments.size, 'Comment') %> 
+          <span class="<%= 'd-none' unless timeline.comments.any? %>">, last one by <%= timeline.comments&.last&.owner&.name %></span>
+        </a> 
+      </strong>
 
-  <strong>
-    <a class="link m-r-10 seen-link toggle-seen-link-<%= timeline.id %> <%= 'text-info' if timeline.reacts.any? %>" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<%= timeline.reacts.collect { |r| [r.reactor.name, r.react]  }.map { |n| "#{n[0]} #{react_translation(n[1])}<br>" }.join %>">
-      <i class="fa fa-eye"></i> <%= pluralize(timeline.reacts.size, 'Teammate') %> reacted
-    </a>
+      <strong>
+        <a class="link m-r-10 seen-link toggle-seen-link-<%= timeline.id %> <%= 'text-info' if timeline.reacts.any? %>" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<%= timeline.reacts.collect { |r| [r.reactor.name, r.react]  }.map { |n| "#{n[0]} #{react_translation(n[1])}<br>" }.join %>">
+          <i class="fa fa-eye"></i> <%= pluralize(timeline.reacts.size, 'Teammate') %> reacted
+        </a>
 
-    <% react = timeline.reacts.where(reactor: current_active_user).first&.react %>
+        <% react = timeline.reacts.where(reactor: current_active_user).first&.react %>
 
-    <a onclick='toggleSeen(<%= timeline.id %>, "like");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'like') %>" data-method="post">
-      <%= emojify ":+1:", class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'like')}", title: 'Like' } %>
-    </a>
-
-    <a onclick='toggleSeen(<%= timeline.id %>, "love");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'love') %>" data-method="post">
-      <%= emojify ":heart:", class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'love')}", title: 'Love' } %>
-    </a>
-
-    <a onclick='toggleSeen(<%= timeline.id %>, "joy");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'joy') %>" data-method="post">
-      <%= emojify ":joy:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'joy')}", title: 'Haha' } %>
-    </a>
-
-    <a onclick='toggleSeen(<%= timeline.id %>, "wow");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'wow') %>" data-method="post">
-      <%= emojify ":open_mouth:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'wow')}", title: 'Wow' } %>
-    </a>
-
-    <a onclick='toggleSeen(<%= timeline.id %>, "sad");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'sad') %>" data-method="post">
-      <%= emojify ":cry:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'sad')}", title: 'Sad' } %>
-    </a>
-
-    <a onclick='toggleSeen(<%= timeline.id %>, "angry");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'angry') %>" data-method="post">
-      <%= emojify ":angry:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'angry')}", title: 'Angry' } %>
-    </a>
-  </strong>
+        <a onclick='toggleSeen(<%= timeline.id %>, "like");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'like') %>" data-method="post">
+          <%= emojify ":+1:", class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'like')}", title: 'Like' } %>
+        </a>
+        <a onclick='toggleSeen(<%= timeline.id %>, "love");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'love') %>" data-method="post" class="love-btn">
+          <%= emojify ":heart:", class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'love')}", title: 'Love' } %>
+        </a>
+        <a onclick='toggleSeen(<%= timeline.id %>, "joy");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'joy') %>" data-method="post" class="joy-btn">
+          <%= emojify ":joy:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'joy')}", title: 'Haha' } %>
+        </a>
+        <a onclick='toggleSeen(<%= timeline.id %>, "wow");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'wow') %>" data-method="post">
+          <%= emojify ":open_mouth:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'wow')}", title: 'Wow' } %>
+        </a>
+        <a onclick='toggleSeen(<%= timeline.id %>, "sad");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'sad') %>" data-method="post">
+          <%= emojify ":cry:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'sad')}", title: 'Sad' } %>
+        </a>
+        <a onclick='toggleSeen(<%= timeline.id %>, "angry");' href="<%= toggle_admin_timeline_reacts_path(timeline, react: 'angry') %>" data-method="post">
+          <%= emojify ":angry:" , class_name: 'animated-emoji', img_attrs: { style: "height: #{react_emoji_size(react, 'angry')}", title: 'Angry' } %>
+        </a>
+      </strong>
+    </div>
+  </div>
 </div>
 
-<script>
-</script>
+<% if timeline.comments.any? && action_name == 'dashboard' %>
+  <div class="row">
+    <div class="col-md-10">
+      <div class="comment-widgets"> 
+          <!-- Comment Row -->
+          <div class="d-flex flex-row comment-row">
+            <div class="p-2"><span class="round"><img src="<%= timeline.comments.last&.owner.profile_pic.thumb.url %>" alt="user" width="50"></span></div>
+            <div class="comment-text active w-100">
+              <h5><%= timeline.comments.last&.owner.name %></h5>
+              <p class="m-b-5"><%= Twemoji.parse(timeline.comments.last&.content.html_safe, img_attrs: { style: 'height: 1.3em' }).html_safe %></p>
+              <div class="comment-footer ">
+                <span class="text-muted pull-right"><%= time_ago_in_words(timeline.comments.last&.created_at) %> ago</span>
+                <span class="action-icons active">
+                  <a href="javascript:void(0)" title="Coming soon"><i class="ti-heart text-danger"></i></a>    
+                  <% if timeline.comments.last&.owner == current_active_user %>
+                    <a href="<%= admin_timeline_comment_path(timeline, timeline.comments.last) %>" class="comment-delete-link" data-method="delete" data-confirm="Are you sure?" title="Delete"><i class="fa fa-times text-danger"></i></a>    
+                  <% end %>
+                </span>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if action_name == 'dashboard' %>
+  <%= form_for [:admin, :timeline, @comment], url: admin_timeline_comments_path(timeline) do |f| %>
+    <%= f.hidden_field :timeline_id, value: timeline.id %>
+
+    <% if current_admin %>
+      <%= f.hidden_field :admin_id, value: current_active_user.id %>
+    <% elsif current_hr %>
+      <%= f.hidden_field :hr_id, value: current_active_user.id %>
+    <% elsif current_employee %>
+      <%= f.hidden_field :employee_id, value: current_active_user.id %>
+    <% end %>
+
+    <div class="row">
+      <div class="col-md-11">
+        <%= f.text_area :content, placeholder: 'Write comment...', class: 'form-control' %>
+      </div>
+      <div class="col-md-1">
+        <button type="submit" class="btn btn-circle btn-pink comment-btn"><i class="fa fa-paper-plane-o"></i></button>
+      </div>
+    </div>
+  <% end %>
+<% end %>

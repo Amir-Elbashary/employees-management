@@ -1,6 +1,7 @@
 class Admin::TimelinesController < Admin::BaseAdminController
   load_and_authorize_resource
   before_action :require_same_user, only: :destroy
+  before_action :init_comment, only: :show
 
   def create
     if @timeline.save
@@ -25,6 +26,10 @@ class Admin::TimelinesController < Admin::BaseAdminController
 
   def timeline_params
     params.require(:timeline).permit(:admin_id, :hr_id, :employee_id, :content, :kind, images:[])
+  end
+
+  def init_comment
+    @comment = Comment.new
   end
 
   def set_timeline_type(timeline)

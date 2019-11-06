@@ -12,7 +12,7 @@ RSpec.feature 'Commenting on timeline post' do
   scenario 'with valid data' do
     fill_in 'comment[content]', with: 'First comment'
 
-    click_button 'Post'
+    find('.comment-submit-btn').click
     
     expect(page).to have_content(Comment.first.content)
     expect(page).to have_content("last one by #{@employee.name}")
@@ -21,7 +21,7 @@ RSpec.feature 'Commenting on timeline post' do
   scenario 'with invalid data' do
     fill_in 'comment[content]', with: ''
 
-    click_button 'Post'
+    find('.comment-submit-btn').click
     
     expect(page).to have_content('Content can&#39;t be blank')
     expect(Comment.count).to eq(0)
