@@ -5,29 +5,50 @@ RSpec.feature 'Commenting on timeline post' do
     initialize_app_settings
     @employee = create(:employee)
     login_as(@employee, scope: :employee)
-    @timeline = create(:timeline, employee: @employee, kind: 1)
-    visit admin_timeline_path(@timeline)
   end
 
-  scenario 'with valid data' do
+  scenario '(own posts) with valid data' do
+    @own_timeline = create(:timeline, employee: @employee, kind: 1)
+    visit admin_timeline_path(@own_timeline)
+    expect(Notification.count).to eq(0)
     fill_in 'comment[content]', with: 'First comment'
 
     find('.comment-submit-btn').click
     
     expect(page).to have_content(Comment.first.content)
     expect(page).to have_content("last one by #{@employee.name}")
+    expect(Notification.count).to eq(0)
+  end
+
+  scenario '(others posts) with valid data' do
+    @timeline = create(:timeline, kind: 1)
+    visit admin_timeline_path(@timeline)
+    expect(Notification.count).to eq(0)
+    fill_in 'comment[content]', with: 'First comment'
+
+    find('.comment-submit-btn').click
+    
+    expect(page).to have_content(Comment.first.content)
+    expect(page).to have_content("last one by #{@employee.name}")
+    expect(Notification.count).to eq(1)
   end
 
   scenario 'with invalid data' do
+    @timeline = create(:timeline, kind: 1)
+    visit admin_timeline_path(@timeline)
+    expect(Notification.count).to eq(0)
     fill_in 'comment[content]', with: ''
 
     find('.comment-submit-btn').click
     
     expect(page).to have_content('Content can&#39;t be blank')
     expect(Comment.count).to eq(0)
+    expect(Notification.count).to eq(0)
   end
 
   scenario 'deleting comment' do
+    @timeline = create(:timeline, kind: 1)
+    visit admin_timeline_path(@timeline)
     create(:comment, timeline: @timeline, employee: @employee)
     visit admin_path
     find('.comments-link').click

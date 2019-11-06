@@ -2,6 +2,7 @@ class Comment < ApplicationRecord
   include ActionView::Helpers::DateHelper
   mount_uploader :image, ImageUploader
   # after_commit -> { Timeline::TimelineWorker.perform_async(self.id) }, on: :create
+  # after_commit :create_notification, on: :create
 
   validates :content, presence: true
 
@@ -29,4 +30,10 @@ class Comment < ApplicationRecord
     return image.url unless image.empty?
     'images/fallback/small_400_default.png'
   end
+
+  # def create_notification
+  #   Notification.create(recipient: timeline.owner,
+  #                       content: "#{owner.name} commented on your post.",
+  #                       link: "/admin/timelines/#{timeline.id}")
+  # end
 end

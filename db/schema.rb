@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_05_091502) do
+ActiveRecord::Schema.define(version: 2019_11_06_110922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(version: 2019_11_05_091502) do
     t.string "recipient_type"
     t.bigint "recipient_id"
     t.integer "read_status", default: 0
+    t.string "link"
     t.index ["read_status"], name: "index_notifications_on_read_status"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient_type_and_recipient_id"
   end

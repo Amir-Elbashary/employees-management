@@ -14,7 +14,11 @@ class Admin::TimelinesController < Admin::BaseAdminController
     redirect_to admin_path
   end
 
-  def show; end
+  def show
+    if @timeline.owner == current_active_user
+      Notification.where('notifications.link like ?', "/admin/timelines/#{@timeline.id}").each { |n| n.read! }
+    end
+  end
 
   def destroy
     return unless @timeline.destroy
