@@ -42,23 +42,25 @@
   <div class="row">
     <div class="col-md-10">
       <div class="comment-widgets"> 
+        <% timeline.comments.last(2).each do |comment| %>
           <!-- Comment Row -->
           <div class="d-flex flex-row comment-row">
-            <div class="p-2"><span class="round"><img src="<%= timeline.comments.last&.owner.profile_pic.thumb.url %>" alt="user" width="50"></span></div>
+            <div class="p-2"><span class="round"><img src="<%= comment.owner.profile_pic.thumb.url %>" alt="user" width="50"></span></div>
             <div class="comment-text active w-100">
-              <h5><%= timeline.comments.last&.owner.name %></h5>
-              <p class="m-b-5"><%= Twemoji.parse(timeline.comments.last&.content.html_safe, img_attrs: { style: 'height: 1.3em' }).html_safe %></p>
+              <h5><%= comment.owner.name %></h5>
+              <p class="m-b-5"><%= Twemoji.parse(comment.content.html_safe, img_attrs: { style: 'height: 1.3em' }).html_safe %></p>
               <div class="comment-footer ">
-                <span class="text-muted pull-right"><%= time_ago_in_words(timeline.comments.last&.created_at) %> ago</span>
+                <span class="text-muted pull-right"><%= time_ago_in_words(comment.created_at) %> ago</span>
                 <span class="action-icons active">
                   <a href="javascript:void(0)" title="Coming soon"><i class="ti-heart text-danger"></i></a>    
-                  <% if timeline.comments.last&.owner == current_active_user %>
-                    <a href="<%= admin_timeline_comment_path(timeline, timeline.comments.last) %>" class="comment-delete-link" data-method="delete" data-confirm="Are you sure?" title="Delete"><i class="fa fa-times text-danger"></i></a>    
+                  <% if comment.owner == current_active_user %>
+                    <a href="<%= admin_timeline_comment_path(timeline, comment) %>" class="comment-delete-link" data-method="delete" data-confirm="Are you sure?" title="Delete"><i class="fa fa-times text-danger"></i></a>    
                   <% end %>
                 </span>
               </div>
             </div>
           </div>
+        <% end %>
       </div>
     </div>
   </div>
