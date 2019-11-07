@@ -64,13 +64,12 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     work_from_home_days = @settings.work_from_home
 
     if @vacation_request.vacation?
-      vacation_duration = (@vacation_request.ends_on - @vacation_request.starts_on).to_i
-      if employee.update(vacation_balance: employee.vacation_balance.to_i - vacation_duration)
+      if employee.update(vacation_balance: employee.vacation_balance - @vacation_request.duration)
         flash[:notice] = 'Vacation request Approved.'
         @vacation_request.approved!
 
-        content = "<p><strong>#{@vacation_request.employee.name} is going to have a vacation :)</strong></p>
-        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is going to be on a refreshing vacation, We are wishing #{him_her(@vacation_request.employee)} happy time.</p>
+        content = "<p><strong>#{@vacation_request.employee.name} is going to have a vacation :smiley:</strong></p>
+        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is going to be on a refreshing vacation, We are wishing #{him_her(@vacation_request.employee)} happy time. :wink:</p>
         <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
 
         create_timeline_post(content)
@@ -81,8 +80,8 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
       flash[:notice] = 'Sick leave request approved.'
       @vacation_request.approved!
 
-      content = "<p><strong>#{@vacation_request.employee.name} is not feeling well :(</strong></p>
-      <p><strong>&nbsp;&nbsp;</strong>We're sorry to hear that #{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is not feeling well, The little flowers are rising and blooming; it&rsquo;s the world&rsquo;s way of saying, &ldquo;get well soon.&rdquo;</p>
+      content = "<p><strong>#{@vacation_request.employee.name} is not feeling well :pensive:</strong></p>
+      <p><strong>&nbsp;&nbsp;</strong>We're sorry to hear that #{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is not feeling well, The little flowers are rising and blooming; it&rsquo;s the world&rsquo;s way of saying, &ldquo;get well soon.&rdquo; :pray:</p>
       <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
 
       create_timeline_post(content)

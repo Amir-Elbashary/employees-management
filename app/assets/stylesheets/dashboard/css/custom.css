@@ -1,3 +1,7 @@
+.seen-link:hover {
+  cursor: pointer;
+}
+
 .notification-menu-item-bg {
   background-color: rgba(1, 1, 1, 0.1);
 }

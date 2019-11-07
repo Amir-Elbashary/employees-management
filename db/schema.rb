@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_21_093932) do
+ActiveRecord::Schema.define(version: 2019_11_07_075943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,21 @@ ActiveRecord::Schema.define(version: 2019_10_21_093932) do
     t.index ["admin_id"], name: "index_attendances_on_admin_id"
     t.index ["employee_id"], name: "index_attendances_on_employee_id"
     t.index ["hr_id"], name: "index_attendances_on_hr_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "timeline_id"
+    t.bigint "admin_id"
+    t.bigint "hr_id"
+    t.bigint "employee_id"
+    t.text "content"
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["admin_id"], name: "index_comments_on_admin_id"
+    t.index ["employee_id"], name: "index_comments_on_employee_id"
+    t.index ["hr_id"], name: "index_comments_on_hr_id"
+    t.index ["timeline_id"], name: "index_comments_on_timeline_id"
   end
 
   create_table "documents", force: :cascade do |t|
@@ -221,6 +236,7 @@ ActiveRecord::Schema.define(version: 2019_10_21_093932) do
     t.string "recipient_type"
     t.bigint "recipient_id"
     t.integer "read_status", default: 0
+    t.string "link"
     t.index ["read_status"], name: "index_notifications_on_read_status"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient_type_and_recipient_id"
   end
@@ -230,6 +246,18 @@ ActiveRecord::Schema.define(version: 2019_10_21_093932) do
     t.string "action"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "reacts", force: :cascade do |t|
+    t.bigint "timeline_id"
+    t.string "reactor_type"
+    t.bigint "reactor_id"
+    t.integer "react", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["react"], name: "index_reacts_on_react"
+    t.index ["reactor_type", "reactor_id"], name: "index_reacts_on_reactor_type_and_reactor_id"
+    t.index ["timeline_id"], name: "index_reacts_on_timeline_id"
   end
 
   create_table "recruitments", force: :cascade do |t|
@@ -329,6 +357,7 @@ ActiveRecord::Schema.define(version: 2019_10_21_093932) do
     t.integer "kind", default: 0
     t.time "starts_at"
     t.time "ends_at"
+    t.integer "duration", default: 0
     t.index ["employee_id"], name: "index_vacation_requests_on_employee_id"
     t.index ["hr_id"], name: "index_vacation_requests_on_hr_id"
     t.index ["kind"], name: "index_vacation_requests_on_kind"
@@ -338,10 +367,15 @@ ActiveRecord::Schema.define(version: 2019_10_21_093932) do
   add_foreign_key "attendances", "admins"
   add_foreign_key "attendances", "employees"
   add_foreign_key "attendances", "hrs"
+  add_foreign_key "comments", "admins"
+  add_foreign_key "comments", "employees"
+  add_foreign_key "comments", "hrs"
+  add_foreign_key "comments", "timelines"
   add_foreign_key "documents", "employees"
   add_foreign_key "employees", "sections"
   add_foreign_key "hr_roles", "hrs"
   add_foreign_key "hr_roles", "roles"
+  add_foreign_key "reacts", "timelines"
   add_foreign_key "role_permissions", "permissions"
   add_foreign_key "role_permissions", "roles"
   add_foreign_key "room_messages", "employees"

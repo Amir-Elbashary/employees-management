@@ -1,6 +1,7 @@
 class Admin::TimelinesController < Admin::BaseAdminController
   load_and_authorize_resource
   before_action :require_same_user, only: :destroy
+  before_action :init_comment, only: :show
 
   def create
     if @timeline.save
@@ -13,6 +14,12 @@ class Admin::TimelinesController < Admin::BaseAdminController
     redirect_to admin_path
   end
 
+  def show
+    if @timeline.owner == current_active_user
+      Notification.where('notifications.link like ?', "/admin/timelines/#{@timeline.id}").each { |n| n.read! }
+    end
+  end
+
   def destroy
     return unless @timeline.destroy
     flash[:notice] = 'Your post was deleted.'
@@ -23,6 +30,10 @@ class Admin::TimelinesController < Admin::BaseAdminController
 
   def timeline_params
     params.require(:timeline).permit(:admin_id, :hr_id, :employee_id, :content, :kind, images:[])
+  end
+
+  def init_comment
+    @comment = Comment.new
   end
 
   def set_timeline_type(timeline)
