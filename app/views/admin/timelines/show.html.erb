@@ -1,0 +1,115 @@
+<% content_for :bc_title do %>
+  Timeline
+<% end %>
+
+<% content_for :bc_current do %>
+  Comments
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_path %>" class="refresh-link"><button type="button" class="btn btn-info"> Back to timeline</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+  <!-- Timeline Column -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <!-- timeline tab -->
+        <div class="card-body">
+          <div class="profiletimeline">
+            <div data-channel-subscribe="comments"></div>
+            <div class="sl-item">
+              <% if current_admin || current_hr || ((@timeline.owner == current_active_user) && @timeline.manual?) %>
+                <%= link_to admin_timeline_path(@timeline), method: :delete, class: 'delete-link', data: { confirm: 'Are you sure?' } do %>
+                  <button class="close text-danger">×</button>
+                <% end %>
+              <% end %>
+
+              <div class="sl-left">
+                <%= image_tag(@timeline.owner.profile_pic.thumb.url, class: 'img-circle') %>
+              </div>
+
+              <% if @timeline.news? %>
+                <%= render 'admin/main/timelines/news', timeline: @timeline %>
+              <% elsif @timeline.status? %>
+              <%= render 'admin/main/timelines/status', timeline: @timeline %>
+              <% elsif @timeline.show_off? %>
+                <%= render 'admin/main/timelines/show_off', timeline: @timeline %>
+              <% end %>
+              <hr>
+							<!-- ============================================================== -->
+							<!-- Comment widgets -->
+							<!-- ============================================================== -->
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="card">
+										<div class="comment-widgets"> 
+                      <% @timeline.comments.each do |comment| %>
+                        <!-- Comment Row -->
+                        <div class="d-flex flex-row comment-row">
+                          <div class="p-2"><span class="round"><img src="<%= comment.owner.profile_pic.thumb.url %>" alt="user" width="50"></span></div>
+                          <div class="comment-text active w-100">
+                            <h5><%= comment.owner.name %></h5>
+                            <p class="m-b-5"><%= Twemoji.parse(comment.content.html_safe, img_attrs: { style: 'height: 1.3em' }).html_safe %></p>
+                            <div class="comment-footer ">
+                              <span class="text-muted pull-right"><%= time_ago_in_words(comment.created_at) %> ago</span>
+                              <!--
+                              <span class="label label-success label-rounded">Approved</span>
+                              -->
+                              <span class="action-icons active">
+                                <a href="javascript:void(0)" title="Coming soon"><i class="ti-heart text-danger"></i></a>    
+                                <% if comment.owner == current_active_user %>
+                                  <!--
+                                  <a href="javascript:void(0)"><i class="ti-pencil-alt text-info"></i></a>
+                                  -->
+                                  <a href="<%= admin_timeline_comment_path(@timeline, comment) %>" class="comment-delete-link" data-method="delete" data-confirm="Are you sure?" title="Delete"><i class="fa fa-times text-danger"></i></a>    
+                                <% end %>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      <% end %>
+									  </div>
+									</div>
+								</div>
+							</div>
+							<!-- ============================================================== -->
+							<!-- End Comment -->
+							<!-- ============================================================== -->
+              <div class="row">
+                <div class="col-md-6">
+                  <%= form_for [:admin, :timeline, @comment], url: admin_timeline_comments_path(@timeline) do |f| %>
+                    <%= f.hidden_field :timeline_id, value: @timeline.id %>
+
+                    <% if current_admin %>
+                      <%= f.hidden_field :admin_id, value: current_active_user.id %>
+                    <% elsif current_hr %>
+                      <%= f.hidden_field :hr_id, value: current_active_user.id %>
+                    <% elsif current_employee %>
+                      <%= f.hidden_field :employee_id, value: current_active_user.id %>
+                    <% end %>
+
+                    <div class="row">
+                      <div class="col-md-11">
+                        <%= f.text_area :content, required: true, rows: 2, placeholder: 'Write comment...', class: 'form-control' %>
+                      </div>
+                      <div class="col-md-1">
+                        <button type="submit" class="btn btn-circle btn-pink comment-submit-btn"><i class="fa fa-paper-plane-o"></i></button>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Timeline Column -->
+</div>
+

@@ -2,6 +2,7 @@ class Admin::AdminsController < Admin::BaseAdminController
   load_and_authorize_resource except: %i[dashboard edit update toggle_state]
   skip_authorization_check only: %i[dashboard edit update toggle_state]
   before_action :set_timelines, only: :dashboard
+  before_action :set_comments, only: :dashboard
   # before_action :set_update, only: :dashboard
 
   def dashboard
@@ -69,6 +70,10 @@ class Admin::AdminsController < Admin::BaseAdminController
   def set_timelines
     @timeline = Timeline.new
     @timelines = Timeline.limit(14)
+  end
+
+  def set_comments
+    @comment = Comment.new
   end
 
   # def set_update

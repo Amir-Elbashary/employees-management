@@ -88,4 +88,13 @@ module ApplicationHelper
      'Don’t wait for opportunity. Create it.',
      'Dream it. Believe it. Build it.']
   end
+
+  def react_translation(react)
+    return 'likes this' if react == 'like'
+    return 'loves this' if react == 'love'
+    return 'is laughing' if react == 'joy'
+    return 'is astonished' if react == 'wow'
+    return 'is sad' if react == 'sad'
+    return 'is mad' if react == 'angry'
+  end
 end

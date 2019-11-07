@@ -8,6 +8,14 @@ RSpec.describe Timeline, type: :model do
   end
 
   describe 'Has Associations' do
+    it 'has many reacts' do
+      should have_many(:reacts)
+    end
+
+    it 'has many comments' do
+      should have_many(:comments)
+    end
+
     it 'belongs to admin' do
       should belong_to(:admin).optional
     end

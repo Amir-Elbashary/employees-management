@@ -18,7 +18,7 @@
         <div class="message-center">
           <% @notifications.each do |notification| %>
             <!-- Message -->
-            <a href="<%= admin_notifications_path(user: "#{current_active_user.class.name.downcase}-#{current_active_user.id}") %>" class="<%= 'notification-menu-item-bg' if notification.unread? %>">
+            <a href="<%= notification.link || admin_notifications_path(user: "#{current_active_user.class.name.downcase}-#{current_active_user.id}") %>" class="<%= 'notification-menu-item-bg' if notification.unread? %>">
               <div class="btn <%= notification.unread? ? 'btn-success' : 'btn-pink' %> btn-circle"><i class="fa fa-bell"></i></div>
               <div class="mail-contnet">
                 <h5></h5> <span class="mail-desc"><b><%= truncate(notification.content, length: 28) %></b></span> <span class="time"><%= formatted_time(notification.created_at) %></span>
