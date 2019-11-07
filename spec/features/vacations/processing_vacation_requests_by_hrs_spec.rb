@@ -32,12 +32,12 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         visit pending_admin_vacation_requests_path
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Confirmed')
 
         find('.approve-link').click
 
-        expect(Employee.employee.first.vacation_balance).to eq(18)
+        expect(Employee.first.vacation_balance).to eq(@employee.vacation_balance - @vacation_request.duration)
         expect(page).to have_content('Approved')
 
         visit admin_path
@@ -52,12 +52,12 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         visit pending_admin_vacation_requests_path
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Confirmed')
 
         find('.approve-link').click
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Approved')
 
         visit admin_path
@@ -70,12 +70,12 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         visit pending_admin_vacation_requests_path
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Confirmed')
 
         find('.approve-link').click
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Request duration is longer than the allowed limit of days.')
       end
 
@@ -86,12 +86,12 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         visit pending_admin_vacation_requests_path
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Confirmed')
 
         find('.approve-link').click
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Work from home limit reached for this employee.')
       end
 
@@ -102,12 +102,12 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         visit pending_admin_vacation_requests_path
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Confirmed')
 
         find('.approve-link').click
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Not enough work from home days left for this employee.')
       end
     end
@@ -119,12 +119,12 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         visit pending_admin_vacation_requests_path
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Confirmed')
 
         find('.approve-link').click
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Approved')
 
         visit admin_path
@@ -139,12 +139,12 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
         visit pending_admin_vacation_requests_path
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Confirmed')
 
         find('.approve-link').click
 
-        expect(Employee.employee.first.vacation_balance).to eq(20)
+        expect(Employee.first.vacation_balance).to eq(20)
         expect(page).to have_content('Approved')
       end
     end
@@ -156,12 +156,12 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
     visit pending_admin_vacation_requests_path
 
-    expect(Employee.employee.first.vacation_balance).to eq(20)
+    expect(Employee.first.vacation_balance).to eq(20)
     expect(page).to have_content('Confirmed')
 
     find('.decline-link').click
 
-    expect(Employee.employee.first.vacation_balance).to eq(20)
+    expect(Employee.first.vacation_balance).to eq(20)
     expect(page).to have_content('Declined')
   end
 end

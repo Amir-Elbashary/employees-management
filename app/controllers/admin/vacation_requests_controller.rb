@@ -64,8 +64,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     work_from_home_days = @settings.work_from_home
 
     if @vacation_request.vacation?
-      vacation_duration = (@vacation_request.ends_on - @vacation_request.starts_on).to_i
-      if employee.update(vacation_balance: employee.vacation_balance.to_i - vacation_duration)
+      if employee.update(vacation_balance: employee.vacation_balance - @vacation_request.duration)
         flash[:notice] = 'Vacation request Approved.'
         @vacation_request.approved!
 

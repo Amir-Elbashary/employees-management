@@ -7,7 +7,9 @@
 <% end %>
 
 <% content_for :bc_buttons do %>
-  <a href="<%= new_admin_vacation_request_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> New Request</button></a>
+  <% if current_employee %>
+    <a href="<%= new_admin_vacation_request_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> New Request</button></a>
+  <% end %>
 <% end %>
 
 <%= render 'shared/dashboard/breadcrumb' %>
@@ -26,6 +28,7 @@
             <th>Full Name</th>
             <th>From</th>
             <th>To</th>
+            <th>Duration</th>
             <th>Type</th>
             <% if current_hr %>
               <th>Vacation Balance</th>
@@ -41,6 +44,7 @@
               <td><%= request.employee.full_name %></td>
               <td><%= request.starts_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.starts_at) if request.mission? %> </td>
               <td><%= request.ends_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.ends_at) if request.mission? %> </td>
+              <td><%= request.duration %></td>
               <td><%= request.kind.humanize %></td>
               <% if current_hr %>
                 <td><%= request.employee.vacation_balance %></td>

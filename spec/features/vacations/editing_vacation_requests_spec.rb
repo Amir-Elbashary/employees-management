@@ -15,7 +15,7 @@ RSpec.feature 'Editing vacation requests' do
         visit edit_admin_vacation_request_path(@vacation_request)
 
         fill_in 'Starts on', with: (Date.today + 4.days)
-        fill_in 'Ends on', with: (Date.today + 8.days)
+        fill_in 'Back to work on', with: (Date.today + 8.days)
         fill_in 'Reason', with: 'New reason'
 
         click_button 'Submit'
@@ -42,7 +42,7 @@ RSpec.feature 'Editing vacation requests' do
         visit edit_admin_vacation_request_path(@vacation_request)
 
         fill_in 'Starts on', with: ''
-        fill_in 'Ends on', with: ''
+        fill_in 'Back to work on', with: ''
         fill_in 'Reason', with: ''
 
         click_button 'Submit'
@@ -58,7 +58,7 @@ RSpec.feature 'Editing vacation requests' do
         visit edit_admin_vacation_request_path(@vacation_request)
 
         fill_in 'Starts on', with: (Date.today + 4.days)
-        fill_in 'Ends on', with: (Date.today + 2.days)
+        fill_in 'Back to work on', with: (Date.today + 2.days)
         fill_in 'Reason', with: 'I just need a vacation :P'
 
         click_button 'Submit'

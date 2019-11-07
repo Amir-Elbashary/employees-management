@@ -10,7 +10,7 @@ RSpec.feature 'Creating vacation request' do
 
   scenario 'with valid data' do
     fill_in 'Starts on', with: (Date.today + 2.days)
-    fill_in 'Ends on', with: (Date.today + 4.days)
+    fill_in 'Back to work on', with: (Date.today + 4.days)
     select('Vacation', from: 'Type').select_option
     fill_in 'Reason', with: 'I just need a vacation :P'
 
@@ -25,7 +25,7 @@ RSpec.feature 'Creating vacation request' do
     context 'without required fields' do
       it 'should not submit the request' do
         fill_in 'Starts on', with: ''
-        fill_in 'Ends on', with: ''
+        fill_in 'Back to work on', with: ''
         select('Vacation', from: 'Type').select_option
         fill_in 'Reason', with: ''
 
@@ -41,7 +41,7 @@ RSpec.feature 'Creating vacation request' do
     context 'with end date before start date' do
       it 'should not submit the request' do
         fill_in 'Starts on', with: (Date.today + 4.days)
-        fill_in 'Ends on', with: (Date.today + 2.days)
+        fill_in 'Back to work on', with: (Date.today + 2.days)
         select('Vacation', from: 'Type').select_option
         fill_in 'Reason', with: 'I just need a vacation :P'
 

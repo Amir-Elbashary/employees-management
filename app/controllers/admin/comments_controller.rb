@@ -7,7 +7,7 @@ class Admin::CommentsController < Admin::BaseAdminController
     @comment = Comment.new(comment_params)
     flash[:danger] = @comment.errors.full_messages.join(', ') unless @comment.save
     redirect_to admin_timeline_path(@timeline)
-    create_notification if @comment.save
+    create_notifications if @comment.save
   end
 
   def destroy
@@ -26,10 +26,12 @@ class Admin::CommentsController < Admin::BaseAdminController
     @timeline = Timeline.find(params[:timeline_id])
   end
 
-  def create_notification
+  def create_notifications
     return if @comment.timeline.owner == current_active_user
     Notification.create(recipient: @comment.timeline.owner,
                         content: "#{@comment.owner.name} commented on your post.",
                         link: "/admin/timelines/#{@comment.timeline.id}")
+
+    Comment::MailNotifierWorker.perform_async(@comment.id)
   end
 end

@@ -3,7 +3,6 @@ class Message < ApplicationRecord
   enum read_status: %i[unread read]
   enum starring: %i[unstarred starred]
   enum trashing: %i[untrashed trashed]
-  # after_commit -> { Message::MessageNotificationWorker.perform_async(self.id) }, on: :create
   after_commit -> { Message::MailNotifierWorker.perform_async(self.id) }, on: :create
 
   validates :subject, :content, presence: true

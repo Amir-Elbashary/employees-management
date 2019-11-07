@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_06_110922) do
+ActiveRecord::Schema.define(version: 2019_11_07_075943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -357,6 +357,7 @@ ActiveRecord::Schema.define(version: 2019_11_06_110922) do
     t.integer "kind", default: 0
     t.time "starts_at"
     t.time "ends_at"
+    t.integer "duration", default: 0
     t.index ["employee_id"], name: "index_vacation_requests_on_employee_id"
     t.index ["hr_id"], name: "index_vacation_requests_on_hr_id"
     t.index ["kind"], name: "index_vacation_requests_on_kind"
