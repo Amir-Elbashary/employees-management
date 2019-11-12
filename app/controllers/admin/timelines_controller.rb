@@ -15,7 +15,7 @@ class Admin::TimelinesController < Admin::BaseAdminController
   end
 
   def show
-    if @timeline.owner == current_active_user
+    if @timeline.publisher == current_active_user
       Notification.where('notifications.link like ?', "/admin/timelines/#{@timeline.id}").each { |n| n.read! }
     end
   end
@@ -29,7 +29,7 @@ class Admin::TimelinesController < Admin::BaseAdminController
   private
 
   def timeline_params
-    params.require(:timeline).permit(:admin_id, :hr_id, :employee_id, :content, :kind, images:[])
+    params.require(:timeline).permit(:publisher_id, :publisher_type, :content, :kind, images:[])
   end
 
   def init_comment
@@ -49,7 +49,7 @@ class Admin::TimelinesController < Admin::BaseAdminController
   end
 
   def require_same_user
-    return if @timeline.owner == current_active_user
+    return if @timeline.publisher == current_active_user
     flash[:danger] = 'You may only delete you own posts'
     redirect_to admin_path
   end

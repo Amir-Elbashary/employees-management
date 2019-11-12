@@ -33,13 +33,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
     if @current_attendance
       flash[:notice] = "You have already checked-in today, #{@messages[:checkin].sample}"
     else
-      if current_admin
-        Attendance.create(admin: current_admin, checkin: Time.zone.now)
-      elsif current_hr
-        Attendance.create(hr: current_hr, checkin: Time.zone.now)
-      elsif current_employee
-        Attendance.create(employee: current_employee, checkin: Time.zone.now)
-      end
+      Attendance.create(attender: current_active_user, checkin: Time.zone.now)
       flash[:notice] = "Thank you #{current_active_user.first_name}, Wishing you good and productive day."
     end
 
@@ -86,7 +80,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
         flash[:danger] = 'Employee already checked-in'
       else
         flash[:notice] = 'Check-in appended'
-        Attendance.create(employee: employee, checkin: checktime_utc)
+        Attendance.create(attender: employee, checkin: checktime_utc)
       end
     elsif check_type == 'Check-out'
       if attendance

@@ -103,15 +103,10 @@
                 </tr>
               </thead>
               <tbody>
-                <% @attendances.where(employee: nil).each do |attendance| %>
+                <% @attendances.where(attender_type: ["Admin", "Hr"]).each do |attendance| %>
                   <tr>
-                    <% if attendance.admin %>
-                      <td><%= image_tag(attendance.admin.avatar.thumb.url, class: 'table-thumb') %></td>
-                      <td><%= attendance.admin.full_name %></td>
-                    <% else %>
-                      <td><%= image_tag(attendance.hr.avatar.thumb.url, class: 'table-thumb') %></td>
-                      <td><%= attendance.hr.full_name %></td>
-                    <% end %>
+                    <td><%= image_tag(attendance.attender.avatar.thumb.url, class: 'table-thumb') %></td>
+                    <td><%= attendance.attender.full_name %></td>
                     <td><%= formatted_date(attendance.checkin) %></td>
                     <td><%= formatted_time(attendance.checkin) %></td>
                     <td><%= formatted_time(attendance.checkout) || 'Still working...' %></td>
@@ -139,10 +134,10 @@
               </tr>
             </thead>
             <tbody>
-              <% @attendances.where.not(employee: nil).each do |attendance| %>
+              <% @attendances.where(attender_type: "Employee").each do |attendance| %>
                 <tr>
-                  <td><%= image_tag(attendance.employee.profile_pic.thumb.url, class: 'table-thumb') %></td>
-                  <td><%= link_to attendance.employee.name, admin_employee_path(attendance.employee) %></td>
+                  <td><%= image_tag(attendance.attender.profile_pic.thumb.url, class: 'table-thumb') %></td>
+                  <td><%= link_to attendance.attender.name, admin_employee_path(attendance.attender) %></td>
                   <td><%= formatted_date(attendance.checkin) %></td>
                   <td><%= formatted_time(attendance.checkin) %></td>
                   <td><%= formatted_time(attendance.checkout) || 'Still working...' %></td>

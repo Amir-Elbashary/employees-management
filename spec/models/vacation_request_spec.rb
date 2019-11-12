@@ -16,16 +16,26 @@ RSpec.describe VacationRequest, type: :model do
   end
 
   describe 'Has Associations' do
+    it 'should belongs to requester' do
+      should belong_to(:requester)
+    end
+
     it 'should belong to employee' do
       should belong_to(:employee)
+      # To be
+      # should_not belong_to(:employee)
     end
 
     it 'should belong to supervisor' do
       should belong_to(:supervisor).optional
+      # To be
+      # should_not belong_to(:supervisor).optional
     end
 
     it 'should belong to H.R' do
       should belong_to(:hr).optional
+      # To be
+      # should_not belong_to(:hr).optional
     end
   end
 end

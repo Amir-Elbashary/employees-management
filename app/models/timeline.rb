@@ -9,28 +9,20 @@ class Timeline < ApplicationRecord
 
   has_many :reacts, dependent: :destroy
   has_many :comments, dependent: :destroy
-  belongs_to :admin, optional: true
-  belongs_to :hr, optional: true
-  belongs_to :employee, optional: true
+  belongs_to :publisher, polymorphic: true
 
   default_scope { order(created_at: :desc) }
 
   def as_json(options)
     super(options).merge(avatar_url: avatar_url,
-                         owner_name: owner.full_name,
-                         owner_id: owner.id,
+                         owner_name: publisher.name,
+                         owner_id: publisher.id,
                          image: image,
                          created_since: time_ago_in_words(created_at))
   end
 
-  def owner
-    return admin if admin
-    return hr if hr
-    return employee if employee
-  end
-
   def avatar_url
-    return owner.avatar_url if owner.avatar.present?
+    return publisher.avatar_url if publisher.avatar.present?
     'images/fallback/small_400_default.png'
   end
 

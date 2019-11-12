@@ -16,10 +16,11 @@ class Hr < ApplicationRecord
   has_many :hr_roles, dependent: :destroy
   has_many :roles, through: :hr_roles
   has_many :notifications, as: :recipient
+  has_many :timelines, class_name: 'Timeline', foreign_key: 'publisher_id', as: :publisher, dependent: :destroy
   has_many :reacts, class_name: 'React', foreign_key: 'reactor_id', as: :reactor
-  has_many :comments, dependent: :destroy
+  has_many :comments, class_name: 'Comment', foreign_key: 'commenter_id', as: :commenter, dependent: :destroy
   has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', as: :sender
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', as: :recipient
-  has_many :attendances, dependent: :destroy
+  has_many :attendances, class_name: 'Attendance', foreign_key: 'attender_id', as: :attender, dependent: :destroy
   has_many :vacation_requests, dependent: :destroy
 end

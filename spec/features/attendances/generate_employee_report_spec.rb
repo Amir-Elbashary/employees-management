@@ -39,7 +39,7 @@ RSpec.feature 'Generating employee report by H.R' do
 
     context 'select date range which has at least one attendance' do
       it 'should load reports page' do
-        @attendance = create(:attendance, employee: @employee)
+        @attendance = create(:attendance, attender: @employee)
         expect(page).to have_content('Please select date range')
 
         fill_in 'From', with: Date.today.at_beginning_of_month

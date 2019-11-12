@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_075943) do
+ActiveRecord::Schema.define(version: 2019_11_12_091648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,7 +66,10 @@ ActiveRecord::Schema.define(version: 2019_11_07_075943) do
     t.datetime "updated_at", null: false
     t.bigint "admin_id"
     t.bigint "hr_id"
+    t.string "attender_type"
+    t.bigint "attender_id"
     t.index ["admin_id"], name: "index_attendances_on_admin_id"
+    t.index ["attender_type", "attender_id"], name: "index_attendances_on_attender_type_and_attender_id"
     t.index ["employee_id"], name: "index_attendances_on_employee_id"
     t.index ["hr_id"], name: "index_attendances_on_hr_id"
   end
@@ -80,7 +83,10 @@ ActiveRecord::Schema.define(version: 2019_11_07_075943) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "commenter_type"
+    t.bigint "commenter_id"
     t.index ["admin_id"], name: "index_comments_on_admin_id"
+    t.index ["commenter_type", "commenter_id"], name: "index_comments_on_commenter_type_and_commenter_id"
     t.index ["employee_id"], name: "index_comments_on_employee_id"
     t.index ["hr_id"], name: "index_comments_on_hr_id"
     t.index ["timeline_id"], name: "index_comments_on_timeline_id"
@@ -328,9 +334,12 @@ ActiveRecord::Schema.define(version: 2019_11_07_075943) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "creation", default: 0
+    t.string "publisher_type"
+    t.bigint "publisher_id"
     t.index ["admin_id"], name: "index_timelines_on_admin_id"
     t.index ["employee_id"], name: "index_timelines_on_employee_id"
     t.index ["hr_id"], name: "index_timelines_on_hr_id"
+    t.index ["publisher_type", "publisher_id"], name: "index_timelines_on_publisher_type_and_publisher_id"
   end
 
   create_table "updates", force: :cascade do |t|
@@ -358,9 +367,12 @@ ActiveRecord::Schema.define(version: 2019_11_07_075943) do
     t.time "starts_at"
     t.time "ends_at"
     t.integer "duration", default: 0
+    t.string "requester_type"
+    t.bigint "requester_id"
     t.index ["employee_id"], name: "index_vacation_requests_on_employee_id"
     t.index ["hr_id"], name: "index_vacation_requests_on_hr_id"
     t.index ["kind"], name: "index_vacation_requests_on_kind"
+    t.index ["requester_type", "requester_id"], name: "index_vacation_requests_on_requester_type_and_requester_id"
     t.index ["supervisor_id"], name: "index_vacation_requests_on_supervisor_id"
   end
 

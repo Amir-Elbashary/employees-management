@@ -24,6 +24,10 @@ RSpec.describe Hr, type: :model do
       should have_many(:notifications)
     end
 
+    it 'should have many timelines' do
+      should have_many(:timelines)
+    end
+
     it 'should have many reacts' do
       should have_many(:reacts)
     end
