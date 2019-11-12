@@ -27,7 +27,8 @@
       <div class="card-body">  
         <br/>
         <%= form_for [:admin, @vacation_request], html: { help: :block } do |f| %>
-          <%= f.hidden_field :employee_id, value: current_employee.id %>
+          <%= f.hidden_field :requester_id, value: current_active_user.id %>
+          <%= f.hidden_field :requester_type, value: current_active_user.class.name %>
 
           <div class="row">
             <div class="col-md-6">          

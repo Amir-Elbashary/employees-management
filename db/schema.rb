@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_12_091648) do
+ActiveRecord::Schema.define(version: 2019_11_12_110447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -352,8 +352,6 @@ ActiveRecord::Schema.define(version: 2019_11_12_091648) do
 
   create_table "vacation_requests", force: :cascade do |t|
     t.bigint "employee_id"
-    t.bigint "hr_id"
-    t.integer "supervisor_id"
     t.date "starts_on"
     t.date "ends_on"
     t.text "reason"
@@ -370,10 +368,8 @@ ActiveRecord::Schema.define(version: 2019_11_12_091648) do
     t.string "requester_type"
     t.bigint "requester_id"
     t.index ["employee_id"], name: "index_vacation_requests_on_employee_id"
-    t.index ["hr_id"], name: "index_vacation_requests_on_hr_id"
     t.index ["kind"], name: "index_vacation_requests_on_kind"
     t.index ["requester_type", "requester_id"], name: "index_vacation_requests_on_requester_type_and_requester_id"
-    t.index ["supervisor_id"], name: "index_vacation_requests_on_supervisor_id"
   end
 
   add_foreign_key "attendances", "admins"
@@ -396,5 +392,4 @@ ActiveRecord::Schema.define(version: 2019_11_12_091648) do
   add_foreign_key "timelines", "employees"
   add_foreign_key "timelines", "hrs"
   add_foreign_key "vacation_requests", "employees"
-  add_foreign_key "vacation_requests", "hrs"
 end

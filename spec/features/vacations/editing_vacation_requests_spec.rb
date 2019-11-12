@@ -4,9 +4,10 @@ RSpec.feature 'Editing vacation requests' do
   before do
     initialize_app_settings
     @employee = create(:employee)
+    @other_employee = create(:employee)
     login_as(@employee, scope: :employee)
-    @vacation_request = create(:vacation_request, employee: @employee)
-    @others_request = create(:vacation_request)
+    @vacation_request = create(:vacation_request, requester: @employee)
+    @others_request = create(:vacation_request, requester: @other_employee)
   end
 
   describe 'with valid data' do

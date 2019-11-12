@@ -19,23 +19,5 @@ RSpec.describe Timeline, type: :model do
     it ' belongs to publisher' do
       should belong_to(:publisher)
     end
-
-    it 'belongs to admin' do
-      # should belong_to(:admin).optional
-      # To be
-      should_not belong_to(:admin).optional
-    end
-
-    it 'belongs to hr' do
-      # should belong_to(:hr).optional
-      # To be
-      should_not belong_to(:hr).optional
-    end
-
-    it 'belongs to employee' do
-      # should belong_to(:employee).optional
-      # To be
-      should_not belong_to(:employee).optional
-    end
   end
 end

@@ -10,11 +10,6 @@ module UserHelpers
     first_name + ' ' + middle_name + ' ' + last_name
   end
 
-  def displayy_name
-    return full_name unless display_name
-    display_name
-  end
-
   def name
     return full_name unless display_name
     display_name

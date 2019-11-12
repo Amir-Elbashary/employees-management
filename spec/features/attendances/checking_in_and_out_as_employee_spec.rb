@@ -20,7 +20,7 @@ RSpec.feature 'Checking in/out by employees' do
     context 'accessing from unauthorized network while working from home' do
       it 'should render unauthorized network if request isn\'t approved by H.R' do
         @settings = create(:setting)
-        @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 1)
+        @vacation_request = create(:vacation_request, requester: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 1)
         visit admin_attendances_path
 
         expect(page).to have_content('Attendance Sheet')
@@ -29,7 +29,7 @@ RSpec.feature 'Checking in/out by employees' do
 
       it 'should render attendances table if request is approved by H.R' do
         @settings = create(:setting)
-        @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
+        @vacation_request = create(:vacation_request, requester: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
         visit admin_attendances_path
 
         expect(page).to have_content('Attendance Sheet')
@@ -107,7 +107,7 @@ RSpec.feature 'Checking in/out by employees' do
 
     it 'should bypass network authentication and check the employee in for today if he has approved work from home request' do
       @employee.update(access_token: 'secret-token')
-      @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
+      @vacation_request = create(:vacation_request, requester: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
       @settings = create(:setting)
       page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
       visit admin_attendances_path
@@ -120,7 +120,7 @@ RSpec.feature 'Checking in/out by employees' do
 
     it 'should bypass network authentication and check the employee in for today if he has approved multiple days work from home request' do
       @employee.update(access_token: 'secret-token')
-      @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today - 1.days, ends_on: Date.today + 1.days, status: 4)
+      @vacation_request = create(:vacation_request, requester: @employee, kind: 1, starts_on: Date.today - 1.days, ends_on: Date.today + 1.days, status: 4)
       @settings = create(:setting)
       page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
       visit admin_attendances_path
@@ -174,7 +174,7 @@ RSpec.feature 'Checking in/out by employees' do
     it 'should bypass network authenticating and check the employee out for today if work from home request is approved' do
       @employee.update(access_token: 'secret-token')
       @settings = create(:setting)
-      @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
+      @vacation_request = create(:vacation_request, requester: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
       page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
       visit admin_attendances_path
 
@@ -220,7 +220,7 @@ RSpec.feature 'Checking in/out by employees' do
     it 'should return checked out message already after bypassing network authentication if work from home request is approved' do
       @employee.update(access_token: 'secret-token')
       @settings = create(:setting)
-      @vacation_request = create(:vacation_request, employee: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
+      @vacation_request = create(:vacation_request, requester: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
       page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
       visit admin_attendances_path
 

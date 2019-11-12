@@ -26,7 +26,7 @@ class Employee < ApplicationRecord
   has_many :employees, class_name: 'Employee', foreign_key: 'supervisor_id'
   has_many :documents, dependent: :destroy
   has_many :attendances, class_name: 'Attendance', foreign_key: 'attender_id', as: :attender, dependent: :destroy
-  has_many :vacation_requests, dependent: :destroy
+  has_many :vacation_requests, class_name: 'VacationRequest', foreign_key: 'requester_id', as: :requester, dependent: :destroy
   has_many :room_messages, dependent: :destroy
   belongs_to :supervisor, class_name: 'Employee', foreign_key: 'supervisor_id', optional: true
   belongs_to :section, optional: true

@@ -7,9 +7,10 @@ RSpec.feature 'Listing pending vacation requests as an H.R or supervisor' do
     @hr = create(:hr)
     @supervisor = create(:employee, level: 1)
     @employee = create(:employee, supervisor: @supervisor)
+    @other_employee = create(:employee)
 
-    @vacation_request1 = create(:vacation_request, employee: @employee)
-    @vacation_request2 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 10.days)
+    @vacation_request1 = create(:vacation_request, requester: @employee)
+    @vacation_request2 = create(:vacation_request, requester: @other_employee, starts_on: Date.today + 8.days, ends_on: Date.today + 10.days)
   end
 
   context 'when visiting as employee' do
