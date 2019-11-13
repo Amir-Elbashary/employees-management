@@ -11,6 +11,7 @@ class Admin::HolidaysController < Admin::BaseAdminController
     end
 
     create_timeline_post(@holiday.content) if params[:holiday][:announce]
+    send_emails if params[:holiday][:announce]
   end
 
   def index; end
@@ -34,5 +35,9 @@ class Admin::HolidaysController < Admin::BaseAdminController
                     kind: 'news',
                     creation: 'manual',
                     content: content)
+  end
+
+  def send_emails
+    Holiday::MailNotifierWorker.perform_async(@holiday.id)
   end
 end
