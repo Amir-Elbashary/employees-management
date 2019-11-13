@@ -5,7 +5,7 @@ RSpec.feature 'Reacting on timeline posts' do
     initialize_app_settings
     @employee = create(:employee)
     login_as(@employee, scope: :employee)
-    @timeline = create(:timeline, employee: @employee, kind: 1)
+    @timeline = create(:timeline, publisher: @employee, kind: 1)
     visit admin_timeline_path(@timeline)
   end
 

@@ -14,16 +14,14 @@
           </tr>
         </thead>
         <tbody>
+          <% @admins.each do |admin| %>
+            <%= render 'table_row', resource: admin %>
+          <% end %>
+          <% @hrs.each do |hr| %>
+            <%= render 'table_row', resource: hr %>
+          <% end %>
           <% @employees.each do |employee| %>
-            <tr>
-              <td><%= image_tag(employee.profile_pic.thumb.url, class: 'table-thumb') %></td>
-              <td><%= link_to employee.full_name, admin_employee_path(employee), title: employee.formal_name %></td>
-              <td><%= employee.email %></td>
-              <td><%= employee.birthdate&.strftime('%d/%m/%Y') %></td>
-              <td>
-                <%= link_to 'View Report', reports_admin_attendances_path(employee: employee.id), class: 'btn btn-sm btn-primary' %>
-              </td>
-            </tr>
+            <%= render 'table_row', resource: employee %>
           <% end %>
         </tbody>
       </table>

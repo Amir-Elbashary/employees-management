@@ -53,7 +53,7 @@ class Admin::BaseAdminController < ApplicationController
                         elsif current_hr
                           VacationRequest.where(status: ['confirmed', 'escalated'])
                         elsif current_employee&.supervisor?
-                          VacationRequest.where(employee: current_employee.employees, status: 'pending')
+                          VacationRequest.where(requester: current_employee.employees, status: 'pending')
                         elsif current_employee&.employee?
                           current_employee.vacation_requests.pending
                         end

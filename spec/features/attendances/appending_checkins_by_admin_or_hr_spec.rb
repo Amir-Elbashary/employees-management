@@ -42,7 +42,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
     context 'while employee already checked in' do
       it 'should not be able to check him in again' do
         login_as(@admin, scope: :admin)
-        create(:attendance, employee: @employee, checkin: Time.zone.now, checkout: nil, time_spent: nil)
+        create(:attendance, attender: @employee, checkin: Time.zone.now, checkout: nil, time_spent: nil)
         visit admin_attendances_path
         
         select(@employee.full_name, from: 'Employee').select_option
@@ -72,7 +72,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
     context 'while employee has not checked out' do
       it 'should be able to check employee out' do
         checkin_time = Time.zone.now
-        create(:attendance, employee: @employee, checkin: checkin_time, checkout: nil, time_spent: nil)
+        create(:attendance, attender: @employee, checkin: checkin_time, checkout: nil, time_spent: nil)
         login_as(@admin, scope: :admin)
         visit admin_attendances_path
         
@@ -103,7 +103,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
       it 'should not be able to check him out again' do
         login_as(@admin, scope: :admin)
         checkin_time = Time.zone.now
-        create(:attendance, employee: @employee, checkin: checkin_time, checkout: checkin_time + 4.hours, time_spent: 4)
+        create(:attendance, attender: @employee, checkin: checkin_time, checkout: checkin_time + 4.hours, time_spent: 4)
         visit admin_attendances_path
         
         select(@employee.full_name, from: 'Employee').select_option
@@ -183,7 +183,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
     context 'while employee already checked in' do
       it 'should not be able to check him in again' do
         login_as(@hr, scope: :hr)
-        create(:attendance, employee: @employee, checkin: Time.zone.now, checkout: nil, time_spent: nil)
+        create(:attendance, attender: @employee, checkin: Time.zone.now, checkout: nil, time_spent: nil)
         visit admin_attendances_path
         
         select(@employee.full_name, from: 'Employee').select_option
@@ -210,7 +210,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
     context 'while employee has not checked out' do
       it 'should be able to check employee out' do
         checkin_time = Time.zone.now
-        create(:attendance, employee: @employee, checkin: checkin_time, checkout: nil, time_spent: nil)
+        create(:attendance, attender: @employee, checkin: checkin_time, checkout: nil, time_spent: nil)
         login_as(@hr, scope: :hr)
         visit admin_attendances_path
         
@@ -241,7 +241,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
       it 'should not be able to check him out again' do
         login_as(@hr, scope: :hr)
         checkin_time = Time.zone.now
-        create(:attendance, employee: @employee, checkin: checkin_time, checkout: checkin_time + 4.hours, time_spent: 4)
+        create(:attendance, attender: @employee, checkin: checkin_time, checkout: checkin_time + 4.hours, time_spent: 4)
         visit admin_attendances_path
         
         select(@employee.full_name, from: 'Employee').select_option

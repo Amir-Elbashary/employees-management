@@ -1,10 +1,10 @@
 class Admin::AttendancesController < Admin::BaseAdminController
   load_and_authorize_resource
-  skip_load_resource only: %i[index grant revoke]
+  skip_load_resource only: %i[index reports grant revoke]
   before_action :require_authorized_network, only: %i[checkin checkout]
   before_action :require_authorized_device, only: %i[checkin checkout]
   before_action :set_attendances, only: :index
-  before_action :set_employees, only: :reports
+  before_action :set_resources, only: :reports
   before_action :set_employee, only: %i[grant revoke]
   before_action :set_messages, only: %i[checkin checkout]
 
@@ -33,13 +33,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
     if @current_attendance
       flash[:notice] = "You have already checked-in today, #{@messages[:checkin].sample}"
     else
-      if current_admin
-        Attendance.create(admin: current_admin, checkin: Time.zone.now)
-      elsif current_hr
-        Attendance.create(hr: current_hr, checkin: Time.zone.now)
-      elsif current_employee
-        Attendance.create(employee: current_employee, checkin: Time.zone.now)
-      end
+      Attendance.create(attender: current_active_user, checkin: Time.zone.now)
       flash[:notice] = "Thank you #{current_active_user.first_name}, Wishing you good and productive day."
     end
 
@@ -86,7 +80,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
         flash[:danger] = 'Employee already checked-in'
       else
         flash[:notice] = 'Check-in appended'
-        Attendance.create(employee: employee, checkin: checktime_utc)
+        Attendance.create(attender: employee, checkin: checktime_utc)
       end
     elsif check_type == 'Check-out'
       if attendance
@@ -131,15 +125,15 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
     @holidays = Holiday.where(starts_on: date_from..date_to)&.pluck(:duration)&.inject(:+) || 0
 
-    @employee = Employee.find_by(id: params[:employee]) if params[:employee]
+    @resource = params[:type].constantize.find_by(id: params[:id]) if params[:type] && params[:id]
 
-    if @employee
-      @attendances = @employee.attendances.where(checkin: date_range)
-      @ex_attendances = @employee.attendances.where(checkin: ex_date_range)
-      @vacation_requests = @employee.vacation_requests.where(starts_on: date_range).approved
+    if @resource
+      @attendances = @resource.attendances.where(checkin: date_range)
+      @ex_attendances = @resource.attendances.where(checkin: ex_date_range)
+      @vacation_requests = @resource.vacation_requests.where(starts_on: date_range).approved
     end
 
-    if @attendances.any?
+    if @attendances&.any?
       @actual_work_days = @attendances.size - @attendances.where(checkout: nil).size
       @actual_work_hours = @attendances.pluck(:time_spent)&.inject(:+)&.round(2)
     else
@@ -149,25 +143,9 @@ class Admin::AttendancesController < Admin::BaseAdminController
     end
 
     if @vacation_requests
-      work_from_home_days = []
-      vacation_days = []
-      sick_leave_days = []
-
-      @vacation_requests.work_from_home.each do |req|
-        work_from_home_days << (req.ends_on - req.starts_on).to_i
-      end
-
-      @vacation_requests.vacation.each do |req|
-        vacation_days << (req.ends_on - req.starts_on).to_i
-      end
-
-      @vacation_requests.sick_leave.each do |req|
-        sick_leave_days << (req.ends_on - req.starts_on).to_i
-      end
-
-      @work_from_home_days = work_from_home_days.inject(:+) || 0
-      @vacation_days = vacation_days.inject(:+) || 0
-      @sick_leave_days = sick_leave_days.inject(:+) || 0
+      @work_from_home_days = @vacation_requests.work_from_home.pluck(:duration).inject(:+) || 0
+      @vacation_days = @vacation_requests.vacation.pluck(:duration).inject(:+) || 0
+      @sick_leave_days = @vacation_requests.sick_leave.pluck(:duration).inject(:+) || 0
     end
 
     # Variables needed for views calculations
@@ -209,7 +187,9 @@ class Admin::AttendancesController < Admin::BaseAdminController
     @employee = Employee.find(params[:id])
   end
 
-  def set_employees
+  def set_resources
+    @admins = Admin.all
+    @hrs = Hr.all
     @employees = Employee.all
   end
 

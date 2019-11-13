@@ -5,7 +5,7 @@ RSpec.feature 'Deleting vacation request' do
     initialize_app_settings
     @employee = create(:employee)
     login_as(@employee, scope: :employee)
-    @vacation_request = create(:vacation_request, employee: @employee)
+    @vacation_request = create(:vacation_request, requester: @employee)
     visit admin_vacation_requests_path
   end
 

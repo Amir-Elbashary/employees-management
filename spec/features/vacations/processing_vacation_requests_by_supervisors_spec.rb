@@ -5,14 +5,15 @@ RSpec.feature 'Processing pending vacation requests as a supervisor' do
     initialize_app_settings
     @supervisor = create(:employee, level: 1)
     @employee = create(:employee, vacation_balance: 20, supervisor: @supervisor)
+    @other_employee = create(:employee)
     login_as(@supervisor, scope: :employee)
   end
 
   context 'when visiting pending requests' do
     it 'should list pending entries for employees under this supervisor only' do
-      @vacation_request1 = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee)
-      @vacation_request2 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 12.days, employee: @employee)
-      @vacation_request3 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 10.days)
+      @vacation_request1 = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee)
+      @vacation_request2 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 12.days, requester: @employee)
+      @vacation_request3 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 10.days, requester: @other_employee)
 
       visit pending_admin_vacation_requests_path
 
@@ -23,7 +24,7 @@ RSpec.feature 'Processing pending vacation requests as a supervisor' do
   end
 
   scenario 'can confirm the request' do
-    @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee)
+    @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee)
 
     visit pending_admin_vacation_requests_path
 
@@ -37,7 +38,7 @@ RSpec.feature 'Processing pending vacation requests as a supervisor' do
   end
 
   scenario 'can refuse the request' do
-    @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee)
+    @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee)
 
     visit pending_admin_vacation_requests_path
 

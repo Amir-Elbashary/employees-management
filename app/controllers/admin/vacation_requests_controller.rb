@@ -60,16 +60,16 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   end
 
   def approve
-    employee = @vacation_request.employee
+    requester = @vacation_request.requester
     work_from_home_days = @settings.work_from_home
 
     if @vacation_request.vacation?
-      if employee.update(vacation_balance: employee.vacation_balance - @vacation_request.duration)
+      if requester.update(vacation_balance: requester.vacation_balance - @vacation_request.duration)
         flash[:notice] = 'Vacation request Approved.'
         @vacation_request.approved!
 
-        content = "<p><strong>#{@vacation_request.employee.name} is going to have a vacation :smiley:</strong></p>
-        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is going to be on a refreshing vacation, We are wishing #{him_her(@vacation_request.employee)} happy time. :wink:</p>
+        content = "<p><strong>#{@vacation_request.requester.name} is going to have a vacation :smiley:</strong></p>
+        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.requester.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.requester)} is going to be on a refreshing vacation, We are wishing #{him_her(@vacation_request.requester)} happy time. :wink:</p>
         <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
 
         create_timeline_post(content)
@@ -80,8 +80,8 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
       flash[:notice] = 'Sick leave request approved.'
       @vacation_request.approved!
 
-      content = "<p><strong>#{@vacation_request.employee.name} is not feeling well :pensive:</strong></p>
-      <p><strong>&nbsp;&nbsp;</strong>We're sorry to hear that #{@vacation_request.employee.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.employee)} is not feeling well, The little flowers are rising and blooming; it&rsquo;s the world&rsquo;s way of saying, &ldquo;get well soon.&rdquo; :pray:</p>
+      content = "<p><strong>#{@vacation_request.requester.name} is not feeling well :pensive:</strong></p>
+      <p><strong>&nbsp;&nbsp;</strong>We're sorry to hear that #{@vacation_request.requester.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.requester)} is not feeling well, The little flowers are rising and blooming; it&rsquo;s the world&rsquo;s way of saying, &ldquo;get well soon.&rdquo; :pray:</p>
       <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
 
       create_timeline_post(content)
@@ -94,7 +94,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
     if @vacation_request.work_from_home?
       request_duration = (@vacation_request.ends_on - @vacation_request.starts_on).to_i
-      work_from_home_requests = employee.vacation_requests.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month).approved.work_from_home
+      work_from_home_requests = requester.vacation_requests.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month).approved.work_from_home
       days_taken = 0
 
       work_from_home_requests.each do |request|
@@ -112,8 +112,8 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
         flash[:notice] = 'Work from home request approved.'
         @vacation_request.approved!
 
-        content = "<p><strong>#{@vacation_request.employee.name} will be working from home!</strong></p>
-        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.employee.first_name} will be working from home from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, You can reach #{him_her(@vacation_request.employee)} on Slack!</p>
+        content = "<p><strong>#{@vacation_request.requester.name} will be working from home!</strong></p>
+        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.requester.first_name} will be working from home from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, You can reach #{him_her(@vacation_request.requester)} on Slack!</p>
         <p><strong>Best regards,</strong><br><strong>Fustany Team</strong></p>"
 
         create_timeline_post(content)
@@ -131,21 +131,20 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   private
 
   def vacation_request_params
-    params.require(:vacation_request).permit(:employee_id, :hr_id, :supervisor_id,
-                                             :starts_on, :ends_on, :starts_at, :ends_at,
-                                             :reason, :kind, :supervisor_feedback, :hr_feedback,
-                                             :escalation_reason)
+    params.require(:vacation_request).permit(:requester_id, :requester_type, :starts_on, :ends_on,
+                                             :starts_at, :ends_at, :reason, :kind, :supervisor_feedback,
+                                             :hr_feedback, :escalation_reason)
   end
 
   def set_vacation_requests
-    @vacation_requests = current_employee.vacation_requests
+    @vacation_requests = current_active_user.vacation_requests
   end
 
   def set_pending_requests
     @vacation_requests = if current_hr
                            VacationRequest.all
                          else
-                           VacationRequest.where(employee: current_employee.employees)
+                           VacationRequest.where(requester: current_employee.employees)
                          end
   end
 
@@ -170,7 +169,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   end
 
   def ensure_same_employee
-    return if @vacation_request.employee == current_employee
+    return if @vacation_request.requester == current_employee
     flash[:danger] = 'You are not allowed!'
     redirect_to admin_vacation_requests_path
   end
@@ -182,8 +181,8 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   end
 
   def create_timeline_post(content)
-    Timeline.create(employee: @vacation_request.employee,
-                    images: [@vacation_request.employee.profile_pic],
+    Timeline.create(publisher: @vacation_request.requester,
+                    images: [@vacation_request.requester.profile_pic],
                     kind: 'news',
                     creation: 'auto',
                     content: content)

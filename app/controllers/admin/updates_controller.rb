@@ -53,7 +53,7 @@ class Admin::UpdatesController < Admin::BaseAdminController
   end
 
   def create_timeline_post(content)
-    Timeline.create(employee: current_employee,
+    Timeline.create(publisher: current_employee,
                     images: [],
                     kind: 'news',
                     creation: 'manual',

@@ -6,15 +6,16 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
     initialize_app_settings
     @hr = create(:hr)
     @employee = create(:employee, vacation_balance: 20)
+    @other_employee = create(:employee)
     assign_permission(@hr, :pending, VacationRequest)
     login_as(@hr, scope: :hr)
   end
 
   context 'when visiting pending requests' do
     it 'should list pending entries for all employees' do
-      @vacation_request1 = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee)
-      @vacation_request2 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 12.days, employee: @employee)
-      @vacation_request3 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 10.days)
+      @vacation_request1 = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee)
+      @vacation_request2 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 12.days, requester: @employee)
+      @vacation_request3 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 10.days, requester: @other_employee)
 
       visit pending_admin_vacation_requests_path
 
@@ -28,7 +29,7 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
     context 'when request type is vacation' do
       it 'should be approved and detucted from vacation balance' do
         assign_permission(@hr, :approve, VacationRequest)
-        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, kind: 0, status: 1)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee, kind: 0, status: 1)
 
         visit pending_admin_vacation_requests_path
 
@@ -48,7 +49,7 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
     context 'when request type is work from home' do
       it 'should be approved, not deducted from vanacation balance and counted as work from home if work from home limit is not reached and within the allowed limit of days' do
         assign_permission(@hr, :approve, VacationRequest)
-        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, kind: 1, status: 1)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee, kind: 1, status: 1)
 
         visit pending_admin_vacation_requests_path
 
@@ -66,7 +67,7 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
       it 'should not be approved or counted as work from home if work from home limit is not reached and requested days are longer than the allowed limit of days' do
         assign_permission(@hr, :approve, VacationRequest)
-        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 5.days, employee: @employee, kind: 1, status: 1)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 5.days, requester: @employee, kind: 1, status: 1)
 
         visit pending_admin_vacation_requests_path
 
@@ -81,8 +82,8 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
       it 'should not be approved if work from home limit is reached' do
         assign_permission(@hr, :approve, VacationRequest)
-        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, kind: 1, status: 4)
-        @vacation_request = create(:vacation_request, starts_on: Date.today + 4.days, ends_on: Date.today + 6.days, employee: @employee, kind: 1, status: 1)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee, kind: 1, status: 4)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 4.days, ends_on: Date.today + 6.days, requester: @employee, kind: 1, status: 1)
 
         visit pending_admin_vacation_requests_path
 
@@ -97,8 +98,8 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
       it 'should not be approved if work from home limit is going to be passed after approving the current request' do
         assign_permission(@hr, :approve, VacationRequest)
-        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 3.days, employee: @employee, kind: 1, status: 4)
-        @vacation_request = create(:vacation_request, starts_on: Date.today + 4.days, ends_on: Date.today + 6.days, employee: @employee, kind: 1, status: 1)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 3.days, requester: @employee, kind: 1, status: 4)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 4.days, ends_on: Date.today + 6.days, requester: @employee, kind: 1, status: 1)
 
         visit pending_admin_vacation_requests_path
 
@@ -115,7 +116,7 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
     context 'when request type is sick leave' do
       it 'should be approved and not detucted from vacation balance' do
         assign_permission(@hr, :approve, VacationRequest)
-        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, kind: 2, status: 1)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee, kind: 2, status: 1)
 
         visit pending_admin_vacation_requests_path
 
@@ -135,7 +136,7 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
     context 'when request type is mission' do
       it 'should be approved and not detucted from vacation balance' do
         assign_permission(@hr, :approve, VacationRequest)
-        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, starts_at: Time.now, ends_at: (Time.now + 2.hours), employee: @employee, kind: 3, status: 1)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, starts_at: Time.now, ends_at: (Time.now + 2.hours), requester: @employee, kind: 3, status: 1)
 
         visit pending_admin_vacation_requests_path
 
@@ -152,7 +153,7 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
 
   scenario 'can decline the request' do
     assign_permission(@hr, :decline, VacationRequest)
-    @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, employee: @employee, status: 1)
+    @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee, status: 1)
 
     visit pending_admin_vacation_requests_path
 
