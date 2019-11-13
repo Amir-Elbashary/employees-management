@@ -4,7 +4,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   before_action :require_authorized_network, only: %i[checkin checkout]
   before_action :require_authorized_device, only: %i[checkin checkout]
   before_action :set_attendances, only: :index
-  before_action :set_resources, only: :reports
+  before_action :set_resources, only: %i[index reports]
   before_action :set_employee, only: %i[grant revoke]
   before_action :set_messages, only: %i[checkin checkout]
 
@@ -69,18 +69,25 @@ class Admin::AttendancesController < Admin::BaseAdminController
   end
 
   def append
-    employee = Employee.find(params[:employee])
+    # Extracting resource
+    resource_type = params[:employee].split('-').first
+    resource_id = params[:employee].split('-').last
+    resource = resource_type.constantize.find(resource_id)
+
+    # Extracting times
     checktime = params[:checktime].to_datetime
     checktime_utc = DateTime.new(checktime.year, checktime.month, checktime.day, checktime.hour, checktime.minute, checktime.second, 'EET').utc
     check_type = params[:check_type]
-    attendance = employee.attendances&.where(checkin: checktime_utc.at_beginning_of_day..checktime_utc.at_end_of_day)&.first
+
+    # Getting attendace
+    attendance = resource.attendances&.where(checkin: checktime_utc.at_beginning_of_day..checktime_utc.at_end_of_day)&.first
 
     if check_type == 'Check-in'
       if attendance
         flash[:danger] = 'Employee already checked-in'
       else
         flash[:notice] = 'Check-in appended'
-        Attendance.create(attender: employee, checkin: checktime_utc)
+        Attendance.create(attender: resource, checkin: checktime_utc)
       end
     elsif check_type == 'Check-out'
       if attendance
@@ -93,7 +100,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
           attendance.update(checkout: checktime_utc, time_spent: time_spent)
         end
       else
-        flash[:danger] = 'Employee has not checked-in during selected day' 
+        flash[:danger] = 'Employee has not checked-in during selected day'
       end
     end
 
