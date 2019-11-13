@@ -45,7 +45,17 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <%= label_tag :employee, 'Employee' %>
-                  <%= select_tag :employee, options_from_collection_for_select(@employees, "id", 'full_name'), class: 'form-control select2' %>
+                  <select name="employee" id="employee" class="form-control select2">
+                    <% @admins.each do |admin| %>
+                      <option value="Admin-<%= admin.id %>"><%= admin.name %> (Admin)</option>
+                    <% end %>
+                    <% @hrs.each do |hr| %>
+                      <option value="Hr-<%= hr.id %>"><%= hr.name %> (H.R)</option>
+                    <% end %>
+                    <% @employees.each do |employee| %>
+                      <option value="Employee-<%= employee.id %>"><%= employee.name %></option>
+                    <% end %>
+                  </select>
                 </div>
               </div>
             </div>
