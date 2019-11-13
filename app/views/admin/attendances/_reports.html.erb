@@ -10,8 +10,8 @@
           <h4>Total work hours: <%= @total_work_hours %> <span class="text-muted <%= 'd-none' if @holidays == 0 %>">+ <%= @holidays * 8 %> Hours officialy off</span> <span class="text-muted <%= 'd-none' if @vacation_days == 0 %>">+ <%= @vacation_days * 8 %> vacations</span><span class="text-muted <%= 'd-none' if @sick_leave_days == 0 %>">+ <%= @sick_leave_days * 8 %> sick leave</span></h4>
         </div>
         <div class="col-md-6">
-          <h4>Actual work days: <%= @actual_work_days %></h4>
-          <h4>Actual work hours: <%= @actual_work_hours %></h4>
+          <h4>Actual work days: <%= @actual_work_days %> <span class="text-muted">= <%= (@actual_work_days.to_f / @total_work_days.to_f * 100).round(2) %>%</span></h4>
+          <h4>Actual work hours: <%= @actual_work_hours %> <span class="text-muted">= <%= (@actual_work_hours.to_f / @total_work_hours.to_f * 100).round(2) %>%</span></h4>
         </div>
       </div>
       <hr>
