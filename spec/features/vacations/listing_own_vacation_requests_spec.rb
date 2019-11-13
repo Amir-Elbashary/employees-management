@@ -4,9 +4,10 @@ RSpec.feature 'Listing your own vacation requests as an employee' do
   before do
     initialize_app_settings
     @employee = create(:employee)
+    @other_employee = create(:employee)
     login_as(@employee, scope: :employee)
-    @vacation_request1 = create(:vacation_request, employee: @employee)
-    @vacation_request2 = create(:vacation_request, starts_on: Date.today + 8.days, ends_on: Date.today + 10.days)
+    @vacation_request1 = create(:vacation_request, requester: @employee)
+    @vacation_request2 = create(:vacation_request, requester: @other_employee, starts_on: Date.today + 8.days, ends_on: Date.today + 10.days)
     visit admin_vacation_requests_path
   end
 

@@ -12,16 +12,8 @@ RSpec.describe Comment, type: :model do
       should belong_to(:timeline)
     end
 
-    it 'belongs to admin' do
-      should belong_to(:admin).optional
-    end
-
-    it 'belongs to hr' do
-      should belong_to(:hr).optional
-    end
-
-    it 'belongs to employee' do
-      should belong_to(:employee).optional
+    it 'belongs to commenter' do
+      should belong_to(:commenter)
     end
   end
 end

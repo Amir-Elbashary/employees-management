@@ -29,18 +29,10 @@ class Admin::HolidaysController < Admin::BaseAdminController
   end
 
   def create_timeline_post(content)
-    if current_admin
-      Timeline.create(admin: current_admin,
-                      images: [],
-                      kind: 'news',
-                      creation: 'manual',
-                      content: content)
-    elsif current_hr
-      Timeline.create(hr: current_hr,
-                      images: [],
-                      kind: 'news',
-                      creation: 'manual',
-                      content: content)
-    end
+    Timeline.create(publisher: current_active_user,
+                    images: [],
+                    kind: 'news',
+                    creation: 'manual',
+                    content: content)
   end
 end

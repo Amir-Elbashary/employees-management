@@ -16,16 +16,8 @@ RSpec.describe Timeline, type: :model do
       should have_many(:comments)
     end
 
-    it 'belongs to admin' do
-      should belong_to(:admin).optional
-    end
-
-    it 'belongs to hr' do
-      should belong_to(:hr).optional
-    end
-
-    it 'belongs to employee' do
-      should belong_to(:employee).optional
+    it ' belongs to publisher' do
+      should belong_to(:publisher)
     end
   end
 end

@@ -19,7 +19,7 @@ class Admin::CommentsController < Admin::BaseAdminController
   private
 
   def comment_params
-    params.require(:comment).permit(:timeline_id, :admin_id, :hr_id, :employee_id, :content)
+    params.require(:comment).permit(:timeline_id, :commenter_id, :commenter_type, :content)
   end
 
   def set_timeline
@@ -27,9 +27,9 @@ class Admin::CommentsController < Admin::BaseAdminController
   end
 
   def create_notifications
-    return if @comment.timeline.owner == current_active_user
-    Notification.create(recipient: @comment.timeline.owner,
-                        content: "#{@comment.owner.name} commented on your post.",
+    return if @comment.timeline.publisher == current_active_user
+    Notification.create(recipient: @comment.timeline.publisher,
+                        content: "#{@comment.commenter.name} commented on your post.",
                         link: "/admin/timelines/#{@comment.timeline.id}")
 
     Comment::MailNotifierWorker.perform_async(@comment.id)

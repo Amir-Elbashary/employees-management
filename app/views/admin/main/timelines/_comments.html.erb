@@ -4,7 +4,7 @@
       <strong>
         <a href="<%= admin_timeline_path(timeline) %>" class="link m-r-10 comments-link">
           <i class="fa fa-comment-o text-<%= 'info' if timeline.comments.any? %>"></i> <%= pluralize(timeline.comments.size, 'Comment') %> 
-          <span class="<%= 'd-none' unless timeline.comments.any? %>">, last one by <%= timeline.comments&.last&.owner&.name %></span>
+          <span class="<%= 'd-none' unless timeline.comments.any? %>">, last one by <%= timeline.comments&.last&.commenter&.name %></span>
         </a> 
       </strong>
 
@@ -45,15 +45,15 @@
         <% timeline.comments.last(2).each do |comment| %>
           <!-- Comment Row -->
           <div class="d-flex flex-row comment-row">
-            <div class="p-2"><span class="round"><img src="<%= comment.owner.profile_pic.thumb.url %>" alt="user" width="50"></span></div>
+            <div class="p-2"><span class="round"><img src="<%= comment.commenter.profile_pic.thumb.url %>" alt="user" width="50"></span></div>
             <div class="comment-text active w-100">
-              <h5><%= comment.owner.name %></h5>
+              <h5><%= comment.commenter.name %></h5>
               <p class="m-b-5"><%= Twemoji.parse(comment.content.html_safe, img_attrs: { style: 'height: 1.3em' }).html_safe %></p>
               <div class="comment-footer ">
                 <span class="text-muted pull-right"><%= time_ago_in_words(comment.created_at) %> ago</span>
                 <span class="action-icons active">
                   <a href="javascript:void(0)" title="Coming soon"><i class="ti-heart text-danger"></i></a>    
-                  <% if comment.owner == current_active_user %>
+                  <% if comment.commenter == current_active_user %>
                     <a href="<%= admin_timeline_comment_path(timeline, comment) %>" class="comment-delete-link" data-method="delete" data-confirm="Are you sure?" title="Delete"><i class="fa fa-times text-danger"></i></a>    
                   <% end %>
                 </span>
@@ -70,13 +70,8 @@
   <%= form_for [:admin, :timeline, @comment], url: admin_timeline_comments_path(timeline) do |f| %>
     <%= f.hidden_field :timeline_id, value: timeline.id %>
 
-    <% if current_admin %>
-      <%= f.hidden_field :admin_id, value: current_active_user.id %>
-    <% elsif current_hr %>
-      <%= f.hidden_field :hr_id, value: current_active_user.id %>
-    <% elsif current_employee %>
-      <%= f.hidden_field :employee_id, value: current_active_user.id %>
-    <% end %>
+    <%= f.hidden_field :commenter_id, value: current_active_user.id %>
+    <%= f.hidden_field :commenter_type, value: current_active_user.class.name %>
 
     <div class="row">
       <div class="col-md-11">

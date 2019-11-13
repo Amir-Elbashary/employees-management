@@ -5,20 +5,20 @@
       </div>
       <% timelines.each do |timeline| %>
         <div class="sl-item">
-          <% if current_admin || current_hr || ((timeline.owner == current_active_user) && timeline.manual?) %>
+          <% if current_admin || current_hr || ((timeline.publisher == current_active_user) && timeline.manual?) %>
             <%= link_to admin_timeline_path(timeline), method: :delete, class: 'delete-link', data: { confirm: 'Are you sure?' } do %>
               <button class="close text-danger">×</button>
             <% end %>
           <% end %>
 
           <div class="sl-left">
-            <%= image_tag(timeline.owner.profile_pic.thumb.url, class: 'img-circle') %>
+            <%= image_tag(timeline.publisher.profile_pic.thumb.url, class: 'img-circle') %>
           </div>
 
           <% if timeline.news? %>
             <%= render 'admin/main/timelines/news', timeline: timeline %>
           <% elsif timeline.status? %>
-          <%= render 'admin/main/timelines/status', timeline: timeline %>
+            <%= render 'admin/main/timelines/status', timeline: timeline %>
           <% elsif timeline.show_off? %>
             <%= render 'admin/main/timelines/show_off', timeline: timeline %>
           <% end %>
@@ -39,13 +39,8 @@
       </div>
       <div class="modal-body">
         <%= form_for [:admin, @timeline], method: :post do |f| %>
-          <% if current_admin %>
-            <%= f.hidden_field :admin_id, value: current_admin.id %>
-          <% elsif current_hr %>
-            <%= f.hidden_field :hr_id, value: current_hr.id %>
-          <% elsif current_employee %>
-            <%= f.hidden_field :employee_id, value: current_employee.id %>
-          <% end %>
+          <%= f.hidden_field :publisher_id, value: current_active_user.id %>
+          <%= f.hidden_field :publisher_type, value: current_active_user.class.name %>
 
           <%= f.hidden_field :kind, value: 'status' %>
 

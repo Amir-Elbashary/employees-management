@@ -1,0 +1,13 @@
+<tr>
+  <td><%= image_tag(resource.profile_pic.thumb.url, class: 'table-thumb') %></td>
+  <% if resource.class.name == 'Employee' %>
+    <td><%= link_to resource.full_name, admin_employee_path(resource), title: resource.formal_name %></td>
+  <% else %>
+    <td><span title="<%= resource.formal_name %>"><%= resource.full_name %> (<%= resource.class.name %>)</span></td>
+  <% end %>
+  <td><%= resource.email %></td>
+  <td><%= resource.birthdate&.strftime('%d/%m/%Y') %></td>
+  <td>
+    <%= link_to 'View Report', reports_admin_attendances_path(type: resource.class.name, id: resource.id), class: 'btn btn-sm btn-primary' %>
+  </td>
+</tr>

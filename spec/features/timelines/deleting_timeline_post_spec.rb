@@ -9,7 +9,7 @@ RSpec.feature 'Deleting timeline post' do
 
   context 'if user own the post' do
     it 'should delete it from homepage timeline' do
-      @timeline = create(:timeline, employee: @employee, kind: 1)
+      @timeline = create(:timeline, publisher: @employee, kind: 1)
       visit admin_path
 
       expect(Timeline.count).to eq(1)
@@ -26,7 +26,7 @@ RSpec.feature 'Deleting timeline post' do
   context 'if user does not own the post' do
     it 'should not be able to see delete button' do
       @other_employee = create(:employee)
-      @timeline = create(:timeline, employee: @other_employee, kind: 1)
+      @timeline = create(:timeline, publisher: @other_employee, kind: 1)
       visit admin_path
 
       expect(Timeline.count).to eq(1)

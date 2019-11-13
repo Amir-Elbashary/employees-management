@@ -5,23 +5,15 @@ class Comment < ApplicationRecord
   validates :content, presence: true
 
   belongs_to :timeline
-  belongs_to :admin, optional: true
-  belongs_to :hr, optional: true
-  belongs_to :employee, optional: true
+  belongs_to :commenter, polymorphic: true
 
   default_scope { order(created_at: :asc) }
 
   def as_json(options)
-    super(options).merge(owner_name: owner.full_name,
-                         owner_id: owner.id,
+    super(options).merge(owner_name: commenter.name,
+                         owner_id: commenter.id,
                          image: image,
                          created_since: time_ago_in_words(created_at))
-  end
-
-  def owner
-    return admin if admin
-    return hr if hr
-    return employee if employee
   end
 
   def pic
