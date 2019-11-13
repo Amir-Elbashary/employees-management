@@ -11,6 +11,7 @@ class Admin::TimelinesController < Admin::BaseAdminController
       flash[:danger] = @timeline.errors.full_messages.join(', ')
     end
 
+    Timeline::MailNotifierWorker.perform_async(@timeline.id)
     redirect_to admin_path
   end
 
