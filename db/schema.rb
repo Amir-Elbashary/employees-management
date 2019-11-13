@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_12_110447) do
+ActiveRecord::Schema.define(version: 2019_11_13_081901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,37 +58,25 @@ ActiveRecord::Schema.define(version: 2019_11_12_110447) do
   end
 
   create_table "attendances", force: :cascade do |t|
-    t.bigint "employee_id"
     t.datetime "checkin"
     t.datetime "checkout"
     t.float "time_spent", default: 0.0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "admin_id"
-    t.bigint "hr_id"
     t.string "attender_type"
     t.bigint "attender_id"
-    t.index ["admin_id"], name: "index_attendances_on_admin_id"
     t.index ["attender_type", "attender_id"], name: "index_attendances_on_attender_type_and_attender_id"
-    t.index ["employee_id"], name: "index_attendances_on_employee_id"
-    t.index ["hr_id"], name: "index_attendances_on_hr_id"
   end
 
   create_table "comments", force: :cascade do |t|
     t.bigint "timeline_id"
-    t.bigint "admin_id"
-    t.bigint "hr_id"
-    t.bigint "employee_id"
     t.text "content"
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "commenter_type"
     t.bigint "commenter_id"
-    t.index ["admin_id"], name: "index_comments_on_admin_id"
     t.index ["commenter_type", "commenter_id"], name: "index_comments_on_commenter_type_and_commenter_id"
-    t.index ["employee_id"], name: "index_comments_on_employee_id"
-    t.index ["hr_id"], name: "index_comments_on_hr_id"
     t.index ["timeline_id"], name: "index_comments_on_timeline_id"
   end
 
@@ -325,9 +313,6 @@ ActiveRecord::Schema.define(version: 2019_11_12_110447) do
   end
 
   create_table "timelines", force: :cascade do |t|
-    t.bigint "admin_id"
-    t.bigint "hr_id"
-    t.bigint "employee_id"
     t.text "content"
     t.string "images", default: [], array: true
     t.integer "kind", default: 0
@@ -336,9 +321,6 @@ ActiveRecord::Schema.define(version: 2019_11_12_110447) do
     t.integer "creation", default: 0
     t.string "publisher_type"
     t.bigint "publisher_id"
-    t.index ["admin_id"], name: "index_timelines_on_admin_id"
-    t.index ["employee_id"], name: "index_timelines_on_employee_id"
-    t.index ["hr_id"], name: "index_timelines_on_hr_id"
     t.index ["publisher_type", "publisher_id"], name: "index_timelines_on_publisher_type_and_publisher_id"
   end
 
@@ -351,7 +333,6 @@ ActiveRecord::Schema.define(version: 2019_11_12_110447) do
   end
 
   create_table "vacation_requests", force: :cascade do |t|
-    t.bigint "employee_id"
     t.date "starts_on"
     t.date "ends_on"
     t.text "reason"
@@ -367,17 +348,10 @@ ActiveRecord::Schema.define(version: 2019_11_12_110447) do
     t.integer "duration", default: 0
     t.string "requester_type"
     t.bigint "requester_id"
-    t.index ["employee_id"], name: "index_vacation_requests_on_employee_id"
     t.index ["kind"], name: "index_vacation_requests_on_kind"
     t.index ["requester_type", "requester_id"], name: "index_vacation_requests_on_requester_type_and_requester_id"
   end
 
-  add_foreign_key "attendances", "admins"
-  add_foreign_key "attendances", "employees"
-  add_foreign_key "attendances", "hrs"
-  add_foreign_key "comments", "admins"
-  add_foreign_key "comments", "employees"
-  add_foreign_key "comments", "hrs"
   add_foreign_key "comments", "timelines"
   add_foreign_key "documents", "employees"
   add_foreign_key "employees", "sections"
@@ -388,8 +362,4 @@ ActiveRecord::Schema.define(version: 2019_11_12_110447) do
   add_foreign_key "role_permissions", "roles"
   add_foreign_key "room_messages", "employees"
   add_foreign_key "room_messages", "rooms"
-  add_foreign_key "timelines", "admins"
-  add_foreign_key "timelines", "employees"
-  add_foreign_key "timelines", "hrs"
-  add_foreign_key "vacation_requests", "employees"
 end
