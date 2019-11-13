@@ -17,7 +17,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         login_as(@admin, scope: :admin)
         visit admin_attendances_path
         
-        select(@employee.full_name, from: 'Employee').select_option
+        select(@employee.name, from: 'Employee').select_option
         select('Check-in', from: 'Action').select_option
         fill_in 'Date and Time', with: Time.zone.now
 
@@ -45,7 +45,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         create(:attendance, attender: @employee, checkin: Time.zone.now, checkout: nil, time_spent: nil)
         visit admin_attendances_path
         
-        select(@employee.full_name, from: 'Employee').select_option
+        select(@employee.name, from: 'Employee').select_option
         select('Check-in', from: 'Action').select_option
         fill_in 'Date and Time', with: Time.zone.now + 2.hours
 
@@ -76,7 +76,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         login_as(@admin, scope: :admin)
         visit admin_attendances_path
         
-        select(@employee.full_name, from: 'Employee').select_option
+        select(@employee.name, from: 'Employee').select_option
         select('Check-out', from: 'Action').select_option
         fill_in 'Date and Time', with: checkin_time + 4.hours
 
@@ -106,7 +106,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         create(:attendance, attender: @employee, checkin: checkin_time, checkout: checkin_time + 4.hours, time_spent: 4)
         visit admin_attendances_path
         
-        select(@employee.full_name, from: 'Employee').select_option
+        select(@employee.name, from: 'Employee').select_option
         select('Check-out', from: 'Action').select_option
         fill_in 'Date and Time', with: checkin_time + 5.hours
 
@@ -131,7 +131,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         login_as(@admin, scope: :admin)
         visit admin_attendances_path
         
-        select(@employee.full_name, from: 'Employee').select_option
+        select(@employee.name, from: 'Employee').select_option
         select('Check-out', from: 'Action').select_option
         fill_in 'Date and Time', with: checkin_time + 4.hours
 
@@ -158,7 +158,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         login_as(@hr, scope: :hr)
         visit admin_attendances_path
         
-        select(@employee.full_name, from: 'Employee').select_option
+        select(@employee.name, from: 'Employee').select_option
         select('Check-in', from: 'Action').select_option
         fill_in 'Date and Time', with: Time.zone.now
 
@@ -186,7 +186,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         create(:attendance, attender: @employee, checkin: Time.zone.now, checkout: nil, time_spent: nil)
         visit admin_attendances_path
         
-        select(@employee.full_name, from: 'Employee').select_option
+        select(@employee.name, from: 'Employee').select_option
         select('Check-in', from: 'Action').select_option
         fill_in 'Date and Time', with: Time.zone.now + 2.hours
 
@@ -214,7 +214,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         login_as(@hr, scope: :hr)
         visit admin_attendances_path
         
-        select(@employee.full_name, from: 'Employee').select_option
+        select(@employee.name, from: 'Employee').select_option
         select('Check-out', from: 'Action').select_option
         fill_in 'Date and Time', with: checkin_time + 4.hours
 
@@ -244,7 +244,7 @@ RSpec.feature 'appending checkins by admin or H.R' do
         create(:attendance, attender: @employee, checkin: checkin_time, checkout: checkin_time + 4.hours, time_spent: 4)
         visit admin_attendances_path
         
-        select(@employee.full_name, from: 'Employee').select_option
+        select(@employee.name, from: 'Employee').select_option
         select('Check-out', from: 'Action').select_option
         fill_in 'Date and Time', with: checkin_time + 5.hours
 
