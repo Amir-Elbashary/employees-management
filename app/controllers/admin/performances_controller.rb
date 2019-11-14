@@ -1,17 +1,14 @@
 class Admin::PerformancesController < Admin::BaseAdminController
   load_and_authorize_resource
   skip_load_resource
+  before_action :set_performance, except: :index
   before_action :set_employee
   before_action :set_performances
+  before_action :set_performance_topics, except: %i[index destroy]
 
-  def new
-    @performance = Performance.new
-    @performance_topics = PerformanceTopic.all
-  end
+  def new; end
 
   def create
-    @performance_topics = PerformanceTopic.all
-    @performance = Performance.new(performance_params)
     if @performance.save
       flash[:notice] = 'Performance has been added.'
       redirect_to admin_employee_performances_path(@performance.employee)
@@ -20,14 +17,9 @@ class Admin::PerformancesController < Admin::BaseAdminController
     end
   end
 
-  def edit
-    @performance = Performance.find(params[:id])
-    @performance_topics = PerformanceTopic.all
-  end
+  def edit; end
 
   def update
-    @performance_topics = PerformanceTopic.all
-    @performance = Performance.find(params[:id])
     if @performance.update(performance_params)
       flash[:notice] = 'Changes has been saved'
       redirect_to admin_employee_performances_path(@performance.employee)
@@ -39,7 +31,6 @@ class Admin::PerformancesController < Admin::BaseAdminController
   def index; end
 
   def destroy
-    @performance = Performance.find(params[:id])
     return unless @performance.destroy
     flash[:notice] = 'Performance was deleted.'
     redirect_to admin_employee_performances_path(@performance.employee)
@@ -56,7 +47,21 @@ class Admin::PerformancesController < Admin::BaseAdminController
     @employee = Employee.find(params[:employee_id])
   end
 
+  def set_performance
+    @performance = if action_name == 'new'
+                     Performance.new
+                   elsif action_name == 'create'
+                     Performance.new(performance_params)
+                   else
+                     Performance.find(params[:id])
+                   end
+  end
+
   def set_performances
     @performances = @employee.performances
+  end
+
+  def set_performance_topics
+    @performance_topics = PerformanceTopic.all
   end
 end
