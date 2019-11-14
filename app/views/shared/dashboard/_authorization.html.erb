@@ -7,7 +7,7 @@
   </div>
 <% end %>
 
-<% unless current_admin || current_hr || @settings.ip_addresses.include?(request.remote_ip) || (@settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)) || @approved_requests.any? %>
+<% unless current_admin || current_hr || @settings.ip_addresses.include?(request.remote_ip) || (@settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)) || @approved_wfh_requests.any? %>
   <div class="alert alert-warning">
     <h3 class="text-warning"><i class="fa fa-exclamation-triangle"></i> Unauthorized network detected!</h3>
     <!--

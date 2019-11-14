@@ -46,7 +46,7 @@ class Admin::BaseAdminController < ApplicationController
     @main_room = Room.find_by(name: 'Fustany Team')
     @current_attendance = current_active_user&.attendances&.where(created_at: Time.zone.now.at_beginning_of_day..Time.zone.now.at_end_of_day)&.first
     # TODO known issue where it calculates extra day
-    @approved_requests = current_employee&.vacation_requests&.work_from_home&.approved&.where("? BETWEEN starts_on AND ends_on", Date.today)
+    @approved_wfh_requests = current_employee&.vacation_requests&.work_from_home&.approved&.where("? BETWEEN starts_on AND ends_on", Date.today)
 
     @pending_requests = if current_admin
                           VacationRequest.where(status: ['pending', 'confirmed', 'escalated'])
