@@ -48,6 +48,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
         checkin = @current_attendance.checkin
         checkout = @current_attendance.checkout
         time_spent = ((checkout - checkin) / 60 / 60).round(2)
+        time_spent = 8.0 if @approved_wfh_requests&.any? && time_spent > 8.0
         @current_attendance.update(time_spent: time_spent)
         flash[:notice] = "Thanks #{current_active_user.first_name}, See you next day."
       else
@@ -165,7 +166,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   private
 
   def require_authorized_network
-    return if @approved_requests&.any?
+    return if @approved_wfh_requests&.any?
     return unless current_employee
     return if @settings.ip_addresses.include?(request.remote_ip)
     return if @settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)

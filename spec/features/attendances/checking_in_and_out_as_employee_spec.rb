@@ -171,6 +171,28 @@ RSpec.feature 'Checking in/out by employees' do
       expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
     end
 
+    it 'should checkout with over-time if checkout is made from office' do
+      @employee.update(access_token: 'secret-token')
+      @settings = create(:setting, ip_addresses: ['127.0.0.1'])
+      page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
+      visit admin_attendances_path
+
+      click_link 'Check-in!'
+
+      expect(page).to have_content("Wishing you good and productive day.")
+      expect(Employee.first.attendances.first.checkin).not_to eq(nil)
+
+      Timecop.travel(10.hours) do
+        click_link 'Check-out!'
+
+        expect(page).to have_content("See you next day.")
+        expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+        expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
+        expect(Employee.first.attendances.first.time_spent).to be > 8.0
+        expect(Employee.first.attendances.first.time_spent).to eq(10.0)
+      end
+    end
+
     it 'should bypass network authenticating and check the employee out for today if work from home request is approved' do
       @employee.update(access_token: 'secret-token')
       @settings = create(:setting)
@@ -183,11 +205,61 @@ RSpec.feature 'Checking in/out by employees' do
       expect(page).to have_content("Wishing you good and productive day.")
       expect(Employee.first.attendances.first.checkin).not_to eq(nil)
 
-      click_link 'Check-out!'
+      Timecop.travel(6.hours) do
+        click_link 'Check-out!'
 
-      expect(page).to have_content("See you next day.")
-      expect(Employee.first.attendances.first.checkout).not_to eq(nil)
-      expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
+        expect(page).to have_content("See you next day.")
+        expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+        expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
+        expect(Employee.first.attendances.first.time_spent).to be <= 8.0
+        expect(Employee.first.attendances.first.time_spent).to eq(6.0)
+      end
+    end
+
+    it 'should allow working for 8 hours or less while working from home' do
+      @employee.update(access_token: 'secret-token')
+      @settings = create(:setting)
+      @vacation_request = create(:vacation_request, requester: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
+      page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
+      visit admin_attendances_path
+
+      click_link 'Check-in!'
+
+      expect(page).to have_content("Wishing you good and productive day.")
+      expect(Employee.first.attendances.first.checkin).not_to eq(nil)
+
+      Timecop.travel(8.hours) do
+        click_link 'Check-out!'
+
+        expect(page).to have_content("See you next day.")
+        expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+        expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
+        expect(Employee.first.attendances.first.time_spent).to be <= 8.0
+        expect(Employee.first.attendances.first.time_spent).to eq(8.0)
+      end
+    end
+
+    it 'should restrict work from home hours to maximum 8 hours' do
+      @employee.update(access_token: 'secret-token')
+      @settings = create(:setting)
+      @vacation_request = create(:vacation_request, requester: @employee, kind: 1, starts_on: Date.today, ends_on: Date.today + 1.days, status: 4)
+      page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
+      visit admin_attendances_path
+
+      click_link 'Check-in!'
+
+      expect(page).to have_content("Wishing you good and productive day.")
+      expect(Employee.first.attendances.first.checkin).not_to eq(nil)
+
+      Timecop.travel(10.hours) do
+        click_link 'Check-out!'
+
+        expect(page).to have_content("See you next day.")
+        expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+        expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
+        expect(Employee.first.attendances.first.time_spent).to be <= 8.0
+        expect(Employee.first.attendances.first.time_spent).to eq(8.0)
+      end
     end
   end
 
