@@ -24,9 +24,9 @@ RSpec.describe Employee, type: :model do
   end
 
   describe 'Has Associations' do
-    it 'should have many performances' do
-      should have_many(:performances)
-    end
+    # it 'should have many performances' do
+    #   should have_many(:performances)
+    # end
 
     it 'should have many notifications' do
       should have_many(:notifications)
