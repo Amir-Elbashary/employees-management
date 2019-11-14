@@ -1,7 +1,8 @@
 class Ability
   include CanCan::Ability
   AUTHORIZABLE_MODELS = [Employee, VacationRequest, Attendance, Recruitment,
-                         Timeline, Comment, Holiday, Notification, Message]
+                         Timeline, Comment, Holiday, Notification, Message,
+                         PerformanceTopic]
   END_USERS_MODELS = [Employee]
   END_USERS_AUTHORIZED_MODELS = [VacationRequest, Message, Timeline, Comment,
                                  React, RoomMessage]

@@ -63,6 +63,8 @@ Rails.application.routes.draw do
     resources :rooms
     resources :room_messages
     resources :recruitments
+    resources :performance_topics
+
     resources :timelines do
       resources :reacts, only: %i[index] do
         collection do

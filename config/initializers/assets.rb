@@ -13,6 +13,6 @@ Rails.application.config.assets.version = '1.0'
 # folder are already added.
 Rails.application.config.assets.precompile += %w( admin_login.css.scss admin_login.js dashboard.css.scss dashboard.js )
 
-%w( admin/admins admin/settings admin/sections admin/hrs admin/holidays admin/recruitments admin/employees admin/roles admin/rooms admin/attendances admin/vacation_requests admin/notifications admin/updates admin/messages admin/timelines ).each do |controller|
+%w( admin/admins admin/settings admin/sections admin/hrs admin/holidays admin/recruitments admin/employees admin/roles admin/rooms admin/attendances admin/vacation_requests admin/notifications admin/updates admin/messages admin/timelines admin/performance_topics ).each do |controller|
   Rails.application.config.assets.precompile += ["#{controller}.css.scss", "#{controller}.js"]
 end
