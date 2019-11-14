@@ -67,16 +67,16 @@
       </li>
     <% end %>
 
-    <%# if can? :read, Performance %>
-      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Employees </span></a>
+    <% if can? :read, Performance %>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Performance </span></a>
         <ul aria-expanded="false" class="collapse">
           <% if can? :read, PerformanceTopic %>
             <li><%= link_to 'Performance Topics', admin_performance_topics_path %></li>
           <% end %>
-          <li><%= link_to 'New Employee', new_admin_employee_path %></li>
+          <li><%= link_to 'Assign Performance Appraisal', admin_employees_path %></li>
         </ul>
       </li>
-    <%# end %>
+    <% end %>
 
     <% if can? :read, Recruitment %>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-address-card"></i><span class="hide-menu">Recruitment </span></a>

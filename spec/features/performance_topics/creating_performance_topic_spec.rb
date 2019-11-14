@@ -31,7 +31,6 @@ RSpec.feature 'Creating performance topic' do
     end
 
     it 'should not add topic with duplicated data' do
-      @update = create(:update, version: 2.4)
       @performance_topic = create(:performance_topic)
 
       fill_in 'Title', with: @performance_topic.title

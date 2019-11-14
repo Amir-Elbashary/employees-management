@@ -107,6 +107,8 @@ Rails.application.routes.draw do
     end
 
     resources :employees do
+      resources :performances
+
       member do
         get :profile
         patch :update_profile

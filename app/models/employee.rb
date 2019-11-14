@@ -17,6 +17,7 @@ class Employee < ApplicationRecord
   validates :first_name, :last_name, presence: true
   validates :display_name, uniqueness: { case_sensitive: false }, on: :update_profile
 
+  has_many :performances, dependent: :destroy
   has_many :notifications, as: :recipient
   has_many :timelines, class_name: 'Timeline', foreign_key: 'publisher_id', as: :publisher, dependent: :destroy
   has_many :comments, class_name: 'Comment', foreign_key: 'commenter_id', as: :commenter, dependent: :destroy
