@@ -1,5 +1,6 @@
 class Admin::PerformanceTopicsController < Admin::BaseAdminController
   load_and_authorize_resource
+  before_action :set_performances, only: :leaderboard
 
   def new; end
 
@@ -25,6 +26,8 @@ class Admin::PerformanceTopicsController < Admin::BaseAdminController
 
   def index; end
 
+  def leaderboard; end
+
   def destroy
     return unless @performance_topic.destroy
     flash[:notice] = 'Performance Topic was deleted.'
@@ -35,5 +38,11 @@ class Admin::PerformanceTopicsController < Admin::BaseAdminController
 
   def performance_topic_params
     params.require(:performance_topic).permit(:title)
+  end
+
+  def set_performances
+    if params[:year] && params[:month]
+      @performances = Performance.where(topic: @performance_topic.title, year: params[:year], month: params[:month]).order(score: :desc)
+    end
   end
 end

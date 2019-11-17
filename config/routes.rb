@@ -63,7 +63,11 @@ Rails.application.routes.draw do
     resources :rooms
     resources :room_messages
     resources :recruitments
-    resources :performance_topics
+    resources :performance_topics do
+      member do
+        get :leaderboard
+      end
+    end
 
     resources :timelines do
       resources :reacts, only: %i[index] do
@@ -107,7 +111,16 @@ Rails.application.routes.draw do
     end
 
     resources :employees do
-      resources :performances
+      collection do
+        get :compare
+      end
+
+      resources :performances do
+        collection do
+          get :employee_performance
+          get :compare
+        end
+      end
 
       member do
         get :profile

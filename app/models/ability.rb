@@ -21,6 +21,9 @@ class Ability
         end
       end
 
+      can :leaderboard, PerformanceTopic
+      can :manage, Performance
+      can :compare, Employee
       can :manage, React
       can :checkin_reminder, Attendance
       can :checkout_reminder, Attendance
@@ -30,6 +33,7 @@ class Ability
     when Employee
       # Employees have access to specific models only
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
+      can :employee_performance, Performance
       can :read, Notification
       can :toggle_read_status, Notification
       can :toggle_all_read_status, Notification

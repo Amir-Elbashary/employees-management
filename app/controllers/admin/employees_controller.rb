@@ -1,5 +1,6 @@
 class Admin::EmployeesController < Admin::BaseAdminController
   load_and_authorize_resource
+  before_action :set_employees, only: :compare
   before_action :set_sections, except: %i[index destroy]
   before_action :build_documents, only: %i[new edit]
 
@@ -17,6 +18,8 @@ class Admin::EmployeesController < Admin::BaseAdminController
   end
 
   def index; end
+
+  def compare; end
 
   def edit; end
 
@@ -96,6 +99,10 @@ class Admin::EmployeesController < Admin::BaseAdminController
 
   def set_sections
     @sections = Section.roots.sort
+  end
+
+  def set_employees
+    @employees = Employee.all
   end
 
   def build_documents

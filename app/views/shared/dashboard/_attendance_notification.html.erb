@@ -33,6 +33,12 @@
                 </div>
             </div>
             <!-- Column -->
+
+            <!-- Column -->
+            <div class="p-r-40 m-t-30 m-b-30">
+              <h5 class="m-t-30">Time spent this month: <b><%= @hours_spent_this_month %> Hours</b></h5>
+            </div>
+            <!-- Column -->
           </div>
         </div>
         <%= link_to checkout_admin_attendances_path, method: :post, data: { confirm: 'Finished everything ? ready to go home ?' } do %>

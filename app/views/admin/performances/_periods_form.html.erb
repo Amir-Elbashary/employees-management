@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header bg-info">
+        <h4 class="m-b-0 text-white">Please select 2 periods</h4>
+      </div>
+      <div class="card-body">
+        <%= form_tag compare_admin_employee_performances_path(params[:employee_id]), method: :get do %>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= label_tag :from, 'From' %>
+                <div class="row">
+                  <div class="col-md-6">
+                    <%= number_field_tag :year_from, '', placeholder: 'Year (ex: 2018)', required: true, class: 'form-control' %>
+                  </div>
+                  <div class="col-md-6">
+                    <%= number_field_tag :month_from, '', placeholder: 'Month (ex: 9)', required: true, class: 'form-control' %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= label_tag :to, 'To' %>
+                <div class="row">
+                  <div class="col-md-6">
+                    <%= number_field_tag :year_to, '', placeholder: 'Year (ex: 2019)', required: true, class: 'form-control' %>
+                  </div>
+                  <div class="col-md-6">
+                    <%= number_field_tag :month_to, '', placeholder: 'Month (ex: 10)', required: true, class: 'form-control' %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <%= submit_tag 'Compare', class: 'btn btn-md btn-info' %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

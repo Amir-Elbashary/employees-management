@@ -67,13 +67,19 @@
       </li>
     <% end %>
 
-    <% if can? :read, Performance %>
-      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i><span class="hide-menu">Performance </span></a>
+    <% if (can? :read, Performance) || (can? :employee_performance, Performance) %>
+      <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-bookmark"></i><span class="hide-menu">Performance </span></a>
         <ul aria-expanded="false" class="collapse">
+          <% if current_employee %>
+            <li><%= link_to 'My Performance', employee_performance_admin_employee_performances_path(current_employee) %></li>
+          <% end %>
           <% if can? :read, PerformanceTopic %>
             <li><%= link_to 'Performance Topics', admin_performance_topics_path %></li>
           <% end %>
-          <li><%= link_to 'Assign Performance Appraisal', admin_employees_path %></li>
+          <% unless current_employee %>
+            <li><%= link_to 'Assign Performance', admin_employees_path %></li>
+            <li><%= link_to 'Comparison', compare_admin_employees_path %></li>
+          <% end %>
         </ul>
       </li>
     <% end %>

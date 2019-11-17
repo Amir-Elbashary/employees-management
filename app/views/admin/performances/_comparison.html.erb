@@ -1,0 +1,55 @@
+<% if params[:topic] %>
+  <div class="row">
+    <!-- column -->
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Comparison</h4>
+          <% @performances.each do |performance| %>
+            <div class="row">
+              <div class="col-md-6">
+                <%= performance.month %>-<%= performance.year %> => <%= performance.score %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="row">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header bg-info">
+          <h4 class="m-b-0 text-white">Please select 2 periods</h4>
+        </div>
+        <div class="card-body">
+          <%= form_tag compare_admin_employee_performances_path(params[:employee_id]), method: :get do %>
+            <%= hidden_field_tag :year_from, '', value: params[:year_from] %>
+            <%= hidden_field_tag :year_to, '', value: params[:year_to] %>
+            <%= hidden_field_tag :month_from, '', value: params[:month_from] %>
+            <%= hidden_field_tag :month_to, '', value: params[:month_to] %>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= label_tag :topic, 'Topic' %>
+                  <select name="topic" class="form-control select2">
+                    <% @performance_topics.each do |topic| %>
+                      <option value="<%= topic.title %>"><%= topic.title %></option>
+                    <% end %>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <%= submit_tag 'Compare', class: 'btn btn-md btn-info' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

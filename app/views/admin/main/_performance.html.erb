@@ -1,0 +1,51 @@
+<div class="tab-pane" id="performance" role="tabpanel">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        <b>Performance Appraisals are displayed monthly, and it will be quarterly starting from next year 2020</b>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-md-12">
+        Performance Appraisal for <b><%= Time.zone.now.strftime('%B') %> <%= Time.zone.now.year %></b>&nbsp;&nbsp; <%= link_to 'Previous Appraisals', employee_performance_admin_employee_performances_path(current_employee), class: 'btn btn-sm btn-info' %>
+      </div>
+    </div>
+
+    <br/>
+
+    <% if @performances.any? %>
+      <div class="row">
+        <div class="col-md-12 large-text">
+          Total score given ( <b><%= @total_score %> / <%= @performances_score %> ) which is <%= (@total_score / @performances_score * 100).round(2) %>%</b>
+        </div>
+      </div>
+
+      <hr>
+
+      <% @performances.each do |performance| %>
+        <div class="row">
+          <div class="col-md-3 col-xs-6"> <strong>Topic:</strong>
+            <p><%= performance.topic %></p>
+          </div>
+          <div class="col-md-3 col-xs-6"> <strong>Score:</strong>
+            <p><%= performance.score %> / 5 (<%= (performance.score / 5 * 100).round(2) %>%)</p>
+          </div>
+          <div class="col-md-6 col-xs-6"> <strong>Comment:</strong>
+            <p><%= performance.comment %></p>
+          </div>
+        </div>
+        <hr>
+      <% end %>
+    <% else %>
+      <div class="row">
+        <div class="col-md-12">
+          <hr>
+          No performance appraisals found for this month, Wishing you the best on the upcoming ones.
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

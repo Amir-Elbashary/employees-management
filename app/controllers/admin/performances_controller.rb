@@ -1,8 +1,9 @@
 class Admin::PerformancesController < Admin::BaseAdminController
   load_and_authorize_resource
   skip_load_resource
-  before_action :set_performance, except: :index
+  before_action :set_performance, except: %i[index compare employee_performance]
   before_action :set_employee
+  before_action :ensure_same_employee, only: :employee_performance
   before_action :set_performances
   before_action :set_performance_topics, except: %i[index destroy]
 
@@ -29,6 +30,10 @@ class Admin::PerformancesController < Admin::BaseAdminController
   end
 
   def index; end
+
+  def employee_performance; end
+
+  def compare; end
 
   def destroy
     return unless @performance.destroy
@@ -58,10 +63,22 @@ class Admin::PerformancesController < Admin::BaseAdminController
   end
 
   def set_performances
-    @performances = @employee.performances
+    @performances = if params[:topic]
+                      @employee.performances.where(topic: params[:topic],
+                                                   year: [params[:year_from], params[:year_to]],
+                                                   month: [params[:month_from], params[:month_to]]).order("year ASC, month ASC")
+                    else
+                      @employee.performances
+                    end
+    @total_performances = PerformanceTopic.count * 5
   end
 
   def set_performance_topics
     @performance_topics = PerformanceTopic.all
+  end
+
+  def ensure_same_employee
+    return unless current_employee
+    redirect_to admin_path if @employee != current_employee
   end
 end

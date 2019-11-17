@@ -3,6 +3,7 @@ class Admin::AdminsController < Admin::BaseAdminController
   skip_authorization_check only: %i[dashboard edit update toggle_state]
   before_action :set_timelines, only: :dashboard
   before_action :set_comments, only: :dashboard
+  before_action :set_performances, only: :dashboard
   # before_action :set_update, only: :dashboard
 
   def dashboard
@@ -74,6 +75,14 @@ class Admin::AdminsController < Admin::BaseAdminController
 
   def set_comments
     @comment = Comment.new
+  end
+
+  def set_performances
+    @performances = current_employee&.performances&.where(year: Time.zone.now.year, month: Time.zone.now.month)
+    if current_employee
+      @performances_score = (PerformanceTopic.count * 5)
+      @total_score = @performances.pluck(:score).inject(:+)
+    end
   end
 
   # def set_update

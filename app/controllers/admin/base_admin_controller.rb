@@ -58,13 +58,13 @@ class Admin::BaseAdminController < ApplicationController
                           current_employee.vacation_requests.pending
                         end
 
-    @time_spent_percentage = if @current_attendance
-                               start_time = @current_attendance.checkin
-                               current_time = Time.zone.now
-                               ((((current_time - start_time) / 60 / 60).round(2)) / 8 * 100).round(2)
-                             else
-                               0
-                             end
+    current_time = Time.zone.now
+    start_time = @current_attendance ? @current_attendance.checkin : 0
+
+    @time_spent_today = @current_attendance ? ((current_time - start_time) / 60 / 60).round(2) : 0 
+    @time_spent_percentage = @current_attendance ? ((((current_time - start_time) / 60 / 60).round(2)) / 8 * 100).round(2) : 0
+
+    @hours_spent_this_month = current_active_user&.attendances&.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month).pluck(:time_spent)&.inject(:+) || 0
 
     @progress_color = if @time_spent_percentage < 50
                         'danger'

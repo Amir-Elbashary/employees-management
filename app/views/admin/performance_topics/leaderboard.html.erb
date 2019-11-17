@@ -1,0 +1,55 @@
+<% content_for :bc_title do %>
+  Leaderboard
+<% end %>
+
+<% content_for :bc_current do %>
+  Leaderboard
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_path %>"><button type="button" class="btn btn-info"> Back to Timeline</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<% if @performances&.any? %>
+  <% @performances.each do |performance| %>
+    <%= performance.employee.full_name %> => <%= performance.score %>
+    <br/>
+  <% end %>
+<% else %>
+  <div class="row">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header bg-info">
+          <h4 class="m-b-0 text-white">Please select a month</h4>
+        </div>
+        <div class="card-body">
+          <%= form_tag leaderboard_admin_performance_topic_path(params[:id]), method: :get do %>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= label_tag :select_month, 'Select Month' %>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <%= number_field_tag :year, '', placeholder: 'Year (ex: 2018)', required: true, class: 'form-control' %>
+                    </div>
+                    <div class="col-md-6">
+                      <%= number_field_tag :month, '', placeholder: 'Month (ex: 9)', required: true, class: 'form-control' %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <%= submit_tag 'Compare', class: 'btn btn-md btn-info' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
