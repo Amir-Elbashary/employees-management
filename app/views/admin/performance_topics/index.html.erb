@@ -28,7 +28,7 @@
           <% @performance_topics.each do |topic| %>
             <tr>
               <td><%= topic.title %></td>
-              <td><%= link_to 'Leaderboard', leaderboard_admin_performance_topic_path(topic), class: 'btn btn-sm btn-info' %></td>
+              <td><%= link_to 'Leaderboard', leaderboard_admin_performance_topic_path(topic), class: 'btn btn-sm btn-info leaderboard-link' %></td>
               <td>
                 <a href="<%= edit_admin_performance_topic_path(topic) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
                 <a href="<%= admin_performance_topic_path(topic) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>

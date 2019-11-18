@@ -20,14 +20,19 @@
           <h4 class="m-b-0 text-white"><%= @performance_topic.title %> Leaderboard</h4>
         </div>
         <div class="card-body">
-          <h1 class="first-leaderboard">1. <%= @performances.first.employee.full_name %> Scored: <%= @performances.first.score %></h1>
-          <h1 class="second-leaderboard">2. <%= @performances.offset(1).first.employee.full_name %> Scored: <%= @performances.offset(1).first.score %></h1>
-          <h1 class="third-leaderboard">3. <%= @performances.offset(2).first.employee.full_name %> Scored: <%= @performances.offset(2).first.score %></h1>
-          <h1 class="rest-leaderboard">4. Folan Scored</h1>
-          <% sn = 4 %>
-          <% @performances.offset(3).each do |performance| %>
-            <h4><%= sn %> <%= performance.employee.full_name %> Scored: <%= performance.score %></h4>
-            <% sn += 1 %>
+          <h1 class="first-leaderboard">1. <%= @performances.first.employee.full_name %> scored: <%= @performances.first.score %></h1>
+          <% if @performances.size > 1 %>
+            <h1 class="second-leaderboard">2. <%= @performances.offset(1).first.employee.full_name %> scored: <%= @performances.offset(1).first.score %></h1>
+          <% end %>
+          <% if @performances.size > 2 %>
+            <h1 class="third-leaderboard">3. <%= @performances.offset(2).first.employee.full_name %> scored: <%= @performances.offset(2).first.score %></h1>
+          <% end %>
+          <% if @performances.size > 3 %>
+            <% sn = 4 %>
+            <% @performances.offset(3).each do |performance| %>
+              <h4><%= sn %> <%= performance.employee.full_name %> scored: <%= performance.score %></h4>
+              <% sn += 1 %>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -60,7 +65,7 @@
 
             <div class="row">
               <div class="col-md-6">
-                <%= submit_tag 'Compare', class: 'btn btn-md btn-info' %>
+                <%= submit_tag 'Compare', class: 'btn btn-md btn-info period-submit' %>
               </div>
             </div>
           </div>

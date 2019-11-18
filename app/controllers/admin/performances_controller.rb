@@ -66,7 +66,7 @@ class Admin::PerformancesController < Admin::BaseAdminController
     if params[:year_from]
       previous_date = Date.new(params[:year_from].to_i, params[:month_from].to_i)
       last_date = Date.new(params[:year_to].to_i, params[:month_to].to_i)
-      flash[:notice] = 'Please compare from past to future' if last_date < previous_date
+      flash[:notice] = 'Please compare past with future' if last_date < previous_date
       return redirect_to compare_admin_employee_performances_path(params[:employee_id]) if last_date < previous_date
     end
 
