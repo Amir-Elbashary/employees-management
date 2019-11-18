@@ -39,8 +39,11 @@
               <td><%= employee.email %></td>
               <td><%= employee.birthdate&.strftime('%d/%m/%Y') %></td>
               <% if can? :read, Performance %>
-                <td><%= link_to 'Performance', admin_employee_performances_path(employee), class: 'btn btn-sm btn-info performances-link' %>
-                <%= link_to 'Yearly Performance', employee_performance_admin_employee_performances_path(employee), class: 'btn btn-sm btn-info performances-link' %></td>
+                <td>
+                  <%= link_to 'Performance', admin_employee_performances_path(employee), class: 'btn btn-sm btn-info performances-link' %>
+                  <%= link_to 'Yearly Performance', employee_performance_admin_employee_performances_path(employee), class: 'btn btn-sm btn-info performances-link' %>
+                  <%= link_to 'Compare', compare_admin_employee_performances_path(employee), class: 'btn btn-sm btn-info' %>
+                </td>
               <% end %>
 							<td align="center">
                 <%= link_to 'Demote to employee', toggle_level_admin_employee_path(employee),

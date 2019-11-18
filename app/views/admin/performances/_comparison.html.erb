@@ -4,13 +4,28 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Comparison</h4>
-          <% @performances.each do |performance| %>
+          <h4 class="card-title">Result <span style="color: <%= @previous_performance.score < @last_performance.score ? 'green' : 'red' %>">(<%= @previous_performance.score < @last_performance.score ? 'Step Up!' : 'Step Back!' %>)</span></h4>
+          <% if @previous_performance && @last_performance %>
             <div class="row">
               <div class="col-md-6">
-                <%= performance.month %>-<%= performance.year %> => <%= performance.score %>
+                <h4>Score in <%= @previous_performance.month %>-<%= @previous_performance.year %> was: <%= @previous_performance.score %></h4>
+                <h4>Score in <%= @last_performance.month %>-<%= @last_performance.year %> became: <%= @last_performance.score %></h4>
               </div>
             </div>
+          <% elsif @previous_performance && !@last_performance %>
+              <h4>Only previous month has assigned performance</h4>
+              <br/><br/>
+              <h4>
+                Score in <%= @previous_performance.month %>-<%= @previous_performance.year %> was: <%= @previous_performance.score %>
+              </h4>
+          <% elsif !@previous_performance && @last_performance %>
+              <h4>Only last month has assigned performance</h4>
+              <br/><br/>
+              <h4>
+                Score in <%= @last_performance.month %>-<%= @last_performance.year %> was: <%= @last_performance.score %>
+              </h4>
+          <% else %>
+            <p><h2>No data found for the selected period</h2></p>
           <% end %>
         </div>
       </div>

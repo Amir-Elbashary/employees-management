@@ -63,13 +63,25 @@ class Admin::PerformancesController < Admin::BaseAdminController
   end
 
   def set_performances
-    @performances = if params[:topic]
-                      @employee.performances.where(topic: params[:topic],
-                                                   year: [params[:year_from], params[:year_to]],
-                                                   month: [params[:month_from], params[:month_to]]).order("year ASC, month ASC")
-                    else
-                      @employee.performances
-                    end
+    if params[:year_from]
+      previous_date = Date.new(params[:year_from].to_i, params[:month_from].to_i)
+      last_date = Date.new(params[:year_to].to_i, params[:month_to].to_i)
+      flash[:notice] = 'Please compare from past to future' if last_date < previous_date
+      return redirect_to compare_admin_employee_performances_path(params[:employee_id]) if last_date < previous_date
+    end
+
+    if params[:topic]
+      @previous_performance = @employee.performances.where(topic: params[:topic],
+                                   year: params[:year_from],
+                                   month: params[:month_from],
+                                   employee_id: params[:employee_id]).first
+      @last_performance = @employee.performances.where(topic: params[:topic],
+                                   year: params[:year_to],
+                                   month: params[:month_to],
+                                   employee_id: params[:employee_id]).first
+    else
+      @performances = @employee.performances
+    end
     @total_performances = PerformanceTopic.count * 5
   end
 

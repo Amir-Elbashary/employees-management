@@ -111,10 +111,6 @@ Rails.application.routes.draw do
     end
 
     resources :employees do
-      collection do
-        get :compare
-      end
-
       resources :performances do
         collection do
           get :employee_performance
