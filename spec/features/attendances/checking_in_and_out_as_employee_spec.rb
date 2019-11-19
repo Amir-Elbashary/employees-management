@@ -1,7 +1,9 @@
 require 'rails_helper'
+include ActiveSupport::Testing::TimeHelpers
 
 RSpec.feature 'Checking in/out by employees' do
   before do
+    travel_to Time.zone.parse('2019-09-23')
     @employee = create(:employee)
     login_as(@employee, scope: :employee)
   end
@@ -182,15 +184,15 @@ RSpec.feature 'Checking in/out by employees' do
       expect(page).to have_content("Wishing you good and productive day.")
       expect(Employee.first.attendances.first.checkin).not_to eq(nil)
 
-      Timecop.travel(10.hours) do
-        click_link 'Check-out!'
+      travel_to (Time.now + 10.hours)
 
-        expect(page).to have_content("See you next day.")
-        expect(Employee.first.attendances.first.checkout).not_to eq(nil)
-        expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
-        expect(Employee.first.attendances.first.time_spent).to be > 8.0
-        expect(Employee.first.attendances.first.time_spent).to eq(10.0)
-      end
+      click_link 'Check-out!'
+
+      expect(page).to have_content("See you next day.")
+      expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).to be > 8.0
+      expect(Employee.first.attendances.first.time_spent).to eq(10.0)
     end
 
     it 'should bypass network authenticating and check the employee out for today if work from home request is approved' do
@@ -205,15 +207,15 @@ RSpec.feature 'Checking in/out by employees' do
       expect(page).to have_content("Wishing you good and productive day.")
       expect(Employee.first.attendances.first.checkin).not_to eq(nil)
 
-      Timecop.travel(6.hours) do
-        click_link 'Check-out!'
+      travel_to (Time.now + 6.hours)
 
-        expect(page).to have_content("See you next day.")
-        expect(Employee.first.attendances.first.checkout).not_to eq(nil)
-        expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
-        expect(Employee.first.attendances.first.time_spent).to be <= 8.0
-        expect(Employee.first.attendances.first.time_spent).to eq(6.0)
-      end
+      click_link 'Check-out!'
+
+      expect(page).to have_content("See you next day.")
+      expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).to be <= 8.0
+      expect(Employee.first.attendances.first.time_spent).to eq(6.0)
     end
 
     it 'should allow working for 8 hours or less while working from home' do
@@ -228,15 +230,15 @@ RSpec.feature 'Checking in/out by employees' do
       expect(page).to have_content("Wishing you good and productive day.")
       expect(Employee.first.attendances.first.checkin).not_to eq(nil)
 
-      Timecop.travel(8.hours) do
-        click_link 'Check-out!'
+      travel_to (Time.now + 8.hours)
 
-        expect(page).to have_content("See you next day.")
-        expect(Employee.first.attendances.first.checkout).not_to eq(nil)
-        expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
-        expect(Employee.first.attendances.first.time_spent).to be <= 8.0
-        expect(Employee.first.attendances.first.time_spent).to eq(8.0)
-      end
+      click_link 'Check-out!'
+
+      expect(page).to have_content("See you next day.")
+      expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).to be <= 8.0
+      expect(Employee.first.attendances.first.time_spent).to eq(8.0)
     end
 
     it 'should restrict work from home hours to maximum 8 hours' do
@@ -251,15 +253,15 @@ RSpec.feature 'Checking in/out by employees' do
       expect(page).to have_content("Wishing you good and productive day.")
       expect(Employee.first.attendances.first.checkin).not_to eq(nil)
 
-      Timecop.travel(10.hours) do
-        click_link 'Check-out!'
+      travel_to (Time.now + 10.hours)
 
-        expect(page).to have_content("See you next day.")
-        expect(Employee.first.attendances.first.checkout).not_to eq(nil)
-        expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
-        expect(Employee.first.attendances.first.time_spent).to be <= 8.0
-        expect(Employee.first.attendances.first.time_spent).to eq(8.0)
-      end
+      click_link 'Check-out!'
+
+      expect(page).to have_content("See you next day.")
+      expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).not_to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).to be <= 8.0
+      expect(Employee.first.attendances.first.time_spent).to eq(8.0)
     end
   end
 

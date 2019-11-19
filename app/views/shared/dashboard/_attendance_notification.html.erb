@@ -27,10 +27,16 @@
           <div class="col-12">
             <!-- Column -->
             <div class="p-r-40 m-t-30 m-b-30">
-              <h5 class="m-t-30">Time spent today:<span class="pull-right"><%= @time_spent_percentage %>%</span></h5>
+              <h5 class="m-t-30">Time spent today: <b><%= @time_spent_today %> Hours</b><span class="pull-right"><%= @time_spent_percentage %>%</span></h5>
                 <div class="progress ">
                   <div class="progress-bar bg-<%= @progress_color %> wow animated progress-animated" style="width: <%= @time_spent_percentage %>%; height:6px;" role="progressbar"></div>
                 </div>
+            </div>
+            <!-- Column -->
+
+            <!-- Column -->
+            <div class="p-r-40 m-t-30 m-b-30">
+              <h5 class="m-t-30">Time spent this month: <b><%= @hours_spent_this_month %> Hours</b></h5>
             </div>
             <!-- Column -->
           </div>

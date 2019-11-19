@@ -1,0 +1,112 @@
+<% content_for :bc_title do %>
+  Performance
+<% end %>
+
+<% content_for :bc_current do %>
+  <%= @performance.new_record? ? 'New' : 'Edit' %> Performance entry
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_employee_performances_path(@employee) %>"><button type="button" class="btn btn-info"> <%= @employee.full_name %>'s Performances</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @performance %>
+
+<div class="row">
+	<div class="col-8">
+		<div class="card">
+      <div class="card-header bg-info">
+        <% if @performance.new_record? %>
+          <h4 class="m-b-0 text-white">Add new entry</h4>
+        <% else %>
+          <h4 class="m-b-0 text-white">Edit entry</h4>
+        <% end %>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for [:admin, :employee, @performance], html: { help: :block } do |f| %>
+          <% if @performance.new_record? %>
+            <%= f.hidden_field :employee_id, value: @employee.id %>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= f.label :year, 'Year' %>
+                  <select name="performance[year]" class="form-control select2">
+                    <option value="<%= (Time.now - 1.year).year %>"><%= (Time.now - 1.year).year %></option>
+                    <option value="<%= Time.now.year %>" <%= 'selected' if [Time.now.year, nil].include?(@performance.year) %>><%= Time.now.year %></option>
+                    <option value="<%= (Time.now + 1.year).year %>"><%= (Time.now + 1.year).year %></option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= f.label :month, 'Month' %>
+                  <select name="performance[month]" class="form-control select2">
+                    <% Date::MONTHNAMES.map do |month| %>
+                      <% next if month.nil? %>
+                      <option value="<%= Date::MONTHNAMES.index(month) %>" <%= 'selected' if @performance.month == Date::MONTHNAMES.index(month) %>><%= month %></option>
+                    <% end %>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= f.label :topic, 'Topic' %>
+                  <select name="performance[topic]" class="form-control select2">
+                    <% @performance_topics.each do |topic| %>
+                      <option value="<%= topic.title %>" <%= 'selected' if @performance.topic == topic.title %>><%= topic.title %></option>
+                    <% end %>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= f.label :score, 'Score' %>
+                  <%= f.number_field :score, required: true, step: 0.5, class: 'form-control' %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :comment, 'Comment' %>
+                <%= f.text_area :comment, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.label :hr_comment, 'Hr Comment' %>
+                <%= f.text_area :hr_comment, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <%= f.submit 'Submit', class: 'btn btn-md btn-success' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

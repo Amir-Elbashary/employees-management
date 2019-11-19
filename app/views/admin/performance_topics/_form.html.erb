@@ -1,0 +1,47 @@
+<% content_for :bc_title do %>
+  Performance Topics
+<% end %>
+
+<% content_for :bc_current do %>
+  <%= @performance_topic.new_record? ? 'New' : 'Edit' %> Performance Topic
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_performance_topics_path %>"><button type="button" class="btn btn-info"> All Topics</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= render 'shared/error_messages', object: @performance_topic %>
+
+<div class="row">
+	<div class="col-8">
+		<div class="card">
+      <div class="card-header bg-info">
+        <% if @performance_topic.new_record? %>
+          <h4 class="m-b-0 text-white">Add new topic</h4>
+        <% else %>
+          <h4 class="m-b-0 text-white">Edit topic</h4>
+        <% end %>
+      </div>
+			<div class="card-body">
+        <br/>
+        <%= form_for [:admin, @performance_topic], html: { help: :block } do |f| %>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :title, 'Title' %>
+                <%= f.text_field :title, required: true, class: 'form-control' %>
+                <small>Title should be describtive and unique</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.submit 'Submit', class: 'btn btn-lg btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

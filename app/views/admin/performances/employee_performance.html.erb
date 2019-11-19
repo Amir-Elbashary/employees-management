@@ -1,0 +1,41 @@
+<% content_for :bc_title do %>
+  Performance
+<% end %>
+
+<% content_for :bc_current do %>
+  <%= @employee.full_name %>'s Performance
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> Back to Timeline</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<div class="card">
+	<div class="card-body">
+    <h4 class="card-title"><%= @employee.full_name %>'s Performance Appraisals in <%= Time.zone.now.year %></h4>
+    <% (Date::MONTHNAMES-[nil]).in_groups_of(3) do |quarter| %>
+      <div class="row">
+        <% quarter.each do |month| %>
+          <div class="col-md-4 b-r">
+            <% performances = @performances.where(year: Time.zone.now.year, month: Date::MONTHNAMES.index(month)) %>
+            <% total_month_performance = performances.pluck(:score).inject(:+) || 0 %>
+            <p><b><%= month %> <span class="text-info"><%= "#{total_month_performance} / #{@total_performances} (#{(total_month_performance / @total_performances * 100).round(2)}%)" if performances.any? %><span></b></p>
+            <% if performances.any? %>
+              <% performances.each do |performance| %>
+                <p class="text-primary">Topic: <%= performance.topic %></p>
+                <p class="text-primary">Score: <%= performance.score %></p>
+                <p class="text-primary">Comment: <%= performance.comment %></p>
+                <hr>
+              <% end %>
+            <% else %>
+              <p class="text-danger"><b>No Performance Appraisals found for this month</b></p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <hr>
+    <% end %>
+  </div>
+</div>

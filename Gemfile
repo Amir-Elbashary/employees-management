@@ -54,7 +54,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8', '>= 3.8.2'
   gem 'factory_bot', '~> 5.0', '>= 5.0.2'
   gem 'faker', '~> 1.9', '>= 1.9.3'
-  gem 'timecop'
   gem 'guard', '~> 2.15'
   gem 'guard-rspec', '~> 4.7', '>= 4.7.3'
 end
