@@ -1,0 +1,76 @@
+<% content_for :bc_title do %>
+  Leaderboard
+<% end %>
+
+<% content_for :bc_current do %>
+  Leaderboard
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_path %>"><button type="button" class="btn btn-info"> Back to Timeline</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<% if @performances&.any? %>
+  <div class="row">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header bg-info">
+          <h4 class="m-b-0 text-white"><%= @performance_topic.title %> Leaderboard</h4>
+        </div>
+        <div class="card-body">
+          <h1 class="first-leaderboard">1. <%= @performances.first.employee.full_name %> scored: <%= @performances.first.score %></h1>
+          <% if @performances.size > 1 %>
+            <h1 class="second-leaderboard">2. <%= @performances.offset(1).first.employee.full_name %> scored: <%= @performances.offset(1).first.score %></h1>
+          <% end %>
+          <% if @performances.size > 2 %>
+            <h1 class="third-leaderboard">3. <%= @performances.offset(2).first.employee.full_name %> scored: <%= @performances.offset(2).first.score %></h1>
+          <% end %>
+          <% if @performances.size > 3 %>
+            <% sn = 4 %>
+            <% @performances.offset(3).each do |performance| %>
+              <h4><%= sn %> <%= performance.employee.full_name %> scored: <%= performance.score %></h4>
+              <% sn += 1 %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="row">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header bg-info">
+          <h4 class="m-b-0 text-white">Please select a month</h4>
+        </div>
+        <div class="card-body">
+          <%= form_tag leaderboard_admin_performance_topic_path(params[:id]), method: :get do %>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= label_tag :select_month, 'Select Month' %>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <%= number_field_tag :year, '', value: params[:year], placeholder: 'Year (ex: 2018)', required: true, class: 'form-control' %>
+                    </div>
+                    <div class="col-md-6">
+                      <%= number_field_tag :month, '', value: params[:month], placeholder: 'Month (ex: 9)', required: true, class: 'form-control' %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <%= submit_tag 'Compare', class: 'btn btn-md btn-info period-submit' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

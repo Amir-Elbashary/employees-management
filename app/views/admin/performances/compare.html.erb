@@ -1,0 +1,19 @@
+<% content_for :bc_title do %>
+  Employees
+<% end %>
+
+<% content_for :bc_current do %>
+  Compare
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> Back to Timeline</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<% unless params[:year_from] && params[:year_to] && params[:month_from] && params[:month_to] %>
+  <%= render 'admin/performances/periods_form' %>
+<% else %>
+  <%= render 'admin/performances/comparison' %>
+<% end %>

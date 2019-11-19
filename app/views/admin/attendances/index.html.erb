@@ -21,13 +21,19 @@
   <div class="col-md-4">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Working hours spent today</h4>
+        <h4 class="card-title">Working hours spent:</h4>
         <!-- Column -->
         <div class="m-t-30">
-          <h5 class="m-t-30">Until now you spent:<span class="pull-right"><%= @time_spent_percentage %>%</span></h5>
+          <h5 class="m-t-30">Today you spent: <b><%= @time_spent_today %> Hours</b><span class="pull-right"><%= @time_spent_percentage %>%</span></h5>
           <div class="progress ">
             <div class="progress-bar bg-<%= @progress_color %> wow animated progress-animated" style="width: <%= @time_spent_percentage %>%; height:6px;" role="progressbar"></div>
           </div>
+        </div>
+        <!-- Column -->
+
+        <!-- Column -->
+        <div class="m-t-30">
+          <h5 class="m-t-30">This month you spent:<span class="pull-right"><b><%= @hours_spent_this_month %> Hours</b></span></h5>
         </div>
         <!-- Column -->
       </div>

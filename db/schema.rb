@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_13_081901) do
+ActiveRecord::Schema.define(version: 2019_11_14_123648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -233,6 +233,25 @@ ActiveRecord::Schema.define(version: 2019_11_13_081901) do
     t.string "link"
     t.index ["read_status"], name: "index_notifications_on_read_status"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient_type_and_recipient_id"
+  end
+
+  create_table "performance_topics", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "performances", force: :cascade do |t|
+    t.bigint "employee_id"
+    t.integer "year"
+    t.integer "month"
+    t.string "topic"
+    t.float "score"
+    t.text "comment"
+    t.text "hr_comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_performances_on_employee_id"
   end
 
   create_table "permissions", force: :cascade do |t|
