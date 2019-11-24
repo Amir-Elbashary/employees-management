@@ -51,6 +51,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
         time_spent = 8.0 if @approved_wfh_requests&.any? && time_spent > 8.0
         @current_attendance.update(time_spent: time_spent)
         flash[:notice] = "Thanks #{current_active_user.first_name}, See you next day."
+        Attendance::CheckoutNotifierWorker.perform_async(@current_attendance.id, @hours_spent_this_month)
       else
         flash[:danger] = 'You haven\'t check-in today yet, Let\'s start a productive day!'
       end
@@ -203,19 +204,19 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def set_messages
     @messages = { checkin: [
-                    'Have you attended twice?',
+                    'Have you attended twice ?',
                     'Are you ok dear ?',
                     'Looks like you forgot your coffee!',
                     'Didn\'t you hear any welcomes today ?',
                     'Refresh your memory!',
-                    'Maybe you need a break?',
+                    'Maybe you need a break ?',
                     'Don\'t worry, we have an excellent memory.',
                     'Why do you insist ?'
                   ],
                   checkout: [
                     'I\'m sure!',
                     'Looks like you had a long day.',
-                    'Haven\'t you take your break?',
+                    'Haven\'t you take your break ?',
                     'You can count on us.',
                     'And you did great today!',
                     'Go home safe.',

@@ -17,6 +17,8 @@ class Admin::TimelinesController < Admin::BaseAdminController
 
   def show
     if @timeline.publisher == current_active_user
+      # This to to mark notification for show
+      # comments as read automaticaly
       Notification.where('notifications.link like ?', "/admin/timelines/#{@timeline.id}").each { |n| n.read! }
     end
   end

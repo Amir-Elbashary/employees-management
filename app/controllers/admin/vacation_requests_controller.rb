@@ -50,13 +50,17 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   end
 
   def confirm
-    @vacation_request.confirmed!
-    redirect_to pending_admin_vacation_requests_path
+    if @vacation_request.confirmed!
+      redirect_to pending_admin_vacation_requests_path
+      VacationRequest::SupervisorConfirmNotifierWorker.perform_async(@vacation_request.id)
+    end
   end
 
   def refuse
-    @vacation_request.refused!
-    redirect_to pending_admin_vacation_requests_path
+    if @vacation_request.refused!
+      redirect_to pending_admin_vacation_requests_path
+      VacationRequest::SupervisorRefuseNotifierWorker.perform_async(@vacation_request.id)
+    end
   end
 
   def approve
@@ -66,7 +70,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     if @vacation_request.vacation?
       if requester.update(vacation_balance: requester.vacation_balance - @vacation_request.duration)
         flash[:notice] = 'Vacation request Approved.'
-        @vacation_request.approved!
+        VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id, @vacation_request.id) if @vacation_request.approved!
 
         content = "<p><strong>#{@vacation_request.requester.name} is going to have a vacation :smiley:</strong></p>
         <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.requester.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.requester)} is going to be on a refreshing vacation, We are wishing #{him_her(@vacation_request.requester)} happy time. :wink:</p>
@@ -78,7 +82,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
     if @vacation_request.sick_leave?
       flash[:notice] = 'Sick leave request approved.'
-      @vacation_request.approved!
+      VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id, @vacation_request.id) if @vacation_request.approved!
 
       content = "<p><strong>#{@vacation_request.requester.name} is not feeling well :pensive:</strong></p>
       <p><strong>&nbsp;&nbsp;</strong>We're sorry to hear that #{@vacation_request.requester.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.requester)} is not feeling well, The little flowers are rising and blooming; it&rsquo;s the world&rsquo;s way of saying, &ldquo;get well soon.&rdquo; :pray:</p>
@@ -89,7 +93,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
     if @vacation_request.mission?
       flash[:notice] = 'Mission request approved.'
-      @vacation_request.approved!
+      VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id, @vacation_request.id) if @vacation_request.approved!
     end
 
     if @vacation_request.work_from_home?
@@ -110,7 +114,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
         flash[:danger] = 'Not enough work from home days left for this employee.'
       elsif (days_taken + request_duration) <= work_from_home_days
         flash[:notice] = 'Work from home request approved.'
-        @vacation_request.approved!
+        VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id, @vacation_request.id) if @vacation_request.approved!
 
         content = "<p><strong>#{@vacation_request.requester.name} will be working from home!</strong></p>
         <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.requester.first_name} will be working from home from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, You can reach #{him_her(@vacation_request.requester)} on Slack!</p>
@@ -124,8 +128,10 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   end
 
   def decline
-    @vacation_request.declined!
-    redirect_to pending_admin_vacation_requests_path
+    if @vacation_request.declined!
+      redirect_to pending_admin_vacation_requests_path
+      VacationRequest::HrDeclineNotifierWorker.perform_async(current_active_user.id, @vacation_request.id)
+    end
   end
 
   private
