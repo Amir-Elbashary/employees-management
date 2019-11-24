@@ -1,0 +1,23 @@
+<h2>Dear, <%= @attendance.attender.full_name %></h2>
+========
+
+<h3>Thank you for your efforts today</h3>
+<p>Here is a summary for your attendance:<p>
+<table>
+  <thead>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Today:</td>
+      <td><%= @attendance.time_spent %> Hours</td>
+    </tr>
+    <tr>
+      <td>This month:</td>
+      <td><%= @time_spent_this_month %> Hours</td>
+    </tr>
+  </tbody>
+</table>
+
+<strong><p>Best Regards,<br/>Fustany Team</p></strong>
