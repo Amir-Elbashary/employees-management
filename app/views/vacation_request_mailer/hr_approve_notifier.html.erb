@@ -1,0 +1,8 @@
+<h2>Dear <%= @vacation_request.requester.full_name %></h2>
+========
+<h3><%= @hr.full_name %> has approved your request</h3>
+<h4>Please keep in mind that you have <u><%= @vacation_request.requester.vacation_balance %> days</u> remaining on your vacation balance.</h4>
+<h4>Please note that work from home and sick leave do not affect your vacation balance.</h4>
+
+<p><a href=<%= "http://team.fustany.com/admin/vacation_requests" %> target="_blank">Click here</a> to check your requests.</p>
+<strong><p>Best Regards,<br/>Fustany Team</p></strong>
