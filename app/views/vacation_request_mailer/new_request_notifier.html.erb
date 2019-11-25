@@ -1,0 +1,7 @@
+<h2>Dear <%= @vacation_request.requester.supervisor.full_name %></h2>
+========
+<h3><%= @vacation_request.requester.full_name %> has submitted new "<%= @vacation_request.kind.humanize.downcase %>" request</h3>
+<h4>He/she will be waiting for your confirmation, to be approved/declined by H.R afterwards</h4>
+
+<p><a href=<%= "http://team.fustany.com/admin/vacation_requests/pending" %> target="_blank">Click here</a> to check pending requests.</p>
+<strong><p>Best Regards,<br/>Fustany Team</p></strong>
