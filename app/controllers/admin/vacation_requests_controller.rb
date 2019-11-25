@@ -15,6 +15,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     if @vacation_request.save
       flash[:notice] = 'Request has been submitted.'
       redirect_to admin_vacation_requests_path
+      VacationRequest::NewRequestNotifierWorker.perform_async(@vacation_request.id)
     else
       render 'new'
     end
@@ -45,8 +46,10 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def escalate
     return unless @vacation_request.update(vacation_request_params)
-    @vacation_request.escalated!
-    redirect_to admin_vacation_requests_path
+    if @vacation_request.escalated!
+      redirect_to admin_vacation_requests_path
+      VacationRequest::EscalationNotifierWorker.perform_async(@vacation_request.id)
+    end
   end
 
   def confirm

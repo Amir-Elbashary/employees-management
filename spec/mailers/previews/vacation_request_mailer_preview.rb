@@ -1,6 +1,11 @@
 # Preview all emails at http://localhost:3000/rails/mailers/vacation_request_mailer
 class VacationRequestMailerPreview < ActionMailer::Preview
 
+  def new_request_notifier_previewe
+    @vacation_request = VacationRequest.first.id
+    VacationRequestMailer.new_request_notifier(@vacation_request)
+  end
+
   def supervisor_confirm_notifier_preview
     @vacation_request = VacationRequest.first.id
     VacationRequestMailer.supervisor_confirm_notifier(@vacation_request)
@@ -21,5 +26,10 @@ class VacationRequestMailerPreview < ActionMailer::Preview
     @hr = Hr.first.id
     @vacation_request = VacationRequest.first.id
     VacationRequestMailer.hr_decline_notifier(@hr, @vacation_request)
+  end
+
+  def escalation_notifier_preview
+    @vacation_request = VacationRequest.first.id
+    VacationRequestMailer.escalation_notifier(@vacation_request)
   end
 end
