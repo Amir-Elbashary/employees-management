@@ -56,6 +56,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     if @vacation_request.confirmed!
       redirect_to pending_admin_vacation_requests_path
       VacationRequest::SupervisorConfirmNotifierWorker.perform_async(@vacation_request.id)
+      VacationRequest::HrPendingApproveNotifierWorker.perform_async(@vacation_request.id)
     end
   end
 

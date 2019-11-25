@@ -15,6 +15,11 @@ class VacationRequestMailer < ApplicationMailer
     mail(to: @vacation_request.requester.email, subject: "#{@vacation_request.requester.supervisor.full_name} has refused your request")
   end
 
+  def hr_pending_approve_notifier(vacation_request_id)
+    @vacation_request = VacationRequest.find(vacation_request_id)
+    mail(to: Hr.pluck(:email), subject: "#{@vacation_request.requester.full_name} request is waiting for your approval")
+  end
+
   def hr_approve_notifier(hr_id, vacation_request_id)
     @hr = Hr.find(hr_id)
     @vacation_request = VacationRequest.find(vacation_request_id)

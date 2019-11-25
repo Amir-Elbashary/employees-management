@@ -16,6 +16,11 @@ class VacationRequestMailerPreview < ActionMailer::Preview
     VacationRequestMailer.supervisor_refuse_notifier(@vacation_request)
   end
 
+  def hr_pending_approve_notifier_preview
+    @vacation_request = VacationRequest.first.id
+    VacationRequestMailer.hr_pending_approve_notifier(@vacation_request)
+  end
+
   def hr_approve_notifier_preview
     @hr = Hr.first.id
     @vacation_request = VacationRequest.first.id
