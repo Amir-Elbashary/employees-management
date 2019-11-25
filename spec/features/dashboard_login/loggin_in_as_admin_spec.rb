@@ -9,16 +9,16 @@ RSpec.feature 'Loggin in as admin' do
   end
 
   scenario 'with valid credential' do
-    fill_in 'admin[email]', with: @admin.email
-    fill_in 'admin[password]', with: @admin.password
+    fill_in 'Email', with: @admin.email
+    fill_in 'Password', with: @admin.password
     click_button 'Log in'
 
     expect(page).to have_content(@admin.full_name)
   end
 
   scenario 'with invalid credential' do
-    fill_in 'admin[email]', with: 'admin@test.com'
-    fill_in 'admin[password]', with: 'AdminAdmin'
+    fill_in 'Email', with: 'admin@test.com'
+    fill_in 'Password', with: 'AdminAdmin'
     click_button 'Log in'
 
     expect(page).to have_content('Invalid Email or password.')

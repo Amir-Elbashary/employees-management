@@ -1,19 +1,42 @@
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <h2><%= resource_name.capitalize %> Login</h2>
-  <div class="form-style-agile">
-    <%= f.email_field :email, placeholder: 'Enter your email...', autofocus: true, autocomplete: "email" %>
+<div class="limiter">
+  <div class="container-login100">
+    <div class="wrap-login100">
+      <div class="login100-pic js-tilt" data-tilt>
+        <img src="/images/logo.png" width="300" alt="IMG">
+      </div>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <span class="login100-form-title">
+          <%= resource_name.capitalize %> Login
+        </span>
+
+        <%= render 'shared/flash_messages' %>
+
+        <div class="wrap-input100 validate-input" data-validate = "Valid email is required: name@fustany.com">
+          <%= f.label :email, 'Email', style: 'display: none;' %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input100" %>
+          <span class="focus-input100"></span>
+          <span class="symbol-input100">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+          </span>
+        </div>
+
+        <div class="wrap-input100 validate-input" data-validate = "Password is required">
+          <%= f.label :password, 'Password', style: 'display: none;' %>
+          <%= f.password_field :password, autocomplete: "off", class: "input100" %>
+          <span class="focus-input100"></span>
+          <span class="symbol-input100">
+            <i class="fa fa-lock" aria-hidden="true"></i>
+          </span>
+        </div>
+        
+        <div class="container-login100-form-btn">
+          <%= f.submit "Log in", class: "login100-form-btn" %>
+        </div>
+
+        <div class="text-center p-t-136"> 
+        </div>
+      <% end %>
+    </div>
   </div>
-  <div class="form-style-agile">
-    <%= f.password_field :password, placeholder: 'Enter your password...', autocomplete: "off" %>
-  </div>
-  <!-- checkbox -->
-  <div class="wthree-text">
-    <ul>
-      <li>
-        <a href="#">Forgot Password?</a>
-      </li>
-    </ul>
-  </div>
-  <!-- //switch -->
-  <%= f.submit "Log in", class: "login100-form-btn" %>
-<% end %>
+</div>
