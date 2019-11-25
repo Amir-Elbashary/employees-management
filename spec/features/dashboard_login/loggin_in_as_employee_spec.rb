@@ -10,16 +10,16 @@ RSpec.feature 'Loggin in as employee' do
   end
 
   scenario 'with valid credential' do
-    fill_in 'employee[email]', with: @employee.email
-    fill_in 'employee[password]', with: @employee.password
+    fill_in 'Email', with: @employee.email
+    fill_in 'Password', with: @employee.password
     click_button 'Log in'
 
     expect(page).to have_content(@employee.full_name)
   end
 
   scenario 'with invalid credential' do
-    fill_in 'employee[email]', with: 'hr@test.com'
-    fill_in 'employee[password]', with: 'AdminAdmin'
+    fill_in 'Email', with: 'hr@test.com'
+    fill_in 'Password', with: 'AdminAdmin'
     click_button 'Log in'
 
     expect(page).to have_content('Invalid Email or password.')
