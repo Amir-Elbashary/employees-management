@@ -1,8 +1,10 @@
 require 'rails_helper'
 include AdminHelpers
+include ActiveSupport::Testing::TimeHelpers
 
-RSpec.feature 'appending checkins by admin or H.R' do
+RSpec.feature 'appending checkins by Admin or H.R' do
   before do
+    travel_to Time.zone.parse('2019-09-23 04')
     @admin = create(:admin)
     @hr = create(:hr) 
     assign_permission(@hr, :read, Employee)
