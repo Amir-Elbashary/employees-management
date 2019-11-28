@@ -6,12 +6,13 @@ class Admin::SettingsController < Admin::BaseAdminController
   def dashboard; end
 
   def refresh_permissions
-    custom_actions = { 'Admin' => %w[change_password],
-                       'Employee' => %w[resend_mail toggle_level],
-                       'Attendance' => %w[grant revoke checkin checkout append reports],
-                       'VacationRequest' => %w[pending approve decline],
-                       'Update' => %w[reset_ip]
-                     }
+    custom_actions = {
+      'Admin' => %w[change_password],
+      'Employee' => %w[resend_mail toggle_level],
+      'Attendance' => %w[grant revoke checkin checkout append reports],
+      'VacationRequest' => %w[pending approve decline],
+      'Update' => %w[reset_ip]
+    }
 
     added_permissions = 0
 

@@ -4,16 +4,21 @@ class Admin::AttendancesController < Admin::BaseAdminController
   before_action :require_authorized_network, only: %i[checkin checkout]
   before_action :require_authorized_device, only: %i[checkin checkout]
   before_action :set_attendances, only: :index
+  before_action :set_resource, only: :append
+  before_action :set_times, only: :append
   before_action :set_resources, only: %i[index reports]
+  before_action :set_date_ranges, only: :reports
+  before_action :set_workdays, only: :reports
+  before_action :set_holidays, only: :reports
+  before_action :set_reports_entities, only: :reports
   before_action :set_employee, only: %i[grant revoke]
   before_action :set_messages, only: %i[checkin checkout]
 
   def index
     return unless current_employee
-    if current_employee.access_token != 'expired' && current_employee.waiting_for_token?
-      cookies[:ft_att_ver] = { value: current_employee.access_token, expires: 1.year }
-      current_employee.token_verified!
-    end
+    return unless current_employee.access_token != 'expired' && current_employee.waiting_for_token?
+    cookies[:ft_att_ver] = { value: current_employee.access_token, expires: 1.year }
+    current_employee.token_verified!
   end
 
   def grant
@@ -43,18 +48,10 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def checkout
     if @current_attendance&.checkout
       flash[:notice] = "You have already checked-out today, #{@messages[:checkout].sample}"
+    elsif @current_attendance&.update(checkout: Time.zone.now)
+      perform_checkout(@current_attendance, @approved_wfh_requests, @hours_spent_this_month)
     else
-      if @current_attendance&.update(checkout: Time.zone.now)
-        checkin = @current_attendance.checkin
-        checkout = @current_attendance.checkout
-        time_spent = ((checkout - checkin) / 60 / 60).round(2)
-        time_spent = 8.0 if @approved_wfh_requests&.any? && time_spent > 8.0
-        @current_attendance.update(time_spent: time_spent)
-        flash[:notice] = "Thanks #{current_active_user.first_name}, See you next day."
-        Attendance::CheckoutNotifierWorker.perform_async(@current_attendance.id, @hours_spent_this_month)
-      else
-        flash[:danger] = 'You haven\'t check-in today yet, Let\'s start a productive day!'
-      end
+      flash[:danger] = 'You haven\'t check-in today yet, Let\'s start a productive day!'
     end
 
     redirect_to request.referer
@@ -62,106 +59,32 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def checkin_reminder
     cookies[:ft_att_ci_rem] = { value: 'hidden', expires: 2.hours }
-    redirect_to request.referer 
+    redirect_to request.referer
   end
 
   def checkout_reminder
     cookies[:ft_att_co_rem] = { value: 'hidden', expires: 2.hours }
-    redirect_to request.referer 
+    redirect_to request.referer
   end
 
   def append
-    # Extracting resource
-    resource_type = params[:employee].split('-').first
-    resource_id = params[:employee].split('-').last
-    resource = resource_type.constantize.find(resource_id)
+    @check_type = params[:check_type]
+    attendance = @resource.attendances&.where(checkin: @checktime_utc_day_range)&.first
 
-    # Extracting times
-    checktime = params[:checktime].to_datetime
-    checktime_utc = DateTime.new(checktime.year, checktime.month, checktime.day, checktime.hour, checktime.minute, checktime.second, 'EET').utc
-    check_type = params[:check_type]
-
-    # Getting attendace
-    attendance = resource.attendances&.where(checkin: checktime_utc.at_beginning_of_day..checktime_utc.at_end_of_day)&.first
-
-    if check_type == 'Check-in'
-      if attendance
-        flash[:danger] = 'Employee already checked-in'
-      else
-        flash[:notice] = 'Check-in appended'
-        Attendance.create(attender: resource, checkin: checktime_utc)
-      end
-    elsif check_type == 'Check-out'
-      if attendance
-        if attendance.checkout
-          flash[:danger] = 'Employee already checked-out'
-        else
-          flash[:notice] = 'Check-out appended'
-          checkin = attendance.checkin.to_datetime
-          time_spent = ((checktime_utc.to_f - checkin.to_f) / 60 / 60).round(2)
-          attendance.update(checkout: checktime_utc, time_spent: time_spent)
-        end
-      else
-        flash[:danger] = 'Employee has not checked-in during selected day'
-      end
+    if @check_type == 'Check-in'
+      append_checkin(attendance, @resource, @checktime_utc)
+    elsif @check_type == 'Check-out'
+      append_checkout(attendance, @checktime_utc)
     end
 
     redirect_to admin_attendances_path
   end
 
   def reports
-    # Current month date range
-    date_from = params[:from]&.to_datetime&.at_beginning_of_day
-    date_to = params[:to]&.to_datetime&.at_end_of_day
-    @current_month_sym = date_from&.strftime('%b')
-
-    if date_from && date_to
-      if date_to < date_from
-        flash[:danger] = 'End date cannot be before start date'
-        return redirect_to reports_admin_attendances_path
-      else
-        date_range = date_from..date_to
-      end
-    end
-
-    # Last month (ex) date range
-    ex_date_from = date_from - 1.month if date_from
-    ex_date_to = date_to - 1.month if date_to
-    @last_month_sym = ex_date_from&.strftime('%b')
-    ex_date_range = ex_date_from..ex_date_to if ex_date_from && ex_date_to
-
-    @work_days = date_range.map { |d| d unless ['Fri', 'Sat'].include?(d.strftime('%a'))}.uniq - [nil] if date_range
-
-    @holidays = Holiday.where(starts_on: date_from..date_to)&.pluck(:duration)&.inject(:+) || 0
-
-    @resource = params[:type].constantize.find_by(id: params[:id]) if params[:type] && params[:id]
-
-    if @resource
-      @attendances = @resource.attendances.where(checkin: date_range)
-      @ex_attendances = @resource.attendances.where(checkin: ex_date_range)
-      @vacation_requests = @resource.vacation_requests.where(starts_on: date_range).approved
-    end
-
-    if @attendances&.any?
-      @actual_work_days = @attendances.size - @attendances.where(checkout: nil).size
-      @actual_work_hours = @attendances.pluck(:time_spent)&.inject(:+)&.round(2)
-    else
-      if params[:from].present? && params[:to].present?
-        flash[:danger] = 'This employee has no attendances during the selected dates'
-      end
-    end
-
-    if @vacation_requests
-      @work_from_home_days = @vacation_requests.work_from_home.pluck(:duration).inject(:+) || 0
-      @vacation_days = @vacation_requests.vacation.pluck(:duration).inject(:+) || 0
-      @sick_leave_days = @vacation_requests.sick_leave.pluck(:duration).inject(:+) || 0
-    end
-
-    # Variables needed for views calculations
-    if @work_days
-      @total_work_days = @work_days.size - @holidays - @vacation_days - @sick_leave_days
-      @total_work_hours = @total_work_days * 8
-    end
+    set_attendances_and_vacations if @resource
+    set_actual_work_days_and_hours
+    set_actual_vacations if @vacation_requests
+    set_total_work_days_and_hours
   end
 
   private
@@ -169,8 +92,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def require_authorized_network
     return if @approved_wfh_requests&.any?
     return unless current_employee
-    return if @settings.ip_addresses.include?(request.remote_ip)
-    return if @settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)
+    return if ip_address_authorized?
     flash[:danger] = 'Unauthorized network detected, Please connect to an authorized network!'
     redirect_to admin_path
   end
@@ -180,6 +102,11 @@ class Admin::AttendancesController < Admin::BaseAdminController
     return if cookies[:ft_att_ver] == current_employee.access_token
     flash[:danger] = 'Unauthorized device detected, Please connect via an authorized device!'
     redirect_to admin_path
+  end
+
+  def ip_address_authorized?
+    return true if @settings.ip_addresses.include?(request.remote_ip)
+    return true if @settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)
   end
 
   def set_attendances
@@ -202,27 +129,146 @@ class Admin::AttendancesController < Admin::BaseAdminController
     @employees = Employee.all
   end
 
+  def set_resource
+    resource_type = params[:employee].split('-').first
+    resource_id = params[:employee].split('-').last
+    @resource = resource_type.constantize.find(resource_id)
+  end
+
+  def set_times
+    checktime = params[:checktime].to_datetime
+    @checktime_utc = DateTime.new(checktime.year, checktime.month, checktime.day,
+                                  checktime.hour, checktime.minute, checktime.second, 'EET').utc
+    @checktime_utc_day_range = @checktime_utc.at_beginning_of_day..@checktime_utc.at_end_of_day
+  end
+
+  def append_checkin(attendance, resource, checktime_utc)
+    if attendance
+      flash[:danger] = 'Employee already checked-in'
+    else
+      flash[:notice] = 'Check-in appended'
+      Attendance.create(attender: resource, checkin: checktime_utc)
+    end
+  end
+
+  def append_checkout(attendance, checktime_utc)
+    if attendance
+      if attendance.checkout
+        flash[:danger] = 'Employee already checked-out'
+      else
+        flash[:notice] = 'Check-out appended'
+        checkin = attendance.checkin.to_datetime
+        time_spent = ((checktime_utc.to_f - checkin.to_f) / 60 / 60).round(2)
+        attendance.update(checkout: checktime_utc, time_spent: time_spent)
+      end
+    else
+      flash[:danger] = 'Employee has not checked-in during selected day'
+    end
+  end
+
+  def perform_checkout(current_attendance, approved_wfh_requests, hours_spent_this_month)
+    checkin = current_attendance.checkin
+    checkout = current_attendance.checkout
+    time_spent = ((checkout - checkin) / 60 / 60).round(2)
+    time_spent = 8.0 if approved_wfh_requests&.any? && time_spent > 8.0
+    current_attendance.update(time_spent: time_spent)
+    flash[:notice] = "Thanks #{current_active_user.first_name}, See you next day."
+    Attendance::CheckoutNotifierWorker.perform_async(current_attendance.id, hours_spent_this_month)
+  end
+
+  def set_date_ranges
+    set_selected_date_range
+
+    if @date_from && @date_to
+      if @date_to < @date_from
+        flash[:danger] = 'End date cannot be before start date'
+        return redirect_to reports_admin_attendances_path
+      else
+        @date_range = @date_from..@date_to
+      end
+    end
+
+    set_last_month_date_range
+  end
+
+  def set_selected_date_range
+    @date_from = params[:from]&.to_datetime&.at_beginning_of_day
+    @date_to = params[:to]&.to_datetime&.at_end_of_day
+    @current_month_sym = @date_from&.strftime('%b')
+  end
+
+  def set_last_month_date_range
+    @ex_date_from = @date_from - 1.month if @date_from
+    @ex_date_to = @date_to - 1.month if @date_to
+    @last_month_sym = @ex_date_from&.strftime('%b')
+    @ex_date_range = @ex_date_from..@ex_date_to if @ex_date_from && @ex_date_to
+  end
+
+  def set_workdays
+    @work_days = @date_range.map { |d| d unless %w[Fri Sat].include?(d.strftime('%a')) }.uniq - [nil] if @date_range
+  end
+
+  def set_holidays
+    @holidays = Holiday.where(starts_on: @date_from..@date_to)&.pluck(:duration)&.inject(:+) || 0
+  end
+
+  def set_reports_entities
+    @resource = params[:type].constantize.find_by(id: params[:id]) if params[:type] && params[:id]
+  end
+
+  def set_attendances_and_vacations
+    @attendances = @resource.attendances.where(checkin: @date_range)
+    @ex_attendances = @resource.attendances.where(checkin: @ex_date_range)
+    @vacation_requests = @resource.vacation_requests.where(starts_on: @date_range).approved
+  end
+
+  def set_actual_vacations
+    @work_from_home_days = @vacation_requests.work_from_home.pluck(:duration).inject(:+) || 0
+    @vacation_days = @vacation_requests.vacation.pluck(:duration).inject(:+) || 0
+    @sick_leave_days = @vacation_requests.sick_leave.pluck(:duration).inject(:+) || 0
+  end
+
+  def set_actual_work_days_and_hours
+    if @attendances&.any?
+      calculate_work_days_and_hours
+    elsif params[:from].present? && params[:to].present?
+      flash[:danger] = 'This employee has no attendances during the selected dates'
+    end
+  end
+
+  def calculate_work_days_and_hours
+    @actual_work_days = @attendances.size - @attendances.where(checkout: nil).size
+    @actual_work_hours = @attendances.pluck(:time_spent)&.inject(:+)&.round(2)
+  end
+
+  def set_total_work_days_and_hours
+    return unless @work_days
+    @total_work_days = @work_days.size - @holidays - @vacation_days - @sick_leave_days
+    @total_work_hours = @total_work_days * 8
+  end
+
   def set_messages
-    @messages = { checkin: [
-                    'Have you attended twice ?',
-                    'Are you ok dear ?',
-                    'Looks like you forgot your coffee!',
-                    'Didn\'t you hear any welcomes today ?',
-                    'Refresh your memory!',
-                    'Maybe you need a break ?',
-                    'Don\'t worry, we have an excellent memory.',
-                    'Why do you insist ?'
-                  ],
-                  checkout: [
-                    'I\'m sure!',
-                    'Looks like you had a long day.',
-                    'Haven\'t you take your break ?',
-                    'You can count on us.',
-                    'And you did great today!',
-                    'Go home safe.',
-                    'We need you refreshed tomorrow!',
-                    'Why do you insist ?'
-                  ]
-                }
+    @messages = {
+      checkin: [
+        'Have you attended twice ?',
+        'Are you ok dear ?',
+        'Looks like you forgot your coffee!',
+        'Didn\'t you hear any welcomes today ?',
+        'Refresh your memory!',
+        'Maybe you need a break ?',
+        'Don\'t worry, we have an excellent memory.',
+        'Why do you insist ?'
+      ],
+      checkout: [
+        'I\'m sure!',
+        'Looks like you had a long day.',
+        'Haven\'t you take your break ?',
+        'You can count on us.',
+        'And you did great today!',
+        'Go home safe.',
+        'We need you refreshed tomorrow!',
+        'Why do you insist ?'
+      ]
+    }
   end
 end

@@ -45,7 +45,7 @@ class Admin::UpdatesController < Admin::BaseAdminController
   private
 
   def update_params
-    params.require(:update).permit(:version, :changelog, images:[])
+    params.require(:update).permit(:version, :changelog, images: [])
   end
 
   def set_settings

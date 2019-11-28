@@ -72,13 +72,13 @@ class Admin::PerformancesController < Admin::BaseAdminController
 
     if params[:topic]
       @previous_performance = @employee.performances.where(topic: params[:topic],
-                                   year: params[:year_from],
-                                   month: params[:month_from],
-                                   employee_id: params[:employee_id]).first
+                                                           year: params[:year_from],
+                                                           month: params[:month_from],
+                                                           employee_id: params[:employee_id]).first
       @last_performance = @employee.performances.where(topic: params[:topic],
-                                   year: params[:year_to],
-                                   month: params[:month_to],
-                                   employee_id: params[:employee_id]).first
+                                                       year: params[:year_to],
+                                                       month: params[:month_to],
+                                                       employee_id: params[:employee_id]).first
     else
       @performances = @employee.performances
     end

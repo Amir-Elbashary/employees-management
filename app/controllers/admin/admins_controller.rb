@@ -79,10 +79,9 @@ class Admin::AdminsController < Admin::BaseAdminController
 
   def set_performances
     @performances = current_employee&.performances&.where(year: Time.zone.now.year, month: Time.zone.now.month)
-    if current_employee
-      @performances_score = (PerformanceTopic.count * 5)
-      @total_score = @performances.pluck(:score).inject(:+)
-    end
+    return unless current_employee
+    @performances_score = (PerformanceTopic.count * 5)
+    @total_score = @performances.pluck(:score).inject(:+)
   end
 
   # def set_update
@@ -93,47 +92,40 @@ class Admin::AdminsController < Admin::BaseAdminController
 
   def admin_params
     if current_admin
-      if params[:admin][:password].present?
-        params.require(:admin).permit(:password, :password_confirmation,
-                                      :first_name, :middle_name, :last_name, :nationality, :marital_status,
-                                      :military_status, :gender, :birthdate, :mobile_numbers,
-                                      :landline_numbers, :address, :social_id, :personal_email,
-                                      :business_email, :qualification, :graduation_year,
-                                      :date_of_employment, :job_description, :work_type,
-                                      :vacation_balance, :date_of_social_insurance_joining,
-                                      :social_insurance_number, :avatar,
-                                      :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
-      else
-        params.require(:admin).permit(:first_name, :middle_name, :last_name, :nationality, :marital_status,
-                                      :military_status, :gender, :birthdate, :mobile_numbers,
-                                      :landline_numbers, :address, :social_id, :personal_email,
-                                      :business_email, :qualification, :graduation_year,
-                                      :date_of_employment, :job_description, :work_type,
-                                      :vacation_balance, :date_of_social_insurance_joining,
-                                      :social_insurance_number, :avatar,
-                                      :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
-      end
+      update_model_attributes(:admin)
     elsif current_hr
-      if params[:hr][:password].present?
-        params.require(:hr).permit(:password, :password_confirmation,
-                                   :first_name, :middle_name, :last_name, :nationality, :marital_status,
-                                   :military_status, :gender, :birthdate, :mobile_numbers,
-                                   :landline_numbers, :address, :social_id, :personal_email,
-                                   :business_email, :qualification, :graduation_year,
-                                   :date_of_employment, :job_description, :work_type,
-                                   :vacation_balance, :date_of_social_insurance_joining,
-                                   :social_insurance_number, :avatar,
-                                   :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
-      else
-        params.require(:hr).permit(:first_name, :middle_name, :last_name, :nationality, :marital_status,
-                                   :military_status, :gender, :birthdate, :mobile_numbers,
-                                   :landline_numbers, :address, :social_id, :personal_email,
-                                   :business_email, :qualification, :graduation_year,
-                                   :date_of_employment, :job_description, :work_type,
-                                   :vacation_balance, :date_of_social_insurance_joining,
-                                   :social_insurance_number, :avatar,
-                                   :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
-      end
+      update_model_attributes(:hr)
     end
+  end
+
+  def update_model_attributes(model)
+    if params[model][:password].present?
+      model_params_with_password(model)
+    else
+      model_params_without_password(model)
+    end
+  end
+
+  def model_params_with_password(model)
+    params.require(model).permit(:password, :password_confirmation,
+                                 :first_name, :middle_name, :last_name, :nationality, :marital_status,
+                                 :military_status, :gender, :birthdate, :mobile_numbers,
+                                 :landline_numbers, :address, :social_id, :personal_email,
+                                 :business_email, :qualification, :graduation_year,
+                                 :date_of_employment, :job_description, :work_type,
+                                 :vacation_balance, :date_of_social_insurance_joining,
+                                 :social_insurance_number, :avatar,
+                                 :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
+  end
+
+  def model_params_without_password(model)
+    params.require(model).permit(:first_name, :middle_name, :last_name, :nationality, :marital_status,
+                                 :military_status, :gender, :birthdate, :mobile_numbers,
+                                 :landline_numbers, :address, :social_id, :personal_email,
+                                 :business_email, :qualification, :graduation_year,
+                                 :date_of_employment, :job_description, :work_type,
+                                 :vacation_balance, :date_of_social_insurance_joining,
+                                 :social_insurance_number, :avatar,
+                                 :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
   end
 end

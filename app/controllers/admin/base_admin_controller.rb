@@ -49,9 +49,9 @@ class Admin::BaseAdminController < ApplicationController
     @approved_wfh_requests = current_employee&.vacation_requests&.work_from_home&.approved&.where("? BETWEEN starts_on AND ends_on", Date.today)
 
     @pending_requests = if current_admin
-                          VacationRequest.where(status: ['pending', 'confirmed', 'escalated'])
+                          VacationRequest.where(status: %w[pending confirmed escalated])
                         elsif current_hr
-                          VacationRequest.where(status: ['confirmed', 'escalated'])
+                          VacationRequest.where(status: %w[confirmed escalated])
                         elsif current_employee&.supervisor?
                           VacationRequest.where(requester: current_employee.employees, status: 'pending')
                         elsif current_employee&.employee?

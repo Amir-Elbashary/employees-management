@@ -9,7 +9,7 @@ class Admin::NotificationsController < Admin::BaseAdminController
     Notification::GeneralNotificationWorker.perform_async(params[:notification][:content])
   end
 
-  def index;end
+  def index; end
 
   def toggle_read_status
     if @notification.unread?
