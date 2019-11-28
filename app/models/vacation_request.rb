@@ -1,7 +1,7 @@
 class VacationRequest < ApplicationRecord
   enum status: %i[pending confirmed refused escalated approved declined]
   enum kind: %i[vacation work_from_home sick_leave mission]
-  before_save :calculate_duration, on: %[create update]
+  before_save :calculate_duration, on: %i[create update]
 
   validates :starts_on, :ends_on, :reason, presence: true
 
@@ -9,16 +9,24 @@ class VacationRequest < ApplicationRecord
 
   default_scope { order(id: :desc) }
 
-  def calculate_duration
+  def requested_days
     # Set date range
     range = starts_on..ends_on
     # Generate array of range days
     days = range.map { |d| d.strftime('%a') }
-    # Remove last day to get actual duration
-    days = days.reverse.drop(1).reverse
-    # Remove weekend days from the calculation
-    days = days - ["Fri", "Sat"]
-    # Set duration for the request
-    self.duration = days.size
+    # Remove last day to get actual days array
+    days.reverse.drop(1).reverse
+  end
+
+  def duration_with_weekends
+    requested_days.size
+  end
+
+  def duration_without_weekends
+    (requested_days - %w[Fri Sat]).size
+  end
+
+  def calculate_duration
+    self.duration = duration_without_weekends
   end
 end

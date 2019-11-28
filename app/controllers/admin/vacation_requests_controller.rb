@@ -101,13 +101,12 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     end
 
     if @vacation_request.work_from_home?
-      request_duration = (@vacation_request.ends_on - @vacation_request.starts_on).to_i
+      request_duration = @vacation_request.duration_without_weekends
       work_from_home_requests = requester.vacation_requests.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month).approved.work_from_home
       days_taken = 0
 
       work_from_home_requests.each do |request|
-        duration = (request.ends_on - request.starts_on).to_i
-        days_taken += duration
+        days_taken += request.duration
       end
 
       if request_duration > work_from_home_days

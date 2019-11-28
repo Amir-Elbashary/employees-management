@@ -1,5 +1,6 @@
 require 'rails_helper'
 include AdminHelpers
+include ActiveSupport::Testing::TimeHelpers
 
 RSpec.feature 'Processing pending vacation requests as H.R' do
   before do
@@ -47,7 +48,7 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
     end
 
     context 'when request type is work from home' do
-      it 'should be approved, not deducted from vanacation balance and counted as work from home if work from home limit is not reached and within the allowed limit of days' do
+      it 'should be approved, not deducted from vanacation balance and counted as work from home if work from home limit is not reached and within the allowed limit of days (assuming 2 days during same week requested)' do
         assign_permission(@hr, :approve, VacationRequest)
         @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee, kind: 1, status: 1)
 
@@ -65,7 +66,37 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
         expect(page).to have_content('will be working from home!')
       end
 
+      it 'should be approved, not deducted from vanacation balance and counted as work from home if work from home limit is not reached and within the allowed limit of days (assuming the range includes weekends)' do
+        # Parsing the current day to be Monday
+        travel_to Time.zone.parse('2019-09-23')
+
+        assign_permission(@hr, :approve, VacationRequest)
+        # Requesting to start working from home on
+        # Wednesday to be back on work on Sunday
+        # (Total 2 days since it includes 2 days weekend)
+        @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 6.days, requester: @employee, kind: 1, status: 1)
+
+        visit pending_admin_vacation_requests_path
+
+        expect(Employee.first.vacation_balance).to eq(20)
+
+        # Expecting 2 actualy days after removing weekends
+        expect(VacationRequest.first.duration).to eq(2)
+        expect(page).to have_content('Confirmed')
+
+        find('.approve-link').click
+
+        expect(Employee.first.vacation_balance).to eq(20)
+        expect(page).to have_content('Approved')
+        expect(page).to have_content('Work from home request approved.')
+
+        visit admin_path
+        expect(page).to have_content('will be working from home!')
+      end
+
       it 'should not be approved or counted as work from home if work from home limit is not reached and requested days are longer than the allowed limit of days' do
+        # Parsing the current day to a Friday
+        travel_to Time.zone.parse('2019-09-20')
         assign_permission(@hr, :approve, VacationRequest)
         @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 5.days, requester: @employee, kind: 1, status: 1)
 
@@ -81,6 +112,8 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
       end
 
       it 'should not be approved if work from home limit is reached' do
+        # Parsing the current day to a Friday
+        travel_to Time.zone.parse('2019-09-20')
         assign_permission(@hr, :approve, VacationRequest)
         @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 4.days, requester: @employee, kind: 1, status: 4)
         @vacation_request = create(:vacation_request, starts_on: Date.today + 4.days, ends_on: Date.today + 6.days, requester: @employee, kind: 1, status: 1)
@@ -97,6 +130,8 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
       end
 
       it 'should not be approved if work from home limit is going to be passed after approving the current request' do
+        # Parsing the current day to a Friday
+        travel_to Time.zone.parse('2019-09-20')
         assign_permission(@hr, :approve, VacationRequest)
         @vacation_request = create(:vacation_request, starts_on: Date.today + 2.days, ends_on: Date.today + 3.days, requester: @employee, kind: 1, status: 4)
         @vacation_request = create(:vacation_request, starts_on: Date.today + 4.days, ends_on: Date.today + 6.days, requester: @employee, kind: 1, status: 1)
