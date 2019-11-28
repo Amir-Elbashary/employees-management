@@ -13,6 +13,8 @@ Rails/HasManyOrHasOneDependent:
   Enabled: false               
 Rails/InverseOf:
   Enabled: false
+Rails/OutputSafety:
+  Enabled: false
 Style/MutableConstant:         
   Enabled: false               
 # Metrics/AbcSize:             
