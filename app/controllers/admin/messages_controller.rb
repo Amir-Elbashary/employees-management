@@ -3,31 +3,14 @@ class Admin::MessagesController < Admin::BaseAdminController
   skip_load_resource only: :index
   before_action :set_messages
   before_action :require_same_user, only: :show
+  before_action :set_recipients, only: :create
 
   def new; end
 
   def create
     sent_messages_count = current_active_user.sent_messages.count
-    recipients = params[:message][:recipient].split(',')
 
-    recipients.map do |recipient|
-      recipient_email = recipient.strip.downcase
-
-      if recipient_email == 'all'
-        create_messages(Admin)
-        create_messages(Hr)
-        create_messages(Employee)
-      else
-        admin = Admin.where(email: recipient_email).first
-        hr = Hr.where(email: recipient_email).first
-        employee = Employee.where(email: recipient_email).first
-
-        create_message(admin) if admin
-        create_message(hr) if hr
-        create_message(employee) if employee
-
-      end
-    end
+    send_messages
 
     if current_active_user.sent_messages.count > sent_messages_count
       flash[:notice] = 'Messages sent, Please check your sent messages to make sure they are sent'
@@ -55,6 +38,10 @@ class Admin::MessagesController < Admin::BaseAdminController
     params.require(:message).permit(:subject, :content)
   end
 
+  def set_recipients
+    @recipients = params[:message][:recipient].split(',')
+  end
+
   def set_messages
     @messages = current_active_user.received_messages
     @sent_messages = current_active_user.sent_messages
@@ -68,11 +55,35 @@ class Admin::MessagesController < Admin::BaseAdminController
                    recipient: resource)
   end
 
-  def create_messages(model)
-    model.find_each do |resource|
-      next if resource.email == current_active_user.email
-      create_message(resource)
+  def send_messages
+    @recipients.map do |recipient|
+      recipient_email = recipient.strip.downcase
+
+      if recipient_email == 'all'
+        create_messages([Admin, Hr, Employee])
+      else
+        find_resource_and_create_message(recipient_email)
+      end
     end
+  end
+
+  def create_messages(models)
+    models.map do |model|
+      model.find_each do |resource|
+        next if resource.email == current_active_user.email
+        create_message(resource)
+      end
+    end
+  end
+
+  def find_resource_and_create_message(recipient_email)
+    admin = Admin.where(email: recipient_email).first
+    hr = Hr.where(email: recipient_email).first
+    employee = Employee.where(email: recipient_email).first
+
+    create_message(admin) if admin
+    create_message(hr) if hr
+    create_message(employee) if employee
   end
 
   def require_same_user

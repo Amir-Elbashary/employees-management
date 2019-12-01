@@ -1,8 +1,8 @@
 class Admin::HolidaysController < Admin::BaseAdminController
   load_and_authorize_resource
+  before_action :set_holiday_end, only: :create
 
   def create
-    @holiday.ends_on = @holiday.starts_on + @holiday.duration.days
     if @holiday.save
       flash[:notice] = 'Holiday has been added and announced.'
       redirect_to admin_holidays_path
@@ -27,6 +27,10 @@ class Admin::HolidaysController < Admin::BaseAdminController
   def holiday_params
     params.require(:holiday).permit(:name, :content, :year, :month,
                                     :duration, :starts_on)
+  end
+
+  def set_holiday_end
+    @holiday.ends_on = @holiday.starts_on + @holiday.duration.days
   end
 
   def create_timeline_post(content)

@@ -20,7 +20,7 @@ class Admin::NotificationsController < Admin::BaseAdminController
   end
 
   def toggle_all_read_status
-    @notifications.each { |n| n.read! }
+    @notifications.each(&:read!)
     redirect_to request.referer
   end
 
