@@ -91,6 +91,6 @@ module ApplicationHelper
     return 'is laughing' if react == 'joy'
     return 'is astonished' if react == 'wow'
     return 'is sad' if react == 'sad'
-    return 'is mad' if react == 'angry'
+    'is mad'
   end
 end

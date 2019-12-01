@@ -29,6 +29,8 @@ Metrics/MethodLength:
   Enabled: false
 Metrics/LineLength:
   Max: 120
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false               
 Style/Documentation:           
