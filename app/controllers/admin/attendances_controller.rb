@@ -15,8 +15,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   before_action :set_messages, only: %i[checkin checkout]
 
   def index
-    return unless current_employee
-    return unless current_employee.access_token != 'expired' && current_employee.waiting_for_token?
+    return unless current_employee_token_expired?
     cookies[:ft_att_ver] = { value: current_employee.access_token, expires: 1.year }
     current_employee.token_verified!
   end
@@ -107,6 +106,12 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def ip_address_authorized?
     return true if @settings.ip_addresses.include?(request.remote_ip)
     return true if @settings.ip_addresses[0]&.split(',')&.include?(request.remote_ip)
+  end
+
+  def current_employee_token_expired?
+    return false unless current_employee
+    return false unless current_employee.access_token != 'expired' && current_employee.waiting_for_token?
+    true
   end
 
   def set_attendances

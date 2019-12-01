@@ -45,7 +45,7 @@ class Admin::MessagesController < Admin::BaseAdminController
   end
 
   def mark_all_as_read
-    @messages.each { |m| m.read! }
+    @messages.each(&:read!)
     redirect_to request.referer
   end
 
