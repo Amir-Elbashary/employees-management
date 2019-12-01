@@ -164,7 +164,7 @@ RSpec.feature 'Processing pending vacation requests as H.R' do
         expect(page).to have_content('Approved')
 
         visit admin_path
-        expect(page).to have_content('is not feeling well, The little flowers are rising and blooming')
+        expect(page).to have_content('is not feeling well , The little flowers are rising and blooming')
       end
     end
 
