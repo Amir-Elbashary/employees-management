@@ -9,7 +9,7 @@ class Admin::NotificationsController < Admin::BaseAdminController
     Notification::GeneralNotificationWorker.perform_async(params[:notification][:content])
   end
 
-  def index;end
+  def index; end
 
   def toggle_read_status
     if @notification.unread?
@@ -20,7 +20,7 @@ class Admin::NotificationsController < Admin::BaseAdminController
   end
 
   def toggle_all_read_status
-    @notifications.each { |n| n.read! }
+    @notifications.each(&:read!)
     redirect_to request.referer
   end
 

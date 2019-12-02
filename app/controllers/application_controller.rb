@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
   protect_from_forgery with: :exception
   helper_method :current_active_user, :current_ability
-  skip_before_action :verify_authenticity_token, only: :reorder
   before_action :set_timezone
 
   def current_active_user

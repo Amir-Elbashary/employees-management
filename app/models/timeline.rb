@@ -3,7 +3,7 @@ class Timeline < ApplicationRecord
   mount_uploaders :images, ImageUploader
   enum kind: %i[news status show_off]
   enum creation: %i[manual auto]
-  after_commit -> { Timeline::TimelineWorker.perform_async(self.id) }, on: :create
+  after_commit -> { Timeline::TimelineWorker.perform_async(id) }, on: :create
 
   validates :content, presence: true
 

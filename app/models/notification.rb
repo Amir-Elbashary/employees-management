@@ -1,7 +1,7 @@
 class Notification < ApplicationRecord
   include ActionView::Helpers::DateHelper
   enum read_status: %i[unread read]
-  after_commit -> { Notification::NotificationWorker.perform_async(self.id) }, on: :create
+  after_commit -> { Notification::NotificationWorker.perform_async(id) }, on: :create
 
   validates :content, presence: true
 
