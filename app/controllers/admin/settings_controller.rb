@@ -47,7 +47,7 @@ class Admin::SettingsController < Admin::BaseAdminController
   def generate_custom_actions
     custom_actions = {
       'Admin' => %w[change_password],
-      'Employee' => %w[resend_mail toggle_level],
+      'Employee' => %w[resend_mail toggle_level announce_birthday],
       'Attendance' => %w[grant revoke checkin checkout append reports],
       'VacationRequest' => %w[pending approve decline],
       'Update' => %w[reset_ip]

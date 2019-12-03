@@ -60,6 +60,7 @@ end
 
 # ===================== Testing =====================
 group :test do
+  gem 'rspec-sidekiq', '~> 3.0', '>= 3.0.3'
   gem 'capybara', '~> 3.14'
   gem 'database_cleaner', '~> 1.7'
   gem 'shoulda-matchers', '~> 4.0', '>= 4.0.1'

@@ -40,6 +40,7 @@ class Ability
   def hr_abilities
     can :leaderboard, PerformanceTopic
     can :manage, Performance
+    can :birthdays, Employee
     can :compare, Employee
     can :manage, React
     can :checkin_reminder, Attendance

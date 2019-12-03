@@ -1,4 +1,5 @@
 class Admin::VacationRequestsController < Admin::BaseAdminController
+  include TimelineHelper
   load_and_authorize_resource
   skip_load_resource only: :index
   before_action :set_vacation_requests, only: :index
@@ -156,14 +157,6 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     redirect_to admin_vacation_requests_path
   end
 
-  def create_timeline_post(content)
-    Timeline.create(publisher: @vacation_request.requester,
-                    images: [@vacation_request.requester.profile_pic],
-                    kind: 'news',
-                    creation: 'auto',
-                    content: content)
-  end
-
   def approve_vacation
     flash[:notice] = 'Vacation request Approved.'
     if @vacation_request.approved!
@@ -171,7 +164,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
                                                              @vacation_request.id)
     end
 
-    create_timeline_post(vacation_post_content)
+    create_timeline_post(@vacation_request.requester, vacation_post_content)
   end
 
   def approve_sick_leave
@@ -181,7 +174,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
                                                              @vacation_request.id)
     end
 
-    create_timeline_post(sick_leave_post_content)
+    create_timeline_post(@vacation_request.requester, sick_leave_post_content)
   end
 
   def approve_wfh
@@ -221,7 +214,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
                                                              @vacation_request.id)
     end
 
-    create_timeline_post(wfh_post_content)
+    create_timeline_post(@vacation_request.requester, wfh_post_content)
   end
 
   def approve_mission

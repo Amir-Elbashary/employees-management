@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.feature 'Creating vacation request' do
   before do
     initialize_app_settings
-    @employee = create(:employee)
+    @supervisor = create(:employee, level: 'supervisor')
+    @employee = create(:employee, supervisor: @supervisor)
     login_as(@employee, scope: :employee)
     visit new_admin_vacation_request_path
   end

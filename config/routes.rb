@@ -123,8 +123,12 @@ Rails.application.routes.draw do
         patch :update_profile
         post :resend_mail
         post :toggle_level
+        post :announce_birthday
+      end
+
+      collection do
+        get :birthdays
       end
     end
-
   end
 end
