@@ -5,12 +5,12 @@
         <h4 class="card-title m-t-10"><%= current_active_user.name %></h4>
         <h6 class="card-subtitle"><%= current_active_user.job_description %></h6>
         <div class="row text-center justify-content-md-center">
-          <div class="col-8">
+          <div class="col-12">
             <a href="javascript:void(0)" class="link"><i class="icon-people"></i> <font class="font-medium">Started working: <%= current_active_user.date_of_employment&.strftime('%d-%m-%Y') %></font></a>
           </div>
         </div>
         <div class="row text-center justify-content-md-center">
-          <div class="col-10">
+          <div class="col-12">
             <a href="javascript:void(0)" class="link"><i class="icon-picture"></i> <font class="font-medium">Vacation Balance: <%= pluralize(current_active_user.vacation_balance, 'day') %> remaining</font></a>
           </div>
         </div>
