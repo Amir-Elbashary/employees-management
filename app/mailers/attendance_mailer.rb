@@ -6,4 +6,10 @@ class AttendanceMailer < ApplicationMailer
     mail(to: @attendance.attender.email,
          subject: "Attendance summary for #{@attendance.checkin.strftime('%A %d %B %Y')}")
   end
+
+  def checkout_reminder(attendance_id)
+    @attendance = Attendance.find(attendance_id)
+    mail(to: @attendance.attender.email,
+         subject: "Checkout reminder for today #{@attendance.checkin.strftime('%A %d %B %Y')}")
+  end
 end

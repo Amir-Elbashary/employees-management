@@ -37,7 +37,8 @@ class Admin::AttendancesController < Admin::BaseAdminController
     if @current_attendance
       flash[:notice] = "You have already checked-in today, #{@messages[:checkin].sample}"
     else
-      Attendance.create(attender: current_active_user, checkin: Time.zone.now)
+      attendance = Attendance.create(attender: current_active_user, checkin: Time.zone.now)
+      send_checkout_reminder(attendance)
       flash[:notice] = "Thank you #{current_active_user.first_name}, Wishing you good and productive day."
     end
 
@@ -179,6 +180,10 @@ class Admin::AttendancesController < Admin::BaseAdminController
     current_attendance.update(time_spent: time_spent)
     flash[:notice] = "Thanks #{current_active_user.first_name}, See you next day."
     Attendance::CheckoutNotifierWorker.perform_async(current_attendance.id, hours_spent_this_month)
+  end
+
+  def send_checkout_reminder(attendance)
+    Attendance::CheckoutReminderWorker.perform_in(475.minutes.from_now, attendance.id)
   end
 
   def set_date_ranges
