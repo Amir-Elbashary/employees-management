@@ -15,9 +15,10 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def create
     if @vacation_request.save
+      @vacation_request.confirmed! unless current_employee
+      VacationRequest::NewRequestNotifierWorker.perform_async(@vacation_request.id) if current_employee
       flash[:notice] = 'Request has been submitted.'
       redirect_to admin_vacation_requests_path
-      VacationRequest::NewRequestNotifierWorker.perform_async(@vacation_request.id)
     else
       render 'new'
     end
@@ -70,6 +71,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     if @vacation_request.vacation?
       approve_vacation if @requester.update(vacation_balance: @requester.vacation_balance - @vacation_request.duration)
     end
+
     approve_sick_leave if @vacation_request.sick_leave?
     approve_mission if @vacation_request.mission?
     approve_wfh if @vacation_request.work_from_home?
@@ -159,21 +161,13 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def approve_vacation
     flash[:notice] = 'Vacation request Approved.'
-    if @vacation_request.approved!
-      VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id,
-                                                             @vacation_request.id)
-    end
-
+    send_email_notification if @vacation_request.approved!
     create_timeline_post(@vacation_request.requester, vacation_post_content)
   end
 
   def approve_sick_leave
     flash[:notice] = 'Sick leave request approved.'
-    if @vacation_request.approved!
-      VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id,
-                                                             @vacation_request.id)
-    end
-
+    send_email_notification if @vacation_request.approved!
     create_timeline_post(@vacation_request.requester, sick_leave_post_content)
   end
 
@@ -209,21 +203,21 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def process_valid_request
     flash[:notice] = 'Work from home request approved.'
-    if @vacation_request.approved!
-      VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id,
-                                                             @vacation_request.id)
-    end
-
+    send_email_notification if @vacation_request.approved!
     create_timeline_post(@vacation_request.requester, wfh_post_content)
   end
 
   def approve_mission
-    if @vacation_request.approved!
-      VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id,
-                                                             @vacation_request.id)
-    end
-
     flash[:notice] = 'Mission request approved.'
+    send_email_notification if @vacation_request.approved!
+  end
+
+  def send_email_notification
+    worker = VacationRequest::HrApproveNotifierWorker
+    user_id = current_active_user.id
+    request_id = @vacation_request.id
+
+    worker.perform_async(user_id, request_id) if @vacation_request.requester.is_a?(Employee)
   end
 
   def vacation_post_content

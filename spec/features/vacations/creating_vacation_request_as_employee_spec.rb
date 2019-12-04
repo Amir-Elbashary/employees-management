@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Creating vacation request' do
+RSpec.feature 'Creating vacation request as employee' do
   before do
     initialize_app_settings
     @supervisor = create(:employee, level: 'supervisor')
@@ -19,7 +19,8 @@ RSpec.feature 'Creating vacation request' do
     
     expect(page).to have_content('Request has been submitted.')
     expect(page).to have_content(VacationRequest.first.starts_on.strftime('%d-%m-%Y'))
-    expect(VacationRequest.count).to eq(1)
+    expect(@employee.vacation_requests.count).to eq(1)
+    expect(VacationRequest.first.status).to eq('pending')
   end
 
   describe 'with invalid data' do
