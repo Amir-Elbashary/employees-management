@@ -129,7 +129,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
   end
 
   def birthday_post_content
-    "<h2><strong>Happiest birthday #{@employee.name} :slightly_smiling_face:</strong></h2>
+    "<h2><strong>:tada: &nbsp; Happiest birthday #{@employee.name} &nbsp; :tada:</strong></h2>
     <h4><strong>May this year be full of joy, happiness
     , health and wealth :heart_eyes:</strong></h4><h4><strong>From your Fustany family
     , we wish you all the best :heart:</strong></h4>"
