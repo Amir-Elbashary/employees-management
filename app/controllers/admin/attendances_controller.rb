@@ -65,7 +65,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
     return redirect_to remote_checkout_admin_attendances_path(error: true) unless ip_address_authorized?
     data = JWT.decode(params[:token], hmac_secret, true, algorithm: 'HS256')[0]
     @current_attendance = Attendance.find(data['attendance_id'])
-    perform_checkout if @current_attendance&.update(checkout: Time.zone.now)
+    perform_checkout if @current_attendance&.update(checkout: (Time.zone.now + 5.minutes))
     redirect_to remote_checkout_admin_attendances_path(success: true)
   end
 
