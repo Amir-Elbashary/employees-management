@@ -7,9 +7,7 @@
 <% end %>
 
 <% content_for :bc_buttons do %>
-  <% if current_employee %>
-    <a href="<%= new_admin_vacation_request_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> New Request</button></a>
-  <% end %>
+  <a href="<%= new_admin_vacation_request_path %>"><button type="button" class="btn btn-info"><i class="fa fa-plus-circle"></i> New Request</button></a>
 <% end %>
 
 <%= render 'shared/dashboard/breadcrumb' %>

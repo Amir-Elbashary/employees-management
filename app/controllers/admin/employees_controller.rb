@@ -1,8 +1,10 @@
 class Admin::EmployeesController < Admin::BaseAdminController
+  include TimelineHelper
   load_and_authorize_resource
   before_action :set_employees, only: :compare
   before_action :set_sections, except: %i[index destroy]
   before_action :build_documents, only: %i[new edit]
+  before_action :set_birthdays, only: :birthdays
 
   def new; end
 
@@ -11,7 +13,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
       @employee.update(display_name: @employee.full_name)
       flash[:notice] = "#{@employee.full_name} has joined Fustany Team."
       redirect_to admin_employees_path
-      Mail::WelcomeWorker.perform_async(@employee.id)
+      Employee::WelcomeWorker.perform_async(@employee.id)
     else
       render :new
     end
@@ -83,6 +85,19 @@ class Admin::EmployeesController < Admin::BaseAdminController
     redirect_to admin_path
   end
 
+  def birthdays; end
+
+  def announce_birthday
+    create_timeline_post(@employee, birthday_post_content)
+
+    flash[:notice] = "You have announced #{@employee.first_name}'s birthday"\
+                     ', Timeline post has been created and email was sent.'
+
+    Employee::BirthdayMailNotifierWorker.perform_async(@employee.id)
+
+    redirect_to request.referer
+  end
+
   private
 
   def employee_params
@@ -107,5 +122,16 @@ class Admin::EmployeesController < Admin::BaseAdminController
 
   def build_documents
     @employee.documents.build
+  end
+
+  def set_birthdays
+    @birthdays = Employee.upcoming_birthdays
+  end
+
+  def birthday_post_content
+    "<h2><strong>:tada: &nbsp; Happiest birthday #{@employee.name} &nbsp; :tada:</strong></h2>
+    <h4><strong>May this year be full of joy, happiness
+    , health and wealth :heart_eyes:</strong></h4><h4><strong>From your Fustany family
+    , we wish you all the best :heart:</strong></h4>"
   end
 end

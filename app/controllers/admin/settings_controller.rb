@@ -27,7 +27,8 @@ class Admin::SettingsController < Admin::BaseAdminController
   private
 
   def settings_params
-    params.require(:setting).permit(:work_from_home, ip_addresses: [])
+    params.require(:setting).permit(:work_from_home, :send_attendance_summary, :send_checkout_reminder,
+                                    :checkout_reminder_minutes, ip_addresses: [])
   end
 
   def set_settings
@@ -47,8 +48,8 @@ class Admin::SettingsController < Admin::BaseAdminController
   def generate_custom_actions
     custom_actions = {
       'Admin' => %w[change_password],
-      'Employee' => %w[resend_mail toggle_level],
-      'Attendance' => %w[grant revoke checkin checkout append reports],
+      'Employee' => %w[resend_mail toggle_level announce_birthday],
+      'Attendance' => %w[grant revoke checkin checkout remote_checkout append reports],
       'VacationRequest' => %w[pending approve decline],
       'Update' => %w[reset_ip]
     }

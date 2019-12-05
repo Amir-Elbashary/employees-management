@@ -56,8 +56,8 @@ class Admin::BaseAdminController < ApplicationController
   end
 
   def set_notifications_and_messages
-    @notifications = current_active_user.notifications.limit(10)
-    @inbox = current_active_user.received_messages.limit(10)
+    @notifications = current_active_user&.notifications&.limit(10)
+    @inbox = current_active_user&.received_messages&.limit(10)
   end
 
   def set_attendance
@@ -105,7 +105,7 @@ class Admin::BaseAdminController < ApplicationController
     attendances_this_month = current_active_user&.attendances
                              &.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month)
 
-    @hours_spent_this_month = attendances_this_month.pluck(:time_spent)&.inject(:+)&.round(2) || 0
+    @hours_spent_this_month = attendances_this_month&.pluck(:time_spent)&.inject(:+)&.round(2) || 0
   end
 
   def set_progress_bar_color

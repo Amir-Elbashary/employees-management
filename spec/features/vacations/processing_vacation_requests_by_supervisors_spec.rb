@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.feature 'Processing pending vacation requests as a supervisor' do
   before do
     initialize_app_settings
+    @hr = create(:hr)
     @supervisor = create(:employee, level: 1)
     @employee = create(:employee, vacation_balance: 20, supervisor: @supervisor)
     @other_employee = create(:employee)

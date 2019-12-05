@@ -23,6 +23,7 @@ gem 'sidekiq', '~> 5.2.7'
 # =============== Authentication Gems ===============
 gem 'devise', '~> 4.6', '>= 4.6.1'
 gem 'cancancan', '~> 2.3'
+gem 'jwt', '~> 2.2', '>= 2.2.1'
 
 # =============== Assets Related Gems ===============
 gem 'jquery-rails'
@@ -60,6 +61,7 @@ end
 
 # ===================== Testing =====================
 group :test do
+  gem 'rspec-sidekiq', '~> 3.0', '>= 3.0.3'
   gem 'capybara', '~> 3.14'
   gem 'database_cleaner', '~> 1.7'
   gem 'shoulda-matchers', '~> 4.0', '>= 4.0.1'

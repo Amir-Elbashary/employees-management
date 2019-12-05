@@ -1,0 +1,7 @@
+<% if params[:success] %>
+  Thanks, You have checked out successfully, See you next day :)
+<% elsif params[:error] %>
+  Token expired or invalid, or maybe you're not using an authorized network, Please try again after checking these requirements
+<% elsif !params[:token] && !params[:token] %>
+  There is nothing much to do here
+<% end %>

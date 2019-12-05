@@ -369,6 +369,16 @@ iframe {
   }
 }
 
+@media (max-width: 820px) {
+  .login100-pic {
+    display: none;
+  }
+
+  .login-form {
+    margin-top: -48px;
+  }
+}
+
 @media (max-width: 768px) {
   .wrap-login100 {
     padding: 100px 80px 33px 80px;

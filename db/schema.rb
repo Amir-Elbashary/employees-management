@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_123648) do
+ActiveRecord::Schema.define(version: 2019_12_05_091018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -329,6 +329,9 @@ ActiveRecord::Schema.define(version: 2019_11_14_123648) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "work_from_home", default: 0
+    t.boolean "send_attendance_summary", default: true
+    t.boolean "send_checkout_reminder", default: true
+    t.integer "checkout_reminder_minutes", default: 5
   end
 
   create_table "timelines", force: :cascade do |t|
