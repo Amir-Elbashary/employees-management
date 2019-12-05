@@ -49,7 +49,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
     if @current_attendance&.checkout
       flash[:notice] = "You have already checked-out today, #{@messages[:checkout].sample}"
     elsif @current_attendance&.update(checkout: Time.zone.now)
-      perform_checkout(@current_attendance, @approved_wfh_requests, @hours_spent_this_month)
+      perform_checkout
     else
       flash[:danger] = 'You haven\'t check-in today yet, Let\'s start a productive day!'
     end
@@ -172,18 +172,29 @@ class Admin::AttendancesController < Admin::BaseAdminController
     end
   end
 
-  def perform_checkout(current_attendance, approved_wfh_requests, hours_spent_this_month)
-    checkin = current_attendance.checkin
-    checkout = current_attendance.checkout
-    time_spent = ((checkout - checkin) / 60 / 60).round(2)
-    time_spent = 8.0 if approved_wfh_requests&.any? && time_spent > 8.0
-    current_attendance.update(time_spent: time_spent)
+  def perform_checkout
+    time_spent = calculate_time_spent
+    @current_attendance.update(time_spent: time_spent)
     flash[:notice] = "Thanks #{current_active_user.first_name}, See you next day."
-    Attendance::CheckoutNotifierWorker.perform_async(current_attendance.id, hours_spent_this_month)
+    send_attendance_summary_mail if @settings.send_attendance_summary?
+  end
+
+  def calculate_time_spent
+    checkin = @current_attendance.checkin
+    checkout = @current_attendance.checkout
+    time_spent = ((checkout - checkin) / 60 / 60).round(2)
+    time_spent = 8.0 if @approved_wfh_requests&.any? && time_spent > 8.0
+    time_spent
+  end
+
+  def send_attendance_summary_mail
+    Attendance::CheckoutNotifierWorker.perform_async(@current_attendance.id, @hours_spent_this_month)
   end
 
   def send_checkout_reminder(attendance)
-    Attendance::CheckoutReminderWorker.perform_in(475.minutes.from_now, attendance.id)
+    # Work day have 8 * 60 = 480 minutes
+    reminding_time = (480 - @settings.checkout_reminder_minutes).minutes.from_now
+    Attendance::CheckoutReminderWorker.perform_in(reminding_time, attendance.id) if @settings.send_checkout_reminder?
   end
 
   def set_date_ranges

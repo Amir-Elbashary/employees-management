@@ -27,7 +27,8 @@ class Admin::SettingsController < Admin::BaseAdminController
   private
 
   def settings_params
-    params.require(:setting).permit(:work_from_home, ip_addresses: [])
+    params.require(:setting).permit(:work_from_home, :send_attendance_summary, :send_checkout_reminder,
+                                    :checkout_reminder_minutes, ip_addresses: [])
   end
 
   def set_settings

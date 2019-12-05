@@ -3,6 +3,7 @@ include AdminHelpers
 
 RSpec.feature 'Checking in/out by admin' do
   before do
+    initialize_app_settings
     @hr = create(:hr)
     assign_permission(@hr, :read, Attendance)
     assign_permission(@hr, :checkin, Attendance)
