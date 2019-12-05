@@ -5,10 +5,10 @@
       <h3 class="text-warning"><i class="fa fa-exclamation-triangle"></i> <%= current_active_user.first_name %>, You haven't check-in yet!</h3>
       <br>
       <%= link_to checkin_admin_attendances_path, method: :post, data: { confirm: 'Got your coffee ?, Ready to start?' } do %>
-        <button class="btn btn-success"><b>Check-in now!</b></button>
+        <button class="btn btn-success m-b-8"><b>Check-in now!</b></button>
       <% end %>
       <%= link_to checkin_reminder_admin_attendances_path, method: :post do %>
-        <button class="btn btn-info"><b>Remind me in 2 hours!</b></button>
+        <button class="btn btn-info m-b-8"><b>Remind me in 2 hours!</b></button>
       <% end %>
     </div>
   <% end %>
@@ -42,10 +42,10 @@
           </div>
         </div>
         <%= link_to checkout_admin_attendances_path, method: :post, data: { confirm: 'Finished everything ? ready to go home ?' } do %>
-          <button class="btn btn-success"><b>I'm going home!</b></button>
+          <button class="btn btn-success m-b-8"><b>I'm going home!</b></button>
         <% end %>
         <%= link_to checkout_reminder_admin_attendances_path, method: :post do %>
-          <button class="btn btn-info"><b>Remind me in 2 hours!</b></button>
+          <button class="btn btn-info m-b-8"><b>Remind me in 2 hours!</b></button>
         <% end %>
       </div>
     <% end %>
