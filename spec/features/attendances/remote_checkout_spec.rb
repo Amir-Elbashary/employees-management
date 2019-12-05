@@ -36,7 +36,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
       visit remote_checkout_admin_attendances_path(token: token)
 
       expect(Employee.first.attendances.first.checkout).not_to eq(nil)
-      expect(Employee.first.attendances.first.time_spent).to eq(4)
+      expect(Employee.first.attendances.first.time_spent).to be >= 4
       expect(page).to have_content('Thanks, You have checked out successfully, See you next day :)')
 
       travel_to Time.zone.now + 10.minutes
