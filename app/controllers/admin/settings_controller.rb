@@ -49,7 +49,7 @@ class Admin::SettingsController < Admin::BaseAdminController
     custom_actions = {
       'Admin' => %w[change_password],
       'Employee' => %w[resend_mail toggle_level announce_birthday],
-      'Attendance' => %w[grant revoke checkin checkout append reports],
+      'Attendance' => %w[grant revoke checkin checkout remote_checkout append reports],
       'VacationRequest' => %w[pending approve decline],
       'Update' => %w[reset_ip]
     }

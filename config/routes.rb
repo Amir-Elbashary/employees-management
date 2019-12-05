@@ -80,6 +80,7 @@ Rails.application.routes.draw do
 
     resources :attendances do
       collection do
+        get :remote_checkout
         get :reports
 
         post :append

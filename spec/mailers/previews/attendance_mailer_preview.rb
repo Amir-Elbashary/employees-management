@@ -9,6 +9,6 @@ class AttendanceMailerPreview < ActionMailer::Preview
 
   def checkin_reminder_preview
     @attendance = Attendance.first.id
-    AttendanceMailer.checkout_reminder(@attendance)
+    AttendanceMailer.checkout_reminder(@attendance, ENV['SECRET_KEY_BASE'])
   end
 end

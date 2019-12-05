@@ -23,6 +23,7 @@ gem 'sidekiq', '~> 5.2.7'
 # =============== Authentication Gems ===============
 gem 'devise', '~> 4.6', '>= 4.6.1'
 gem 'cancancan', '~> 2.3'
+gem 'jwt', '~> 2.2', '>= 2.2.1'
 
 # =============== Assets Related Gems ===============
 gem 'jquery-rails'

@@ -1,6 +1,9 @@
 class Admin::AttendancesController < Admin::BaseAdminController
+  layout :resolve_layout
+  rescue_from JWT::ExpiredSignature, JWT::DecodeError, with: :token_expired
+  skip_before_action :authenticate, only: :remote_checkout
   load_and_authorize_resource
-  skip_load_resource only: %i[index reports grant revoke]
+  skip_load_resource only: %i[index reports grant revoke remote_checkout]
   before_action :require_authorized_network, only: %i[checkin checkout]
   before_action :require_authorized_device, only: %i[checkin checkout]
   before_action :set_attendances, only: :index
@@ -55,6 +58,15 @@ class Admin::AttendancesController < Admin::BaseAdminController
     end
 
     redirect_to request.referer
+  end
+
+  def remote_checkout
+    return unless params[:token]
+    return redirect_to remote_checkout_admin_attendances_path(error: true) unless ip_address_authorized?
+    data = JWT.decode(params[:token], hmac_secret, true, algorithm: 'HS256')[0]
+    @current_attendance = Attendance.find(data['attendance_id'])
+    perform_checkout if @current_attendance&.update(checkout: Time.zone.now)
+    redirect_to remote_checkout_admin_attendances_path(success: true)
   end
 
   def checkin_reminder
@@ -194,7 +206,11 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def send_checkout_reminder(attendance)
     # Work day have 8 * 60 = 480 minutes
     reminding_time = (480 - @settings.checkout_reminder_minutes).minutes.from_now
-    Attendance::CheckoutReminderWorker.perform_in(reminding_time, attendance.id) if @settings.send_checkout_reminder?
+    if @settings.send_checkout_reminder?
+      Attendance::CheckoutReminderWorker.perform_in(reminding_time,
+                                                    attendance.id,
+                                                    hmac_secret)
+    end
   end
 
   def set_date_ranges
@@ -291,5 +307,26 @@ class Admin::AttendancesController < Admin::BaseAdminController
         'Why do you insist ?'
       ]
     }
+  end
+
+  def hmac_secret
+    if Rails.env.production?
+      Rails.application.secrets.secret_key_base
+    else
+      ENV['SECRET_KEY_BASE']
+    end
+  end
+
+  def token_expired
+    redirect_to remote_checkout_admin_attendances_path(error: true)
+  end
+
+  def resolve_layout
+    case action_name
+    when 'remote_checkout'
+      'remote_checkout'
+    else
+      'dashboard'
+    end
   end
 end
