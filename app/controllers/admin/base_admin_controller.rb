@@ -1,6 +1,14 @@
 class Admin::BaseAdminController < ApplicationController
   before_action :authenticate
-  before_action :set_entities
+  before_action :set_app_settings
+  before_action :init_new_notification
+  before_action :set_notifications_and_messages
+  before_action :set_attendance
+  before_action :set_wfh_requests
+  before_action :set_all_pending_requests
+  before_action :set_attendance_statistics_today
+  before_action :set_attendance_statistics_this_month
+  before_action :set_progress_bar_color
   layout 'dashboard'
   check_authorization
 
@@ -38,34 +46,69 @@ class Admin::BaseAdminController < ApplicationController
     end
   end
 
-  def set_entities
+  def set_app_settings
     @settings = Setting.first
-    @notification = Notification.new
-    @notifications = current_active_user.notifications.limit(10)
-    @inbox = current_active_user.received_messages.limit(10)
     @main_room = Room.find_by(name: 'Fustany Team')
-    @current_attendance = current_active_user&.attendances&.where(created_at: Time.zone.now.at_beginning_of_day..Time.zone.now.at_end_of_day)&.first
-    # TODO known issue where it calculates extra day
-    @approved_wfh_requests = current_employee&.vacation_requests&.work_from_home&.approved&.where("? BETWEEN starts_on AND ends_on", Date.today)
+  end
 
+  def init_new_notification
+    @notification = Notification.new
+  end
+
+  def set_notifications_and_messages
+    @notifications = current_active_user&.notifications&.limit(10)
+    @inbox = current_active_user&.received_messages&.limit(10)
+  end
+
+  def set_attendance
+    @current_attendance = current_active_user&.attendances
+                          &.where(created_at: Time.zone.now.at_beginning_of_day..Time.zone.now.at_end_of_day)&.first
+  end
+
+  def set_wfh_requests
+    # TODO: known issue where it calculates extra day
+    @approved_wfh_requests = current_employee&.vacation_requests
+                                             &.work_from_home&.approved
+                                             &.where('? BETWEEN starts_on AND ends_on', Date.today)
+  end
+
+  def set_all_pending_requests
     @pending_requests = if current_admin
-                          VacationRequest.where(status: ['pending', 'confirmed', 'escalated'])
+                          VacationRequest.where(status: %w[pending confirmed escalated])
                         elsif current_hr
-                          VacationRequest.where(status: ['confirmed', 'escalated'])
+                          VacationRequest.where(status: %w[confirmed escalated])
                         elsif current_employee&.supervisor?
                           VacationRequest.where(requester: current_employee.employees, status: 'pending')
                         elsif current_employee&.employee?
                           current_employee.vacation_requests.pending
                         end
+  end
 
+  def set_attendance_statistics_today
     current_time = Time.zone.now
     start_time = @current_attendance ? @current_attendance.checkin : 0
 
-    @time_spent_today = @current_attendance ? ((current_time - start_time) / 60 / 60).round(2) : 0 
-    @time_spent_percentage = @current_attendance ? ((((current_time - start_time) / 60 / 60).round(2)) / 8 * 100).round(2) : 0
+    @time_spent_today = if @current_attendance
+                          ((current_time - start_time) / 60 / 60).round(2)
+                        else
+                          0
+                        end
 
-    @hours_spent_this_month = current_active_user&.attendances&.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month).pluck(:time_spent)&.inject(:+)&.round(2) || 0
+    @time_spent_percentage = if @current_attendance
+                               (((current_time - start_time) / 60 / 60).round(2) / 8 * 100).round(2)
+                             else
+                               0
+                             end
+  end
 
+  def set_attendance_statistics_this_month
+    attendances_this_month = current_active_user&.attendances
+                             &.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month)
+
+    @hours_spent_this_month = attendances_this_month&.pluck(:time_spent)&.inject(:+)&.round(2) || 0
+  end
+
+  def set_progress_bar_color
     @progress_color = if @time_spent_percentage < 50
                         'danger'
                       elsif @time_spent_percentage.between?(50, 90)

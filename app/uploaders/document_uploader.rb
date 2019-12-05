@@ -20,24 +20,24 @@ class DocumentUploader < CarrierWave::Uploader::Base
   # def scale(width, height)
   #   # do something
   # end
-  
-  # Create different versions of your uploaded files:
-  # version :thumb do            
-  #   process resize_to_fill: [50, 50] 
-  # end                          
 
-  # version :small_200 do            
+  # Create different versions of your uploaded files:
+  # version :thumb do
+  #   process resize_to_fill: [50, 50]
+  # end
+
+  # version :small_200 do
   #   process resize_to_fill: [200, 200]
   # end
 
-  # version :small_300 do            
+  # version :small_300 do
   #   process resize_to_fill: [300, 300]
   # end
 
-  # version :small_400 do            
+  # version :small_400 do
   #   process resize_to_fill: [400, 400]
   # end
-  
+
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   # def extension_whitelist

@@ -27,11 +27,40 @@ class Employee < ApplicationRecord
   has_many :employees, class_name: 'Employee', foreign_key: 'supervisor_id'
   has_many :documents, dependent: :destroy
   has_many :attendances, class_name: 'Attendance', foreign_key: 'attender_id', as: :attender, dependent: :destroy
-  has_many :vacation_requests, class_name: 'VacationRequest', foreign_key: 'requester_id', as: :requester, dependent: :destroy
+  has_many :vacation_requests, class_name: 'VacationRequest', foreign_key: 'requester_id',
+                               as: :requester, dependent: :destroy
   has_many :room_messages, dependent: :destroy
   belongs_to :supervisor, class_name: 'Employee', foreign_key: 'supervisor_id', optional: true
   belongs_to :section, optional: true
 
   accepts_nested_attributes_for :documents, allow_destroy: true,
                                             reject_if: ->(a) { a[:name].blank? }
+
+  def next_birthday
+    return unless birthdate
+    year = Date.today.year
+    mmdd = birthdate.strftime('%m%d')
+    year += 1 if mmdd < Date.today.strftime('%m%d')
+    mmdd = '0301' if mmdd == '0229' && !Date.parse("#{year}0101").leap?
+    Date.parse("#{year}#{mmdd}")
+  end
+
+  def self.upcoming_birthdays
+    birthdays = []
+
+    Employee.order(:date_of_employment).find_each do |e|
+      next unless e.birthdate
+      birthday_object = {
+        id: e.id,
+        name: e.name,
+        job_description: e.job_description,
+        profile_pic: e.profile_pic.url,
+        birthdate: e.next_birthday
+      }
+
+      birthdays << birthday_object
+    end
+
+    birthdays
+  end
 end

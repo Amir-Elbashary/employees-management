@@ -63,30 +63,49 @@ class Admin::PerformancesController < Admin::BaseAdminController
   end
 
   def set_performances
-    if params[:year_from]
-      previous_date = Date.new(params[:year_from].to_i, params[:month_from].to_i)
-      last_date = Date.new(params[:year_to].to_i, params[:month_to].to_i)
-      flash[:notice] = 'Please compare past with future' if last_date < previous_date
-      return redirect_to compare_admin_employee_performances_path(params[:employee_id]) if last_date < previous_date
-    end
+    validate_dates if params[:year_from]
 
     if params[:topic]
-      @previous_performance = @employee.performances.where(topic: params[:topic],
-                                   year: params[:year_from],
-                                   month: params[:month_from],
-                                   employee_id: params[:employee_id]).first
-      @last_performance = @employee.performances.where(topic: params[:topic],
-                                   year: params[:year_to],
-                                   month: params[:month_to],
-                                   employee_id: params[:employee_id]).first
+      set_previous_performances
+      set_last_performances
     else
       @performances = @employee.performances
     end
+
     @total_performances = PerformanceTopic.count * 5
+  end
+
+  def set_previous_performances
+    @previous_performance = @employee.performances.where(topic: params[:topic],
+                                                         year: params[:year_from],
+                                                         month: params[:month_from],
+                                                         employee_id: params[:employee_id]).first
+  end
+
+  def set_last_performances
+    @last_performance = @employee.performances.where(topic: params[:topic],
+                                                     year: params[:year_to],
+                                                     month: params[:month_to],
+                                                     employee_id: params[:employee_id]).first
   end
 
   def set_performance_topics
     @performance_topics = PerformanceTopic.all
+  end
+
+  def validate_dates
+    parse_dates
+    ensure_valid_comparison
+  end
+
+  def parse_dates
+    @previous_date = Date.new(params[:year_from].to_i, params[:month_from].to_i)
+    @last_date = Date.new(params[:year_to].to_i, params[:month_to].to_i)
+  end
+
+  def ensure_valid_comparison
+    flash[:notice] = 'Please compare past with future' if @last_date < @previous_date
+    return redirect_to compare_admin_employee_performances_path(params[:employee_id]) if @last_date < @previous_date
   end
 
   def ensure_same_employee

@@ -13,14 +13,24 @@ Rails/HasManyOrHasOneDependent:
   Enabled: false               
 Rails/InverseOf:
   Enabled: false
+Rails/OutputSafety:
+  Enabled: false
+Rails/Date:
+  Enabled: false
 Style/MutableConstant:         
   Enabled: false               
+Style/DateTime:
+  Enabled: false
 # Metrics/AbcSize:             
 #   Enabled: false
+Metrics/ClassLength:
+  Enabled: false
 Metrics/MethodLength:          
   Enabled: false
 Metrics/LineLength:
   Max: 120
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false               
 Style/Documentation:           

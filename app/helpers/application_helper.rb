@@ -1,40 +1,36 @@
 module ApplicationHelper
-  def bootstrap_class_for flash_type
+  def bootstrap_class_for(flash_type)
     case flash_type
-      when 'success'
-        "alert-success" # Green
-      when 'danger'
-        "alert-danger" # Red
-      when 'alert'
-        "alert-warning" # Yellow
-      when 'notice'
-        "alert-info" # Blue
-      else
-        puts flash_type
+    when 'success'
+      'alert-success' # Green
+    when 'danger'
+      'alert-danger' # Red
+    when 'alert'
+      'alert-warning' # Yellow
+    when 'notice'
+      'alert-info' # Blue
     end
   end
 
-	def toast_bootstrap_class_for flash_type
+  def toast_bootstrap_class_for(flash_type)
     case flash_type
-      when 'success'
-        "success" # Green
-      when 'danger'
-        "error" # Red
-      when 'warning'
-        "warning" # Yellow
-      when 'notice'
-        "info" # Blue
-      else
-        puts flash_type
+    when 'success'
+      'success' # Green
+    when 'danger'
+      'error' # Red
+    when 'warning'
+      'warning' # Yellow
+    when 'notice'
+      'info' # Blue
     end
   end
 
   def formatted_date(date)
-    date.strftime('%d-%m-%Y') unless date.nil?
+    date&.strftime('%d-%m-%Y')
   end
 
   def formatted_time(time)
-    time.strftime('%I:%M %p') unless time.nil?
+    time&.strftime('%I:%M %p')
   end
 
   def update_profile_url(resource)
@@ -50,13 +46,13 @@ module ApplicationHelper
     tree_spaces = '|' + ('&nbsp;' * 6)
     tree_dashes = '|' + ('-' * 4)
 
-    format = if spaces == 0
+    format = if spaces.zero?
                tree_dashes * dashes
-             elsif dashes == 0
+             elsif dashes.zero?
                tree_spaces * spaces
-            else
-              (tree_spaces * spaces) + (tree_dashes * dashes)
-            end
+             else
+               (tree_spaces * spaces) + (tree_dashes * dashes)
+             end
 
     format.html_safe
   end
@@ -95,6 +91,6 @@ module ApplicationHelper
     return 'is laughing' if react == 'joy'
     return 'is astonished' if react == 'wow'
     return 'is sad' if react == 'sad'
-    return 'is mad' if react == 'angry'
+    'is mad'
   end
 end

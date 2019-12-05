@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'Checking in/out by admin' do
   before do
+    initialize_app_settings
     @admin = create(:admin)
     login_as(@admin, scope: :admin)
     visit admin_attendances_path

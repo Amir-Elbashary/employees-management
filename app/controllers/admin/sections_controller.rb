@@ -41,7 +41,8 @@ class Admin::SectionsController < Admin::BaseAdminController
       @section.destroy
       flash[:notice] = 'Section was removed.'
     else
-      flash[:danger] = "You can't delete section while it has employees assigned to it, move them first, employees are (#{employees.join(', ')})"
+      flash[:danger] = "You can't delete section while it has employees assigned to it
+                       , move them first, employees are (#{employees.join(', ')})"
     end
 
     redirect_to admin_sections_path

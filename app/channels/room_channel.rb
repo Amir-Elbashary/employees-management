@@ -7,7 +7,7 @@ class RoomChannel < ApplicationCable::Channel
     # stream_from "room_#{params[:room]}"
   end
 
-  def unsubscribed             
-    stop_all_streams           
+  def unsubscribed
+    stop_all_streams
   end
 end

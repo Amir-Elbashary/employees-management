@@ -1,0 +1,63 @@
+<% content_for :bc_title do %>
+  Employees
+<% end %>
+
+<% content_for :bc_current do %>
+  Birthdays
+<% end %>
+
+<% content_for :bc_buttons do %>
+  <a href="<%= admin_employees_path %>"><button type="button" class="btn btn-info"> All Employees</button></a>
+<% end %>
+
+<%= render 'shared/dashboard/breadcrumb' %>
+
+<%= Date.today + 292.days%>
+<%= @birthdays.first[:birthdate] == (Date.today + 292.days) %>
+
+<!-- ============================================================== -->
+<!-- Projects of the Month -->
+<!-- ============================================================== -->
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+				<div class="d-flex">
+					<div>
+						<h5 class="card-title">Fustany Team Birthdays</h5>
+					</div>
+				</div>
+				<div class="table-responsive m-t-20 no-wrap">
+					<table class="table vm no-th-brd pro-of-month">
+							<thead>
+								<tr>
+									<th colspan="2">Assigned</th>
+									<th>Name</th>
+									<th>Days left</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+                <% @birthdays.map do |birthday_obj| %>
+                  <tr>
+                    <td style="width:50px;"><span class="round"><img src="<%= birthday_obj[:profile_pic] %>" alt="user" width="50"></span></td>
+                    <td>
+                      <h6><%= birthday_obj[:name] %></h6><small class="text-muted"><%= birthday_obj[:job_description] %></small></td>
+                    <td><%= birthday_obj[:birthdate].strftime('%A, %-d %B') %></td>
+                    <td><span class="label label-<%= birthdate_priority(birthday_obj[:birthdate]) %> label-rounded">After <%= (birthday_obj[:birthdate] - Time.zone.today).to_i %> days</span></td>
+                    <td>
+                      <% if Time.zone.today == birthday_obj[:birthdate] %>
+                        <%= link_to 'Notify Team', announce_birthday_admin_employee_path(birthday_obj[:id]), method: :post, class: 'btn btn-sm btn-rounded btn-info announce-link', data: { confirm: "Announce #{birthday_obj[:name]}'s birthday?, this will create timeline post and send email, Proceed?" } %>
+                      <% else %>
+                        <button class="btn btn-sm btn-danger btn-rounded btn-info disabled-announce" data-toggle="tooltip" data-placement="top" title="You can't announce until the right time comes">Notify Team</button>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+							</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

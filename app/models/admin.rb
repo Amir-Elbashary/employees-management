@@ -19,5 +19,6 @@ class Admin < ApplicationRecord
   has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', as: :sender
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', as: :recipient
   has_many :attendances, class_name: 'Attendance', foreign_key: 'attender_id', as: :attender, dependent: :destroy
-  has_many :vacation_requests, class_name: 'VacationRequest', foreign_key: 'requester_id', as: :requester, dependent: :destroy
+  has_many :vacation_requests, class_name: 'VacationRequest', foreign_key: 'requester_id',
+                               as: :requester, dependent: :destroy
 end

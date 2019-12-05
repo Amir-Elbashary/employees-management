@@ -16,7 +16,7 @@
   <div class="col-6">
     <div class="card">
       <div class="card-header bg-info">
-        <h4 class="m-b-0 text-white">Settings:</h4>
+        <h4 class="m-b-0 text-white">Settings</h4>
       </div>
       <div class="card-body">  
         <br/>
@@ -43,9 +43,66 @@
           </div>
 
           <div class="row">
+            <div class="col-md-6">          
+              <div class="form-group">        
+                <%= f.label :send_attendance_summary, 'Send attendance summary after checkout' %>
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" id="enable-att-sum" name="setting[send_attendance_summary]" value="true" class="custom-control-input" <%= 'checked' if @settings.send_attendance_summary? %>>
+                      <label class="custom-control-label" for="enable-att-sum">Enable</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" id="disable-att-sum" name="setting[send_attendance_summary]" value="false" class="custom-control-input" <%= 'checked' unless @settings.send_attendance_summary?  %>>
+                      <label class="custom-control-label" for="disable-att-sum">Disable</label>
+                    </div>
+                  </div>
+                </div>
+                <br/>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">          
+              <div class="form-group">        
+                <%= f.label :send_checkout_reminder, 'Send checkout reminder' %>
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" id="enable-chkout-rem" name="setting[send_checkout_reminder]" value="true" class="custom-control-input" <%= 'checked' if @settings.send_checkout_reminder? %>>
+                      <label class="custom-control-label" for="enable-chkout-rem">Enable</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" id="disable-chkout-rem" name="setting[send_checkout_reminder]" value="false" class="custom-control-input" <%= 'checked' unless @settings.send_checkout_reminder? %>>
+                      <label class="custom-control-label" for="disable-chkout-rem">Disable</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">          
+              <div class="form-group">        
+                <%= f.label :checkout_reminder_minutes, 'Send reminder' %> <b>(When Enabled)</b>
+
+								<div class="input-group mb-3">
+									<%= f.number_field :checkout_reminder_minutes, step: 1, min: 5, required: true, class: 'form-control' %>
+									<div class="input-group-append">
+										<span class="input-group-text" id="basic-addon2">Mins before leaving</span>
+									</div>
+								</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                <%= f.submit 'Save', class: 'btn btn-md btn-primary' %>
+                <%= f.submit 'Save', class: 'btn btn-md btn-info' %>
               </div>
             </div>
           </div>

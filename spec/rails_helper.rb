@@ -15,6 +15,22 @@ Dir[Rails.root.join('spec', 'helpers', '**', '*.rb')].each { |f| require f }
 
 include FactoriesInitializers
 
+require 'sidekiq/testing/inline'
+
+RSpec::Sidekiq.configure do |config|
+  # Clears all job queues before each example
+  config.clear_all_enqueued_jobs = true # default => true
+
+  # Whether to use terminal colours when outputting messages
+  config.enable_terminal_colours = true # default => true
+
+  # Warn when jobs are not enqueued to Redis but to a job array
+  config.warn_when_jobs_not_processed_by_sidekiq = true # default => true
+
+  # Disable unneeded warnings
+  config.warn_when_jobs_not_processed_by_sidekiq = false
+end
+
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e

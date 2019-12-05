@@ -10,9 +10,9 @@ module ApplicationCable
     private
 
     def find_verified_user
-      if verified_user = Admin.find_by(id: cookies.signed['admin.id']) ||
+      if (verified_user = Admin.find_by(id: cookies.signed['admin.id']) ||
                          Hr.find_by(id: cookies.signed['hr.id']) ||
-                         Employee.find_by(id: cookies.signed['employee.id'])
+                         Employee.find_by(id: cookies.signed['employee.id']))
         verified_user
       else
         reject_unauthorized_connection

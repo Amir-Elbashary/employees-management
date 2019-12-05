@@ -41,8 +41,9 @@ class Admin::PerformanceTopicsController < Admin::BaseAdminController
   end
 
   def set_performances
-    if params[:year] && params[:month]
-      @performances = Performance.where(topic: @performance_topic.title, year: params[:year], month: params[:month]).order(score: :desc)
-    end
+    return unless params[:year] && params[:month]
+    @performances = Performance.where(topic: @performance_topic.title,
+                                      year: params[:year],
+                                      month: params[:month]).order(score: :desc)
   end
 end

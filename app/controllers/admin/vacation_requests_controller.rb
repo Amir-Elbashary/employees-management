@@ -1,4 +1,5 @@
 class Admin::VacationRequestsController < Admin::BaseAdminController
+  include TimelineHelper
   load_and_authorize_resource
   skip_load_resource only: :index
   before_action :set_vacation_requests, only: :index
@@ -8,14 +9,16 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
   before_action :validate_dates, only: %i[create update]
   before_action :validate_times, only: %i[create update]
   before_action :set_settings, only: :approve
+  before_action :set_requester, only: :approve
 
   def new; end
 
   def create
     if @vacation_request.save
+      @vacation_request.confirmed! unless current_employee
+      VacationRequest::NewRequestNotifierWorker.perform_async(@vacation_request.id) if current_employee
       flash[:notice] = 'Request has been submitted.'
       redirect_to admin_vacation_requests_path
-      VacationRequest::NewRequestNotifierWorker.perform_async(@vacation_request.id)
     else
       render 'new'
     end
@@ -46,95 +49,40 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def escalate
     return unless @vacation_request.update(vacation_request_params)
-    if @vacation_request.escalated!
-      redirect_to admin_vacation_requests_path
-      VacationRequest::EscalationNotifierWorker.perform_async(@vacation_request.id)
-    end
+    return unless @vacation_request.escalated!
+    redirect_to admin_vacation_requests_path
+    VacationRequest::EscalationNotifierWorker.perform_async(@vacation_request.id)
   end
 
   def confirm
-    if @vacation_request.confirmed!
-      redirect_to pending_admin_vacation_requests_path
-      VacationRequest::SupervisorConfirmNotifierWorker.perform_async(@vacation_request.id)
-      VacationRequest::HrPendingApproveNotifierWorker.perform_async(@vacation_request.id)
-    end
+    return unless @vacation_request.confirmed!
+    redirect_to pending_admin_vacation_requests_path
+    VacationRequest::SupervisorConfirmNotifierWorker.perform_async(@vacation_request.id)
+    VacationRequest::HrPendingApproveNotifierWorker.perform_async(@vacation_request.id)
   end
 
   def refuse
-    if @vacation_request.refused!
-      redirect_to pending_admin_vacation_requests_path
-      VacationRequest::SupervisorRefuseNotifierWorker.perform_async(@vacation_request.id)
-    end
+    return unless @vacation_request.refused!
+    redirect_to pending_admin_vacation_requests_path
+    VacationRequest::SupervisorRefuseNotifierWorker.perform_async(@vacation_request.id)
   end
 
   def approve
-    requester = @vacation_request.requester
-    work_from_home_days = @settings.work_from_home
-
     if @vacation_request.vacation?
-      if requester.update(vacation_balance: requester.vacation_balance - @vacation_request.duration)
-        flash[:notice] = 'Vacation request Approved.'
-        VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id, @vacation_request.id) if @vacation_request.approved!
-
-        content = "<p><strong>#{@vacation_request.requester.name} is going to have a vacation :smiley:</strong></p>
-        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.requester.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.requester)} is going to be on a refreshing vacation, We are wishing #{him_her(@vacation_request.requester)} happy time. :wink:</p>
-        <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
-
-        create_timeline_post(content)
-      end
+      approve_vacation if @requester.update(vacation_balance: @requester.vacation_balance - @vacation_request.duration)
     end
 
-    if @vacation_request.sick_leave?
-      flash[:notice] = 'Sick leave request approved.'
-      VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id, @vacation_request.id) if @vacation_request.approved!
-
-      content = "<p><strong>#{@vacation_request.requester.name} is not feeling well :pensive:</strong></p>
-      <p><strong>&nbsp;&nbsp;</strong>We're sorry to hear that #{@vacation_request.requester.first_name} will be off from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, as #{he_she(@vacation_request.requester)} is not feeling well, The little flowers are rising and blooming; it&rsquo;s the world&rsquo;s way of saying, &ldquo;get well soon.&rdquo; :pray:</p>
-      <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
-
-      create_timeline_post(content)
-    end
-
-    if @vacation_request.mission?
-      flash[:notice] = 'Mission request approved.'
-      VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id, @vacation_request.id) if @vacation_request.approved!
-    end
-
-    if @vacation_request.work_from_home?
-      request_duration = @vacation_request.duration_without_weekends
-      work_from_home_requests = requester.vacation_requests.where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month).approved.work_from_home
-      days_taken = 0
-
-      work_from_home_requests.each do |request|
-        days_taken += request.duration
-      end
-
-      if request_duration > work_from_home_days
-        flash[:notice] = 'Request duration is longer than the allowed limit of days.'
-      elsif days_taken >= work_from_home_days
-        flash[:danger] = 'Work from home limit reached for this employee.'
-      elsif (days_taken + request_duration) > work_from_home_days
-        flash[:danger] = 'Not enough work from home days left for this employee.'
-      elsif (days_taken + request_duration) <= work_from_home_days
-        flash[:notice] = 'Work from home request approved.'
-        VacationRequest::HrApproveNotifierWorker.perform_async(current_active_user.id, @vacation_request.id) if @vacation_request.approved!
-
-        content = "<p><strong>#{@vacation_request.requester.name} will be working from home!</strong></p>
-        <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.requester.first_name} will be working from home from <strong>#{formatted_date(@vacation_request.starts_on)}</strong> to <strong>#{formatted_date(@vacation_request.ends_on)}</strong>, You can reach #{him_her(@vacation_request.requester)} on Slack!</p>
-        <p><strong>Best regards,</strong><br><strong>Fustany Team</strong></p>"
-
-        create_timeline_post(content)
-      end
-    end
+    approve_sick_leave if @vacation_request.sick_leave?
+    approve_mission if @vacation_request.mission?
+    approve_wfh if @vacation_request.work_from_home?
 
     redirect_to pending_admin_vacation_requests_path
   end
 
   def decline
-    if @vacation_request.declined!
-      redirect_to pending_admin_vacation_requests_path
-      VacationRequest::HrDeclineNotifierWorker.perform_async(current_active_user.id, @vacation_request.id)
-    end
+    return unless @vacation_request.declined!
+    redirect_to pending_admin_vacation_requests_path
+    VacationRequest::HrDeclineNotifierWorker.perform_async(current_active_user.id, @vacation_request.id)
   end
 
   private
@@ -159,22 +107,44 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def set_settings
     @settings = Setting.first
+    @work_from_home_days = @settings.work_from_home
+  end
+
+  def set_requester
+    @requester = @vacation_request.requester
   end
 
   def validate_dates
     return if params[:vacation_request][:kind] == 'mission'
-    return unless params[:vacation_request][:starts_on].present? || params[:vacation_request][:ends_on].present?
-    return if params[:vacation_request][:starts_on] < params[:vacation_request][:ends_on]
+    return if date_params_exist?
+    return if valid_date_params?
     flash[:danger] = 'End date can not be before or equals to start date.'
     redirect_to new_admin_vacation_request_path
   end
 
   def validate_times
     return unless params[:vacation_request][:kind] == 'mission'
-    return unless params[:vacation_request][:starts_at].present? || params[:vacation_request][:ends_at].present?
-    return if params[:vacation_request][:starts_at] < params[:vacation_request][:ends_at]
+    return if time_params_exist?
+    return if valid_time_params?
     flash[:danger] = 'End time can not be before or equals start time.'
     redirect_to new_admin_vacation_request_path
+  end
+
+  def date_params_exist?
+    return true unless params[:vacation_request][:starts_on].present? || params[:vacation_request][:ends_on].present?
+  end
+
+  def valid_date_params?
+    return true if params[:vacation_request][:starts_on] < params[:vacation_request][:ends_on]
+    false
+  end
+
+  def time_params_exist?
+    return true unless params[:vacation_request][:starts_at].present? || params[:vacation_request][:ends_at].present?
+  end
+
+  def valid_time_params?
+    return true if params[:vacation_request][:starts_at] < params[:vacation_request][:ends_at]
   end
 
   def ensure_same_employee
@@ -189,11 +159,95 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
     redirect_to admin_vacation_requests_path
   end
 
-  def create_timeline_post(content)
-    Timeline.create(publisher: @vacation_request.requester,
-                    images: [@vacation_request.requester.profile_pic],
-                    kind: 'news',
-                    creation: 'auto',
-                    content: content)
+  def approve_vacation
+    flash[:notice] = 'Vacation request Approved.'
+    send_email_notification if @vacation_request.approved!
+    create_timeline_post(@vacation_request.requester, vacation_post_content)
+  end
+
+  def approve_sick_leave
+    flash[:notice] = 'Sick leave request approved.'
+    send_email_notification if @vacation_request.approved!
+    create_timeline_post(@vacation_request.requester, sick_leave_post_content)
+  end
+
+  def approve_wfh
+    @request_duration = @vacation_request.duration_without_weekends
+    wfh_requests = @requester.vacation_requests
+                             .where(created_at: Time.zone.now.at_beginning_of_month..Time.zone.now.at_end_of_month)
+                             .approved.work_from_home
+    @days_taken = 0
+
+    wfh_requests.each do |request|
+      @days_taken += request.duration
+    end
+
+    process_wfh_request
+  end
+
+  def process_wfh_request
+    process_invalid_request
+
+    process_valid_request if (@days_taken + @request_duration) <= @work_from_home_days
+  end
+
+  def process_invalid_request
+    if @request_duration > @work_from_home_days
+      flash[:notice] = 'Request duration is longer than the allowed limit of days.'
+    elsif @days_taken >= @work_from_home_days
+      flash[:danger] = 'Work from home limit reached for this employee.'
+    elsif (@days_taken + @request_duration) > @work_from_home_days
+      flash[:danger] = 'Not enough work from home days left for this employee.'
+    end
+  end
+
+  def process_valid_request
+    flash[:notice] = 'Work from home request approved.'
+    send_email_notification if @vacation_request.approved!
+    create_timeline_post(@vacation_request.requester, wfh_post_content)
+  end
+
+  def approve_mission
+    flash[:notice] = 'Mission request approved.'
+    send_email_notification if @vacation_request.approved!
+  end
+
+  def send_email_notification
+    worker = VacationRequest::HrApproveNotifierWorker
+    user_id = current_active_user.id
+    request_id = @vacation_request.id
+
+    worker.perform_async(user_id, request_id) if @vacation_request.requester.is_a?(Employee)
+  end
+
+  def vacation_post_content
+    "<p><strong>#{@vacation_request.requester.name} is going to have a vacation :smiley:</strong></p>
+    <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.requester.first_name} will be off from <strong>
+    #{formatted_date(@vacation_request.starts_on)}</strong> to <strong>
+    #{formatted_date(@vacation_request.ends_on)}</strong>
+    , as #{he_she(@vacation_request.requester)} is going to be on a refreshing vacation
+    , We are wishing #{him_her(@vacation_request.requester)} happy time. :wink:</p>
+    <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
+  end
+
+  def sick_leave_post_content
+    "<p><strong>#{@vacation_request.requester.name} is not feeling well :pensive:</strong></p>
+    <p><strong>&nbsp;&nbsp;</strong>
+    We're sorry to hear that #{@vacation_request.requester.first_name} will be off from <strong>
+    #{formatted_date(@vacation_request.starts_on)}</strong> to <strong>
+    #{formatted_date(@vacation_request.ends_on)}</strong>
+    , as #{he_she(@vacation_request.requester)} is not feeling well
+    , The little flowers are rising and blooming; it&rsquo;s the world&rsquo;s way of saying
+    , &ldquo;get well soon.&rdquo; :pray:</p>
+    <p><strong>Best wishes,</strong><br><strong>Fustany Team</strong></p>"
+  end
+
+  def wfh_post_content
+    "<p><strong>#{@vacation_request.requester.name} will be working from home!</strong></p>
+    <p><strong>&nbsp;&nbsp;</strong>#{@vacation_request.requester.first_name} will be working from home from <strong>
+    #{formatted_date(@vacation_request.starts_on)}</strong> to <strong>
+    #{formatted_date(@vacation_request.ends_on)}</strong>
+    , You can reach #{him_her(@vacation_request.requester)} on Slack!</p>
+    <p><strong>Best regards,</strong><br><strong>Fustany Team</strong></p>"
   end
 end

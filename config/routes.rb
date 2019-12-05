@@ -80,6 +80,7 @@ Rails.application.routes.draw do
 
     resources :attendances do
       collection do
+        get :remote_checkout
         get :reports
 
         post :append
@@ -123,8 +124,12 @@ Rails.application.routes.draw do
         patch :update_profile
         post :resend_mail
         post :toggle_level
+        post :announce_birthday
+      end
+
+      collection do
+        get :birthdays
       end
     end
-
   end
 end

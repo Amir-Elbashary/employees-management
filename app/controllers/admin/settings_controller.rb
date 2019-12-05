@@ -6,32 +6,12 @@ class Admin::SettingsController < Admin::BaseAdminController
   def dashboard; end
 
   def refresh_permissions
-    custom_actions = { 'Admin' => %w[change_password],
-                       'Employee' => %w[resend_mail toggle_level],
-                       'Attendance' => %w[grant revoke checkin checkout append reports],
-                       'VacationRequest' => %w[pending approve decline],
-                       'Update' => %w[reset_ip]
-                     }
+    @added_permissions = 0
 
-    added_permissions = 0
+    generate_main_actions
+    generate_custom_actions
 
-    Ability::AUTHORIZABLE_MODELS.each do |model|
-      %w[create read update destroy].map do |action|
-        next if Permission.where(target_model_name: model.name, action: action).any?
-        Permission.create(target_model_name: model.name, action: action)
-        added_permissions += 1
-      end
-    end
-
-    custom_actions.map do |model, actions|
-      actions.map do |action|
-        next if Permission.where(target_model_name: model, action: action).any?
-        Permission.create(target_model_name: model, action: action)
-        added_permissions += 1
-      end
-    end
-
-    flash[:notice] = "Permissions refreshed successfully, #{added_permissions} permissions added"
+    flash[:notice] = "Permissions refreshed successfully, #{@added_permissions} permissions added"
     redirect_to dashboard_admin_settings_path
   end
 
@@ -47,10 +27,39 @@ class Admin::SettingsController < Admin::BaseAdminController
   private
 
   def settings_params
-    params.require(:setting).permit(:work_from_home, ip_addresses: [])
+    params.require(:setting).permit(:work_from_home, :send_attendance_summary, :send_checkout_reminder,
+                                    :checkout_reminder_minutes, ip_addresses: [])
   end
 
   def set_settings
     @settings = Setting.first
+  end
+
+  def generate_main_actions
+    Ability::AUTHORIZABLE_MODELS.each do |model|
+      %w[create read update destroy].map do |action|
+        next if Permission.where(target_model_name: model.name, action: action).any?
+        Permission.create(target_model_name: model.name, action: action)
+        @added_permissions += 1
+      end
+    end
+  end
+
+  def generate_custom_actions
+    custom_actions = {
+      'Admin' => %w[change_password],
+      'Employee' => %w[resend_mail toggle_level announce_birthday],
+      'Attendance' => %w[grant revoke checkin checkout remote_checkout append reports],
+      'VacationRequest' => %w[pending approve decline],
+      'Update' => %w[reset_ip]
+    }
+
+    custom_actions.map do |model, actions|
+      actions.map do |action|
+        next if Permission.where(target_model_name: model, action: action).any?
+        Permission.create(target_model_name: model, action: action)
+        @added_permissions += 1
+      end
+    end
   end
 end
