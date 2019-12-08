@@ -213,7 +213,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
     # Work day have 8 * 60 = 480 minutes
     reminding_time = (480 - @settings.checkout_reminder_minutes).minutes.from_now
 
-    Attendance::CheckoutReminderWorker.perform_in(reminding_time, attendance.id, hmac_secret) if @settings.send_checkout_reminder?
+    Attendance::CheckoutReminderWorker.perform_in(reminding_time, attendance.id, hmac_secret, @settings.checkout_reminder_minutes) if @settings.send_checkout_reminder?
   end
 
   def set_date_ranges
