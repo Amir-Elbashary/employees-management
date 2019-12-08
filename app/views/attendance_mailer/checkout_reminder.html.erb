@@ -1,7 +1,7 @@
 <h2>Dear <%= @attendance.attender.full_name %>,</h2>
 
 <h3>You're almost done today :)</h3>
-<p>There are 5 minutes left today, <strong>-of course you can stay if you want :)-</strong>, please don't forget to checkout before you leave!<p>
+<p>There are <%= @allowed_time %> minutes left today, <strong>-of course you can stay if you want :)-</strong>, please don't forget to checkout before you leave!<p>
 <p>Feeling like you may forget?<p>
 
 <p><b><a href="http://team.fustany.com/admin/attendances/remote_checkout?token=<%= @token %>" target="_blank">Click here to checkout now!</a> It doesn't require login at all :)</b></p>
