@@ -28,16 +28,6 @@
 				</div>
 				<div class="table-responsive m-t-20 no-wrap">
 					<table class="table vm no-th-brd pro-of-month">
-							<thead>
-								<tr>
-									<th colspan="2">Assigned</th>
-									<th>Name</th>
-									<th>Days left</th>
-                  <% unless current_employee %>
-                    <th>Actions</th>
-                  <% end %>
-								</tr>
-							</thead>
 							<tbody>
                 <% @birthdays.map do |birthday_obj| %>
                   <tr>
