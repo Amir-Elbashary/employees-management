@@ -1,7 +1,11 @@
 <% if params[:success] %>
   Thanks, You have checked out successfully, See you next day :)
-<% elsif params[:error] %>
-  Token expired or invalid, or maybe you're not using an authorized network, or maybe you checked out already!, Please try again after checking these requirements
-<% elsif !params[:token] && !params[:token] %>
-  There is nothing much to do here
+<% elsif params[:error] == '1' %>
+  You have already checked-out today!
+<% elsif params[:error] == '2' %>
+  Token expired or invalid!, Please login to checkout.
+<% elsif params[:error] == '3' %>
+  Unauthorized network detected!, please use any available authorized network.
+<% elsif !params[:token] %>
+  There is nothing much to do here!
 <% end %>

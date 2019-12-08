@@ -62,10 +62,10 @@ class Admin::AttendancesController < Admin::BaseAdminController
 
   def remote_checkout
     return unless params[:token]
-    return redirect_to remote_checkout_admin_attendances_path(error: true) unless ip_address_authorized?
     data = JWT.decode(params[:token], hmac_secret, true, algorithm: 'HS256')[0]
+    return redirect_to remote_checkout_admin_attendances_path(error: 3) unless ip_address_authorized?
     @current_attendance = Attendance.find(data['attendance_id'])
-    return redirect_to remote_checkout_admin_attendances_path(error: true) if @current_attendance.checkout
+    return redirect_to remote_checkout_admin_attendances_path(error: 1) if @current_attendance.checkout
     checkout_time = if @settings.add_remaining_checkout_time?
                       Time.zone.now + @settings.checkout_reminder_minutes.minutes
                     else
@@ -212,11 +212,8 @@ class Admin::AttendancesController < Admin::BaseAdminController
   def send_checkout_reminder(attendance)
     # Work day have 8 * 60 = 480 minutes
     reminding_time = (480 - @settings.checkout_reminder_minutes).minutes.from_now
-    if @settings.send_checkout_reminder?
-      Attendance::CheckoutReminderWorker.perform_in(reminding_time,
-                                                    attendance.id,
-                                                    hmac_secret)
-    end
+
+    Attendance::CheckoutReminderWorker.perform_in(reminding_time, attendance.id, hmac_secret) if @settings.send_checkout_reminder?
   end
 
   def set_date_ranges
@@ -324,7 +321,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   end
 
   def token_expired
-    redirect_to remote_checkout_admin_attendances_path(error: true)
+    redirect_to remote_checkout_admin_attendances_path(error: 2)
   end
 
   def resolve_layout
