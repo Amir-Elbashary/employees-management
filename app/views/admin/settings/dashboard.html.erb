@@ -13,7 +13,7 @@
 <%= render 'shared/dashboard/breadcrumb' %>
 
 <div class="row">
-  <div class="col-6">
+  <div class="col-7">
     <div class="card">
       <div class="card-header bg-info">
         <h4 class="m-b-0 text-white">Settings</h4>
@@ -63,9 +63,6 @@
                 <br/>
               </div>
             </div>
-          </div>
-
-          <div class="row">
             <div class="col-md-6">          
               <div class="form-group">        
                 <%= f.label :send_checkout_reminder, 'Send checkout reminder' %>
@@ -85,6 +82,9 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="row">
             <div class="col-md-6">          
               <div class="form-group">        
                 <%= f.label :checkout_reminder_minutes, 'Send reminder' %> <b>(When Enabled)</b>
@@ -95,6 +95,25 @@
 										<span class="input-group-text" id="basic-addon2">Mins before leaving</span>
 									</div>
 								</div>
+              </div>
+            </div>
+            <div class="col-md-6">          
+              <div class="form-group">        
+                <%= f.label :add_remaining_checkout_time, 'Add remaining checkout time (When Enabled)' %>
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" id="enable-add-time" name="setting[add_remaining_checkout_time]" value="true" class="custom-control-input" <%= 'checked' if @settings.add_remaining_checkout_time? %>>
+                      <label class="custom-control-label" for="enable-add-time">Enable</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="custom-control custom-radio">
+                      <input type="radio" id="disable-add-time" name="setting[add_remaining_checkout_time]" value="false" class="custom-control-input" <%= 'checked' unless @settings.add_remaining_checkout_time? %>>
+                      <label class="custom-control-label" for="disable-add-time">Disable</label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
