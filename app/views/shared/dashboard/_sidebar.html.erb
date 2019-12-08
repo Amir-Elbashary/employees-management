@@ -75,6 +75,21 @@
       </li>
     <% end %>
 
+    <% if current_employee %>
+      <li> 
+        <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-users"></i>
+          <span class="hide-menu">Birthdays 
+            <% if upcoming_birthdays %>
+              <span class="label label-rounded label-info"><%= upcoming_birthdays %></span>
+            <% end %>
+          </span>
+        </a>
+        <ul aria-expanded="false" class="collapse">
+          <li><%= link_to "Birthdays (#{upcoming_birthdays || 0})", birthdays_admin_employees_path %></li>
+        </ul>
+      </li>
+    <% end %>
+
     <% if (can? :read, Performance) || (can? :employee_performance, Performance) %>
       <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="fa fa-bookmark"></i><span class="hide-menu">Performance </span></a>
         <ul aria-expanded="false" class="collapse">

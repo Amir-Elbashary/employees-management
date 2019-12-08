@@ -54,7 +54,7 @@ class Ability
 
   def employee_abilities(employee)
     cannot :manage, Employee
-    can %i[profile update_profile], Employee
+    can %i[profile update_profile birthdays], Employee
     can %i[change_password change_profile_pic updates_tracker], Admin
     can %i[read create checkin checkout remote_checkout checkin_reminder checkout_reminder], Attendance
     can :employee_performance, Performance
