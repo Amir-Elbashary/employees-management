@@ -7,7 +7,7 @@ class AttendanceMailerPreview < ActionMailer::Preview
     AttendanceMailer.checkout_notifier(@attendance, @time_spent_this_month)
   end
 
-  def checkin_reminder_preview
+  def checkout_reminder_preview
     @attendance = Attendance.first.id
     AttendanceMailer.checkout_reminder(@attendance, ENV['SECRET_KEY_BASE'])
   end
