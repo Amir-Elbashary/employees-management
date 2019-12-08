@@ -9,9 +9,9 @@ RSpec.feature 'Remote checkout by clicking mail link' do
   end
 
   context 'clicking valid link' do
-    it 'should check the employee out for today after authenticating network' do
+    it 'should check the employee out for today after authenticating network (Without remaning time)' do
       @employee.update(access_token: 'secret-token')
-      @settings = create(:setting, ip_addresses: ['127.0.0.1'])
+      @settings = create(:setting, ip_addresses: ['127.0.0.1'], add_remaining_checkout_time: false)
       # page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
       visit admin_attendances_path
 
@@ -28,13 +28,14 @@ RSpec.feature 'Remote checkout by clicking mail link' do
 
       payload = {
         attendance_id: Employee.first.attendances.first.id,
-        exp: (Time.zone.now + + 5.minutes).to_i
+        exp: (Time.zone.now + 5.minutes).to_i
       }
 
       token = JWT.encode(payload, ENV['SECRET_KEY_BASE'], 'HS256')
 
       visit remote_checkout_admin_attendances_path(token: token)
 
+      expect(Employee.first.attendances.first.checkout).to eq(Time.zone.now)
       expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       expect(Employee.first.attendances.first.time_spent).to be >= 4
       expect(page).to have_content('Thanks, You have checked out successfully, See you next day :)')
@@ -42,7 +43,45 @@ RSpec.feature 'Remote checkout by clicking mail link' do
       travel_to Time.zone.now + 10.minutes
 
       visit remote_checkout_admin_attendances_path(token: token)
-      expect(page).to have_content('Token expired or invalid, or maybe you\'re not using an authorized network, Please try again after checking these requirements')
+      expect(page).to have_content('Token expired or invalid, or maybe you\'re not using an authorized network, or maybe you checked out already!, Please try again after checking these requirements')
+    end
+
+    it 'should check the employee out for today after authenticating network (With remaning time)' do
+      @employee.update(access_token: 'secret-token')
+      @settings = create(:setting, ip_addresses: ['127.0.0.1'], add_remaining_checkout_time: true)
+      # page.driver.browser.set_cookie("ft_att_ver=#{@employee.access_token}")
+      visit admin_attendances_path
+
+      expect(page).to have_content(@employee.name)
+
+      click_link 'Check-in!'
+
+      expect(page).to have_content("Wishing you good and productive day.")
+      expect(Employee.first.attendances.first.checkin).not_to eq(nil)
+      expect(Employee.first.attendances.first.checkout).to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).to eq(0)
+
+      travel_to (Time.now + 4.hours)
+
+      payload = {
+        attendance_id: Employee.first.attendances.first.id,
+        exp: (Time.zone.now + 5.minutes).to_i
+      }
+
+      token = JWT.encode(payload, ENV['SECRET_KEY_BASE'], 'HS256')
+
+      visit remote_checkout_admin_attendances_path(token: token)
+
+      expect(Employee.first.attendances.first.checkout).not_to eq(Time.zone.now)
+      expect(Employee.first.attendances.first.checkout).to eq(Time.zone.now + 5.minutes)
+      expect(Employee.first.attendances.first.checkout).not_to eq(nil)
+      expect(Employee.first.attendances.first.time_spent).to be >= 4
+      expect(page).to have_content('Thanks, You have checked out successfully, See you next day :)')
+
+      travel_to Time.zone.now + 10.minutes
+
+      visit remote_checkout_admin_attendances_path(token: token)
+      expect(page).to have_content('Token expired or invalid, or maybe you\'re not using an authorized network, or maybe you checked out already!, Please try again after checking these requirements')
     end
 
     it 'should not check the employee out for today via invalid network' do
@@ -76,7 +115,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
       expect(Employee.first.attendances.first.checkout).to eq(nil)
       expect(Employee.first.attendances.first.time_spent).not_to eq(4)
       expect(Employee.first.attendances.first.time_spent).to eq(0)
-      expect(page).to have_content('Token expired or invalid, or maybe you\'re not using an authorized network, Please try again after checking these requirements')
+      expect(page).to have_content('Token expired or invalid, or maybe you\'re not using an authorized network, or maybe you checked out already!, Please try again after checking these requirements')
     end
   end
 
@@ -100,7 +139,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
 
       expect(Employee.first.attendances.first.checkout).to eq(nil)
       expect(Employee.first.attendances.first.time_spent).to eq(0)
-      expect(page).to have_content('Token expired or invalid, or maybe you\'re not using an authorized network, Please try again after checking these requirements')
+      expect(page).to have_content('Token expired or invalid, or maybe you\'re not using an authorized network, or maybe you checked out already!, Please try again after checking these requirements')
     end
   end
 
