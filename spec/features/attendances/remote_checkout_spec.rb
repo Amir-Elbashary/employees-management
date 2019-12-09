@@ -31,7 +31,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
         exp: (Time.zone.now + 5.minutes).to_i
       }
 
-      token = JWT.encode(payload, ENV['SECRET_KEY_BASE'], 'HS256')
+      token = JWT.encode(payload, ENV['HMAC_SECRET'], 'HS256')
 
       travel_to Time.zone.now + 2.minutes
 
@@ -65,7 +65,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
         exp: (Time.zone.now + 5.minutes).to_i
       }
 
-      token = JWT.encode(payload, ENV['SECRET_KEY_BASE'], 'HS256')
+      token = JWT.encode(payload, ENV['HMAC_SECRET'], 'HS256')
 
       travel_to Time.zone.now + 2.minutes
 
@@ -100,7 +100,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
         exp: (Time.zone.now + 5.minutes).to_i
       }
 
-      token = JWT.encode(payload, ENV['SECRET_KEY_BASE'], 'HS256')
+      token = JWT.encode(payload, ENV['HMAC_SECRET'], 'HS256')
 
       visit remote_checkout_admin_attendances_path(token: token)
 
@@ -139,7 +139,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
         exp: (Time.zone.now + 5.minutes).to_i
       }
 
-      token = JWT.encode(payload, ENV['SECRET_KEY_BASE'], 'HS256')
+      token = JWT.encode(payload, ENV['HMAC_SECRET'], 'HS256')
 
       travel_to Time.zone.now + 10.minutes
 
@@ -172,7 +172,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
         exp: (Time.zone.now + 5.minutes).to_i
       }
 
-      token = JWT.encode(payload, ENV['SECRET_KEY_BASE'], 'HS256')
+      token = JWT.encode(payload, ENV['HMAC_SECRET'], 'HS256')
 
       visit remote_checkout_admin_attendances_path(token: 'invalid-token')
 
@@ -205,7 +205,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
         exp: (Time.zone.now + + 5.minutes).to_i
       }
 
-      token = JWT.encode(payload, ENV['SECRET_KEY_BASE'], 'HS256')
+      token = JWT.encode(payload, ENV['HMAC_SECRET'], 'HS256')
 
       visit remote_checkout_admin_attendances_path(token: token)
 

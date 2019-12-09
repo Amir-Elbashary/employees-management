@@ -314,11 +314,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   end
 
   def hmac_secret
-    if Rails.env.production?
-      Rails.application.secrets.secret_key_base
-    else
-      ENV['SECRET_KEY_BASE']
-    end
+    ENV['HMAC_SECRET']
   end
 
   def token_expired
