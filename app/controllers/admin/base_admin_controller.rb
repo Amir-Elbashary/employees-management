@@ -1,4 +1,5 @@
 class Admin::BaseAdminController < ApplicationController
+  before_action :ensure_active_employee!
   before_action :authenticate
   before_action :set_app_settings
   before_action :init_new_notification
@@ -116,5 +117,9 @@ class Admin::BaseAdminController < ApplicationController
                       elsif @time_spent_percentage > 90
                         'success'
                       end
+  end
+
+  def ensure_active_employee!
+    return redirect_to remote_checkout_admin_attendances_path(error: 4) if current_employee&.inactive?
   end
 end

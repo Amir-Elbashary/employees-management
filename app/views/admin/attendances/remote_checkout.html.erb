@@ -13,6 +13,9 @@
     <% elsif params[:error] == '3' %>
       <h1 class="vc-heading">OOPS!</h1>
       <p class="vc-sub-heading"><span class="blink-infinite">Unauthorized network detected!</span>, Please use any available authorized network then try again.</p>
+    <% elsif params[:error] == '4' %>
+      <h1 class="vc-heading">Nice Try!</h1>
+      <p class="vc-sub-heading">Your account has been <span class="blink-infinite">suspended!</span></p>
     <% elsif !params[:token] %>
       <h1 class="vc-heading">Hello</h1>
       <p class="vc-sub-heading">There is <span class="blink-infinite">nothing much</span> to do here!</p>
