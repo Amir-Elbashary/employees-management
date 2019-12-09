@@ -1,5 +1,6 @@
 class Employee < ApplicationRecord
   include UserHelpers
+  enum state: %i[inactive active]
   enum gender: %i[unspecified male female]
   enum work_type: %i[full_time part_time freelance]
   enum marital_status: %i[single engaged married]

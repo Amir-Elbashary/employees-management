@@ -7,6 +7,11 @@ function toggle(id) {
   $('#disable_' + id).toggle();
 }
 
+function toggle_state(id) {
+  $('#activate_' + id).toggle();
+  $('#deactivate_' + id).toggle();
+}
+
 function toggle_status(id) {
   $('#verify_' + id).toggle();
   $('#unverify_' + id).toggle();

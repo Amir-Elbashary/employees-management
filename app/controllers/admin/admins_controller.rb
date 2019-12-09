@@ -26,7 +26,7 @@ class Admin::AdminsController < Admin::BaseAdminController
   # Update with image cropper
   # def update
   #   current_active_role = current_admin || current_hr
-
+  #
   #   if current_active_role.update(admin_params)
   #     if params[:admin] && params[:admin][:avatar].present? || params[:hr] && params[:hr][:avatar].present?
   #       render :crop ## render the view for cropping
