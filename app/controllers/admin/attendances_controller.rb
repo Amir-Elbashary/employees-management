@@ -2,6 +2,7 @@ class Admin::AttendancesController < Admin::BaseAdminController
   layout :resolve_layout
   rescue_from JWT::ExpiredSignature, JWT::DecodeError, with: :token_expired
   skip_before_action :authenticate, only: :remote_checkout
+  skip_before_action :ensure_active_employee!, only: :remote_checkout
   load_and_authorize_resource
   skip_load_resource only: %i[index reports grant revoke remote_checkout]
   before_action :require_authorized_network, only: %i[checkin checkout]

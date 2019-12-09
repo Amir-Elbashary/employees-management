@@ -40,7 +40,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
       expect(Employee.first.attendances.first.checkout).to eq(Time.zone.now)
       expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       expect(Employee.first.attendances.first.time_spent).to be >= 4
-      expect(page).to have_content('Thanks, You have checked out successfully, See you next day :)')
+      expect(page).to have_content('You have checked-out successfully, See you next day :)')
     end
 
     it 'should check the employee out for today after authenticating network (With remaning time)' do
@@ -75,7 +75,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
       expect(Employee.first.attendances.first.checkout).to eq(Time.zone.now + 5.minutes)
       expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       expect(Employee.first.attendances.first.time_spent).to be >= 4
-      expect(page).to have_content('Thanks, You have checked out successfully, See you next day :)')
+      expect(page).to have_content('You have checked-out successfully, See you next day :)')
     end
 
     it 'should not check the employee out if he already checked out' do
@@ -109,7 +109,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
       expect(Employee.first.attendances.first.checkout).to eq(Time.zone.now - 2.minutes)
       expect(Employee.first.attendances.first.checkout).not_to eq(nil)
       expect(Employee.first.attendances.first.time_spent).to be >= 4
-      expect(page).to have_content('Thanks, You have checked out successfully, See you next day :)')
+      expect(page).to have_content('You have checked-out successfully, See you next day :)')
 
       travel_to Time.zone.now + 1.minutes
 
@@ -147,7 +147,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
 
       expect(Employee.first.attendances.first.checkout).to eq(nil)
       expect(Employee.first.attendances.first.time_spent).to eq(0)
-      expect(page).to have_content('Token expired or invalid!, Please login to checkout.')
+      expect(page).to have_content('Token expired or invalid!, Please login to check-out.')
     end
 
     it 'should not check the employee out if token is invalid' do
@@ -178,7 +178,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
 
       expect(Employee.first.attendances.first.checkout).to eq(nil)
       expect(Employee.first.attendances.first.time_spent).to eq(0)
-      expect(page).to have_content('Token expired or invalid!, Please login to checkout.')
+      expect(page).to have_content('Token expired or invalid!, Please login to check-out.')
     end
 
     it 'should not check the employee out for today via invalid network' do
@@ -212,7 +212,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
       expect(Employee.first.attendances.first.checkout).to eq(nil)
       expect(Employee.first.attendances.first.time_spent).not_to eq(4)
       expect(Employee.first.attendances.first.time_spent).to eq(0)
-      expect(page).to have_content('Unauthorized network detected!, please use any available authorized network.')
+      expect(page).to have_content('Unauthorized network detected!, Please use any available authorized network then try again.')
     end
   end
 
@@ -236,7 +236,7 @@ RSpec.feature 'Remote checkout by clicking mail link' do
 
       expect(Employee.first.attendances.first.checkout).to eq(nil)
       expect(Employee.first.attendances.first.time_spent).to eq(0)
-      expect(page).to have_content('Token expired or invalid!, Please login to checkout.')
+      expect(page).to have_content('Token expired or invalid!, Please login to check-out.')
     end
   end
 

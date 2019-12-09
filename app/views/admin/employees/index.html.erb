@@ -28,6 +28,7 @@
             <% end %>
             <th>Level</th>
             <th>Attendance</th>
+            <th>State</th>
 						<th>Actions</th>
           </tr>
         </thead>
@@ -62,6 +63,20 @@
               <td>
                 <a href="<%= grant_admin_attendance_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Grant browser access" data-confirm="After clicking ok, Please ask an employee to checkin at least once!" class="grant-link"> <i class="fa fa-check text-success m-r-10"></i> </a>
                 <a href="<%= revoke_admin_attendance_path(employee) %>" data-method="post" data-toggle="tooltip" data-original-title="Revoke" data-confirm="Are you sure ?"> <i class="fa fa-times text-danger m-r-10"></i> </a>
+              </td>
+              <td>
+                <%= link_to 'Deactivate', toggle_state_admin_employee_path(employee),
+                                          method: :post,
+                                          id: "deactivate_#{employee.id}",
+                                          class: 'btn btn-sm btn-danger',
+                                          onclick: "toggle_state(#{employee.id});",
+                                          style: employee.active? ? 'display: block;' : 'display: none;' %>
+                <%= link_to 'Activate', toggle_state_admin_employee_path(employee),
+                                        method: :post,
+                                        id: "activate_#{employee.id}",
+                                        class: 'btn btn-sm btn-success',
+                                        onclick: "toggle_state(#{employee.id});",
+                                        style: employee.active? ? 'display: none;' : 'display: block;' %>
               </td>
               <td>
                 <a href="<%= reports_admin_attendances_path(id: employee.id, type: employee.class.name) %>" data-toggle="tooltip" data-original-title="Attendance Report" class="report-link"> <i class="fa fa-file text-inverse m-r-10"></i> </a>

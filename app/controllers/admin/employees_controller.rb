@@ -57,13 +57,19 @@ class Admin::EmployeesController < Admin::BaseAdminController
     redirect_to admin_employees_path
   end
 
-  def toggle_level
-    employee = Employee.find(params[:id])
-
-    if employee.supervisor?
-      employee.employee!
+  def toggle_state
+    if @employee.active?
+      @employee.inactive!
     else
-      employee.supervisor!
+      @employee.active!
+    end
+  end
+
+  def toggle_level
+    if @employee.supervisor?
+      @employee.employee!
+    else
+      @employee.supervisor!
     end
   end
 

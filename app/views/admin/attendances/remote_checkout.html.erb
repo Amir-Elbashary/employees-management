@@ -1,11 +1,24 @@
-<% if params[:success] %>
-  Thanks, You have checked out successfully, See you next day :)
-<% elsif params[:error] == '1' %>
-  You have already checked-out today!
-<% elsif params[:error] == '2' %>
-  Token expired or invalid!, Please login to checkout.
-<% elsif params[:error] == '3' %>
-  Unauthorized network detected!, please use any available authorized network.
-<% elsif !params[:token] %>
-  There is nothing much to do here!
-<% end %>
+<div class="vc-container">
+  <div class="vc-content">
+    <% if params[:success] %>
+      <h1 class="vc-heading">Thank you</h1>
+      <p class="vc-sub-heading">You have <span class="blink-infinite">checked-out successfully</span>, See you next day :)</p>
+    <% elsif params[:error] == '1' %>
+      <h1 class="vc-heading">OOPS!</h1>
+      <p class="vc-sub-heading">You have <span class="blink-infinite">already checked-out</span> today!</p>
+    <% elsif params[:error] == '2' %>
+      <h1 class="vc-heading">OOPS!</h1>
+      <p class="vc-sub-heading">Token <span class="blink-infinite">expired or invalid!</span>, Please login to check-out.</p>
+      <p><a href="http://team.fustany.com" target="_blank" class="link">Click here!</a> to login</p>
+    <% elsif params[:error] == '3' %>
+      <h1 class="vc-heading">OOPS!</h1>
+      <p class="vc-sub-heading"><span class="blink-infinite">Unauthorized network detected!</span>, Please use any available authorized network then try again.</p>
+    <% elsif params[:error] == '4' %>
+      <h1 class="vc-heading">Nice Try!</h1>
+      <p class="vc-sub-heading">Your account has been <span class="blink-infinite">suspended!</span></p>
+    <% elsif !params[:token] %>
+      <h1 class="vc-heading">Hello</h1>
+      <p class="vc-sub-heading">There is <span class="blink-infinite">nothing much</span> to do here!</p>
+    <% end %>
+  </div>
+</div>
