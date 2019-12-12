@@ -27,7 +27,7 @@ class Ability
       authorize_models(END_USERS_MODELS, END_USERS_AUTHORIZED_MODELS)
       employee_abilities(user)
     else
-      can :remote_checkout, Attendance
+      can %i[remote_checkout postpone_checkout_reminder], Attendance
     end
   end
 
@@ -56,7 +56,7 @@ class Ability
     cannot :manage, Employee
     can %i[profile update_profile birthdays], Employee
     can %i[change_password change_profile_pic updates_tracker], Admin
-    can %i[read create checkin checkout remote_checkout checkin_reminder checkout_reminder], Attendance
+    can %i[read create checkin checkout remote_checkout postpone_checkout_reminder checkin_reminder checkout_reminder], Attendance
     can :employee_performance, Performance
     can :read, Room
     can %i[read toggle_read_status toggle_all_read_status], Notification

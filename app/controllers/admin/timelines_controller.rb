@@ -7,11 +7,11 @@ class Admin::TimelinesController < Admin::BaseAdminController
     if @timeline.save
       detect_timeline_type(@timeline)
       flash[:notice] = 'Your post has been published on the timeline'
+      Timeline::MailNotifierWorker.perform_async(@timeline.id)
     else
       flash[:danger] = @timeline.errors.full_messages.join(', ')
     end
 
-    Timeline::MailNotifierWorker.perform_async(@timeline.id)
     redirect_to admin_path
   end
 

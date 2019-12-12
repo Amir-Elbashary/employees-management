@@ -1,10 +1,10 @@
 class Admin::AttendancesController < Admin::BaseAdminController
   layout :resolve_layout
   rescue_from JWT::ExpiredSignature, JWT::DecodeError, with: :token_expired
-  skip_before_action :authenticate, only: :remote_checkout
-  skip_before_action :ensure_active_employee!, only: :remote_checkout
+  skip_before_action :authenticate, only: %i[remote_checkout postpone_checkout_reminder]
+  skip_before_action :ensure_active_employee!, only: %i[remote_checkout postpone_checkout_reminder]
   load_and_authorize_resource
-  skip_load_resource only: %i[index reports grant revoke remote_checkout]
+  skip_load_resource only: %i[index reports grant revoke remote_checkout postpone_checkout_reminder]
   before_action :require_authorized_network, only: %i[checkin checkout]
   before_action :require_authorized_device, only: %i[checkin checkout]
   before_action :set_attendances, only: :index
@@ -74,6 +74,19 @@ class Admin::AttendancesController < Admin::BaseAdminController
                     end
     perform_checkout if @current_attendance&.update(checkout: checkout_time)
     redirect_to remote_checkout_admin_attendances_path(success: true)
+  end
+
+  def postpone_checkout_reminder
+    return unless params[:token]
+    data = JWT.decode(params[:token], hmac_secret, true, algorithm: 'HS256')[0]
+    return redirect_to postpone_checkout_reminder_admin_attendances_path(error: 3) unless ip_address_authorized?
+    @current_attendance = Attendance.find(data['attendance_id'])
+    return redirect_to postpone_checkout_reminder_admin_attendances_path(error: 1) if @current_attendance.checkout
+
+    if params[:time]
+      postpone_reminder
+      redirect_to postpone_checkout_reminder_admin_attendances_path(success: true, time: params[:time])
+    end
   end
 
   def checkin_reminder
@@ -217,6 +230,13 @@ class Admin::AttendancesController < Admin::BaseAdminController
     Attendance::CheckoutReminderWorker.perform_in(reminding_time, attendance.id, hmac_secret, @settings.checkout_reminder_minutes) if @settings.send_checkout_reminder?
   end
 
+  def postpone_reminder
+    time = params[:time].to_datetime
+    time_eg = DateTime.new(time.year, time.month, time.day,
+                           time.hour, time.minute, time.second, 'EET')
+    Attendance::CheckoutReminderWorker.perform_at(time_eg, @current_attendance.id, hmac_secret, @settings.checkout_reminder_minutes)
+  end
+
   def set_date_ranges
     set_selected_date_range
 
@@ -318,12 +338,17 @@ class Admin::AttendancesController < Admin::BaseAdminController
   end
 
   def token_expired
-    redirect_to remote_checkout_admin_attendances_path(error: 2)
+    case action_name
+    when 'remote_checkout'
+      redirect_to remote_checkout_admin_attendances_path(error: 2)
+    when 'postpone_checkout_reminder'
+      redirect_to postpone_checkout_reminder_admin_attendances_path(error: 2)
+    end
   end
 
   def resolve_layout
     case action_name
-    when 'remote_checkout'
+    when 'remote_checkout', 'postpone_checkout_reminder'
       'remote_checkout'
     else
       'dashboard'

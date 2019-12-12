@@ -10,6 +10,6 @@ class AttendanceMailerPreview < ActionMailer::Preview
   def checkout_reminder_preview
     @attendance = Attendance.first.id
     @allowed_time = Setting.first.checkout_reminder_minutes
-    AttendanceMailer.checkout_reminder(@attendance, ENV['SECRET_KEY_BASE'], @allowed_time)
+    AttendanceMailer.checkout_reminder(@attendance, ENV['HMAC_SECRET'], @allowed_time)
   end
 end
