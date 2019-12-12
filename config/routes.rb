@@ -81,6 +81,7 @@ Rails.application.routes.draw do
     resources :attendances do
       collection do
         get :remote_checkout
+        get :postpone_checkout_reminder
         get :reports
 
         post :append

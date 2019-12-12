@@ -1,6 +1,7 @@
 <% if params[:success] %>
-  <h1 class="vc-heading">Thank you</h1>
-  <p class="vc-sub-heading">You have <span class="blink-infinite">checked-out successfully</span>, See you next day :)</p>
+  <h1 class="vc-heading">Done!</h1>
+  <p class="vc-sub-heading">You have <span class="blink-infinite">successfully postponed</span> your checkout time</p>
+  <p class="vc-sub-heading">You'll be notified on: <span class="blink-infinite"><%= params[:time].to_datetime.strftime('%d-%m-%Y') %></span> at: <span class="blink-infinite"><%= params[:time].to_datetime.strftime('%I:%M %p') %></span></p>
 <% elsif params[:error] == '1' %>
   <h1 class="vc-heading">OOPS!</h1>
   <p class="vc-sub-heading">You have <span class="blink-infinite">already checked-out</span> today!</p>
@@ -17,4 +18,16 @@
 <% elsif !params[:token] %>
   <h1 class="vc-heading">Hello</h1>
   <p class="vc-sub-heading">There is <span class="blink-infinite">nothing much</span> to do here!</p>
+<% elsif params[:token] && !params[:time] %>
+  <h1 class="vc-heading">When?</h1>
+  <p class="vc-sub-heading">Notify me <span class="blink-infinite">at</span>:</p>
+  <%= form_tag postpone_checkout_reminder_admin_attendances_path, method: :get do %>
+    <%= hidden_field_tag :token, '', value: params[:token] %>
+    <div class="form-group">
+      <input type="time" name="time" class="form-control">
+    </div>
+    <div class="form-group">
+      <%= submit_tag 'Postpone', class: 'btn btn-success' %>
+    </div>
+  <% end %>
 <% end %>

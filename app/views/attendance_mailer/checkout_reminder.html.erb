@@ -1,10 +1,12 @@
 <h2>Dear <%= @attendance.attender.full_name %>,</h2>
 
 <h3>You're almost done today :)</h3>
-<p>There are <%= @allowed_time %> minutes left today, <strong>-of course you can stay if you want :)-</strong>, please don't forget to checkout before you leave!<p>
-<p>Feeling like you may forget?<p>
+<p>There are <%= @allowed_minutes %> minutes left today, <strong>please don't forget to checkout before you leave!</strong><p>
+<p>Feeling like you may forget?, You have 2 options: <strong>(No login required!)</strong><p> 
 
-<p><b><a href="http://team.fustany.com/admin/attendances/remote_checkout?token=<%= @token %>" target="_blank">Click here to checkout now!</a> It doesn't require login at all :)</b></p>
+<p><b><a href="http://team.fustany.com/admin/attendances/remote_checkout?token=<%= @token %>" target="_blank">Click here to checkout now!</a>&nbsp; OneTouch Checkout.</b></p>
+<p><b><a href="http://team.fustany.com/admin/attendances/postpone_checkout_reminder?token=<%= @token %>" target="_blank">Remind me later!</a>&nbsp; If you still have some work to finish.</b></p>
+<p><b><a href="/admin/attendances/postpone_checkout_reminder?token=<%= @token %>" target="_blank">Remind me later!</a>&nbsp; If you still have some work to finish.</b></p>
 
 <p><b>** Note **</b> Checking out now will add the remaining time to you attendace</p>
 <p><b>** Example **</b> If you should leave at 05:00 and you pressed the link 04:55, this will count as leaving at 05:00, so you're safe to perform it once you receive the email</p>

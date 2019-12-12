@@ -70,7 +70,7 @@ class Admin::AdminsController < Admin::BaseAdminController
 
   def set_timelines
     @timeline = Timeline.new
-    @timelines = Timeline.limit(14)
+    @timelines = Timeline.paginate(page: params[:page], per_page: 10)
   end
 
   def set_comments

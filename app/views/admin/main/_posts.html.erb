@@ -1,0 +1,22 @@
+<% timelines.each do |timeline| %>
+  <div class="sl-item">
+    <% if current_admin || current_hr || ((timeline.publisher == current_active_user) && timeline.manual?) %>
+      <%= link_to admin_timeline_path(timeline), method: :delete, class: 'delete-link', data: { confirm: 'Are you sure?' } do %>
+        <button class="close text-danger">×</button>
+      <% end %>
+    <% end %>
+
+    <div class="sl-left">
+      <%= image_tag(timeline.publisher.profile_pic.thumb.url, class: 'img-circle') %>
+    </div>
+
+    <% if timeline.news? %>
+      <%= render 'admin/main/timelines/news', timeline: timeline %>
+    <% elsif timeline.status? %>
+      <%= render 'admin/main/timelines/status', timeline: timeline %>
+    <% elsif timeline.show_off? %>
+      <%= render 'admin/main/timelines/show_off', timeline: timeline %>
+    <% end %>
+    <hr>
+  </div>
+<% end %>

@@ -38,9 +38,9 @@ gem 'jbuilder', '~> 2.5'
 gem 'rest-client'
 
 # ================= UI Related Gems =================
+gem 'will_paginate', '~> 3.1', '>= 3.1.7'
 # gem 'rails_sortable', '~> 1.2', '>= 1.2.1'
 # gem 'momentjs-rails'
-# gem 'will_paginate', '~> 3.1', '>= 3.1.7'
 
 # =============== Images Related Gems ===============
 # gem 'carrierwave'
