@@ -11,7 +11,7 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
-Rails.application.config.assets.precompile += %w( admin_login.css.scss admin_login.js dashboard.css.scss dashboard.js )
+Rails.application.config.assets.precompile += %w( admin_login.css.scss admin_login.js dashboard.css.scss dashboard.js remote_checkout.css.scss )
 
 %w( admin/admins admin/settings admin/sections admin/hrs admin/holidays admin/recruitments admin/employees admin/roles admin/rooms admin/attendances admin/vacation_requests admin/notifications admin/updates admin/messages admin/timelines admin/performance_topics admin/performances ).each do |controller|
   Rails.application.config.assets.precompile += ["#{controller}.css.scss", "#{controller}.js"]
