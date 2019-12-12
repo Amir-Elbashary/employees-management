@@ -49,7 +49,7 @@ class Employee < ApplicationRecord
   def self.upcoming_birthdays
     birthdays = []
 
-    Employee.order(:date_of_employment).find_each do |e|
+    Employee.active.order(:date_of_employment).find_each do |e|
       next unless e.birthdate
       birthday_object = {
         id: e.id,

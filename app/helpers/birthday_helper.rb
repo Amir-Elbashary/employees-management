@@ -16,7 +16,7 @@ module BirthdayHelper
   def upcoming_birthdays
     coming_soon = 0
 
-    Employee.upcoming_birthdays.map do |birthday_obj|
+    Employee.active.upcoming_birthdays.map do |birthday_obj|
       days_left = (birthday_obj[:birthdate] - Time.zone.today).to_i
       next if days_left.negative?
       coming_soon += 1 if days_left <= 3
