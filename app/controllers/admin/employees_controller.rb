@@ -1,6 +1,7 @@
 class Admin::EmployeesController < Admin::BaseAdminController
   include TimelineHelper
   load_and_authorize_resource
+  skip_load_resource only: :birthdays
   before_action :set_employees, only: :compare
   before_action :set_sections, except: %i[index destroy]
   before_action :build_documents, only: %i[new edit]
@@ -131,7 +132,7 @@ class Admin::EmployeesController < Admin::BaseAdminController
   end
 
   def set_birthdays
-    @birthdays = Employee.upcoming_birthdays
+    @birthdays = Employee.active.upcoming_birthdays
   end
 
   def birthday_post_content

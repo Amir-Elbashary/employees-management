@@ -11,9 +11,18 @@ RSpec.feature 'Checking employees birthdays' do
     assign_permission(@hr, :announce_birthday, Employee)
     @employee1 = create(:employee, birthdate: Date.parse('2019-02-25'))
     @employee2 = create(:employee, birthdate: Date.parse('2019-01-31'))
+    @inactive_employee = create(:employee, birthdate: Date.parse('2019-01-31'), state: 'inactive')
     login_as(@hr, scope: :hr)
 
     visit birthdays_admin_employees_path
+  end
+
+  context 'when there is an inactive employee' do
+    it 'should not show this employee on the list' do
+      expect(page).to have_content(@employee1.name)
+      expect(page).to have_content(@employee2.name)
+      expect(page).not_to have_content(@inactive_employee.name)
+    end
   end
 
   context 'when there is no upcoming birthdays' do
