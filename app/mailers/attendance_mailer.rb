@@ -2,7 +2,7 @@ class AttendanceMailer < ApplicationMailer
 
   def checkout_notifier(attendance_id, time_spent_this_month)
     find_attendance(attendance_id)
-    @time_spent_this_month = time_spent_this_month + @attendance.time_spent
+    @time_spent_this_month = (time_spent_this_month + @attendance.time_spent).round(2)
     mail(to: @attendance.attender.email,
          subject: "Attendance summary for #{@attendance.checkin.strftime('%A %d %B %Y')}")
   end
