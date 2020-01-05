@@ -15,54 +15,15 @@
 <!-- ============================================================== -->
 <!-- Start Page Content -->
 <!-- ============================================================== -->
-<div class="card">
-	<div class="card-body">
-    <h4 class="card-title">Your Requests</h4>
-    <div class="table-responsive m-t-40">
-      <table id="myTable" class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>Avatar</th>
-            <th>Full Name</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Duration</th>
-            <th>Type</th>
-            <th>Status</th>
-						<th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @vacation_requests.each do |request| %>
-            <tr>
-              <td><%= image_tag(request.requester.profile_pic.thumb.url, class: 'table-thumb') %></td>
-              <td><%= request.requester.name %></td>
-              <td><%= request.starts_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.starts_at) if request.mission? %></td>
-              <td><%= request.ends_on.strftime('%d-%m-%Y') %> <%= formatted_time(request.ends_at) if request.mission? %> </td>
-              <td><%= request.duration %></td>
-              <td><%= request.kind.humanize %></td>
-              <td><%= request.status.humanize %><%= ' (Waiting for H.R)' if request.confirmed? %></td>
-              <td>
-                <% if request.pending? %>
-                  <a href="<%= edit_admin_vacation_request_path(request) %>" data-toggle="tooltip" data-original-title="Edit"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+<%= render 'admin/vacation_requests/requests', title: 'Your Requests', requests: @vacation_requests %>
 
-                  <%= link_to escalation_admin_vacation_request_path(request), remote: true, data: { toggle: 'tooltip', 'original-title': 'Escalate' }, class: 'escalate-link' do %>
-                    <i class="fa fa-arrow-up m-r-10"></i>
-                  <% end %>
+<% if current_admin %>
+  <%= render 'admin/vacation_requests/requests', title: 'All Vacation Requests', requests: @all_vacation_requests %>
+<% end %>
+<!-- ============================================================== -->
+<!-- End Page Content -->
+<!-- ============================================================== -->
 
-                  <a href="<%= admin_vacation_request_path(request) %>" data-method="delete" data-toggle="tooltip" data-original-title="Delete" data-confirm="Are you sure?" class="delete-link"> <i class="fa fa-close text-danger"></i> </a>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<!-- ============================================================== -->
-<!-- End PAge Content -->
-<!-- ============================================================== -->
 <div id="escalation-modal">
   <!-- Escalation modal shows here via escalation.js.erb (AJAX) -->
 </div>
