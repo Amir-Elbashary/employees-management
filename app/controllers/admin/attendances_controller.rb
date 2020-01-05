@@ -83,10 +83,10 @@ class Admin::AttendancesController < Admin::BaseAdminController
     @current_attendance = Attendance.find(data['attendance_id'])
     return redirect_to postpone_checkout_reminder_admin_attendances_path(error: 1) if @current_attendance.checkout
 
-    if params[:time]
-      postpone_reminder
-      redirect_to postpone_checkout_reminder_admin_attendances_path(success: true, time: params[:time])
-    end
+    return unless params[:time]
+
+    postpone_reminder
+    redirect_to postpone_checkout_reminder_admin_attendances_path(success: true, time: params[:time])
   end
 
   def checkin_reminder
@@ -227,7 +227,12 @@ class Admin::AttendancesController < Admin::BaseAdminController
     # Work day have 8 * 60 = 480 minutes
     reminding_time = (480 - @settings.checkout_reminder_minutes).minutes.from_now
 
-    Attendance::CheckoutReminderWorker.perform_in(reminding_time, attendance.id, hmac_secret, @settings.checkout_reminder_minutes) if @settings.send_checkout_reminder?
+    return unless @settings.send_checkout_reminder?
+
+    Attendance::CheckoutReminderWorker.perform_in(reminding_time,
+                                                  attendance.id,
+                                                  hmac_secret,
+                                                  @settings.checkout_reminder_minutes)
   end
 
   def postpone_reminder

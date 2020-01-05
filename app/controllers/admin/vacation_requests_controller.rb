@@ -95,6 +95,7 @@ class Admin::VacationRequestsController < Admin::BaseAdminController
 
   def set_vacation_requests
     @vacation_requests = current_active_user.vacation_requests
+    @all_vacation_requests = VacationRequest.all if current_admin
   end
 
   def set_pending_requests
